@@ -1,0 +1,13 @@
+{
+  "navbar": {
+    "week": "Veckan",
+    "receipts": "Kvitton",
+    "recipes": "Recept",
+    "scanReceipt": "Skanna kvitto",
+    "search": {
+      "placeholder": "Sök recept eller vara"
+    },
+    "home": "Home",
+    "favorites": "Favorites"
+  }
+}

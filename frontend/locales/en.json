@@ -1,0 +1,13 @@
+{
+  "navbar": {
+    "week": "The Week",
+    "receipts": "Receipts",
+    "recipes": "Recipes",
+    "scanReceipt": "Scan receipt",
+    "search": {
+      "placeholder": "Search for a recipe or food product"
+    },
+    "home": "Home",
+    "favorites": "Favorites"
+  }
+}

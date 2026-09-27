@@ -1,18 +1,23 @@
 import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
+import reactLogo from './assets/plock-icon.svg'
+import { Navbar } from './components/Navbar'
 
 function App() {
+  return (
+    <div>
+      <Navbar/>
+    </div>
+  )
+}
+
+function AppOld() {
   const [count, setCount] = useState(0)
 
   return (
     <>
       <section id="center">
         <div className="bg-red-500 hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
           <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
         </div>
         <div>
           <h1 className="text-red-500">Get started</h1>
@@ -41,7 +46,6 @@ function App() {
           <ul>
             <li>
               <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
                 Explore Vite
               </a>
             </li>

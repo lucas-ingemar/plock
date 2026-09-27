@@ -1,5 +1,148 @@
+/* Plock – HeroUI v3-tema (Tailwind v4)
+   Typsnitt: npm i @fontsource/poppins @fontsource/figtree */
+
 @import "tailwindcss";
 @import "@heroui/styles";
+
+/* ---------- Ljust läge ---------- */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* Varumärke: granskog. Hover- och soft-varianter räknas ut automatiskt */
+  --accent: #183D33;
+  --accent-foreground: #FFFFFF;
+
+  /* Neutrala knappar, chips och sekundära ytor */
+  --default: #E3E8DF;
+  --default-foreground: #16241F;
+
+  /* Canvas och text */
+  --background: #F0F2EC;
+  --foreground: #16241F;
+  --muted: #56655E;
+  --link: #22503F;
+
+  /* Kort, paneler, modaler och dropdowns */
+  --surface: #FFFFFF;
+  --surface-secondary: #F6F8F3;
+  --surface-tertiary: #E3E8DF;
+  --overlay: #FFFFFF;
+
+  /* Formulärfält */
+  --field-background: #FFFFFF;
+
+  /* Linjer */
+  --border: #DCE2D8;
+  --separator: #DCE2D8;
+
+  /* Status */
+  --success: #2F7A4F;
+  --success-foreground: #FFFFFF;
+  --warning: #B45309;
+  --warning-foreground: #FFFFFF;
+  --danger: #B42318;
+  --danger-foreground: #FFFFFF;
+
+  /* Plock-specifikt */
+  --spruce-2: #22503F;
+  --citrus: #F3B61F;
+  --citrus-foreground: #16241F;
+  --citrus-soft: #FBEBC0;
+  --citrus-soft-foreground: #16241F;
+
+  --radius: 1rem;
+}
+
+/* ---------- Mörkt läge ---------- */
+.dark,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Citrus tar över som varumärkesfärg på mörk grund */
+  --accent: #F3B61F;
+  --accent-foreground: #16241F;
+
+  --default: #22503F;
+  --default-foreground: #EEF2EC;
+
+  --background: #0F2A23;
+  --foreground: #EEF2EC;
+  --muted: #B3C4BB;
+  --link: #F7D77A;
+
+  --surface: #183D33;
+  --surface-secondary: #1D4639;
+  --surface-tertiary: #22503F;
+  --overlay: #183D33;
+
+  --field-background: #183D33;
+
+  --border: #2C5A49;
+  --separator: #2C5A49;
+
+  --success: #6FC08F;
+  --success-foreground: #0F2A23;
+  --warning: #F59E0B;
+  --warning-foreground: #16241F;
+  --danger: #F97066;
+  --danger-foreground: #16241F;
+
+  --spruce-2: #22503F;
+  --citrus: #F3B61F;
+  --citrus-foreground: #16241F;
+  --citrus-soft: #3A3415;
+  --citrus-soft-foreground: #F7D77A;
+}
+
+/* Gör de egna färgerna och typsnitten tillgängliga i Tailwind */
+@theme inline {
+  --font-sans: "Figtree", system-ui, sans-serif;
+  --font-heading: "Poppins", system-ui, sans-serif;
+
+  --color-spruce-2: var(--spruce-2);
+  --color-citrus: var(--citrus);
+  --color-citrus-foreground: var(--citrus-foreground);
+  --color-citrus-soft: var(--citrus-soft);
+  --color-citrus-soft-foreground: var(--citrus-soft-foreground);
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply font-heading tracking-tight;
+  }
+}
+
+/* Plocks formspråk ovanpå HeroUI:s komponenter */
+@layer components {
+  /* Pillerformade knappar som i mockupen */
+  .button {
+    @apply rounded-full font-semibold;
+  }
+
+  /* Citrusknapp: <Button className="button--citrus"> */
+  .button--citrus {
+    @apply bg-citrus text-citrus-foreground;
+
+    &:hover,
+    &[data-hovered="true"] {
+      background: color-mix(in oklch, var(--citrus) 88%, black);
+    }
+  }
+
+  /* "9 från kvittot"-chips: <Chip className="chip--receipt"> */
+  .chip--receipt {
+    @apply bg-citrus-soft text-citrus-soft-foreground;
+  }
+  .search-field__group {
+    @apply shadow-none border-1 border-border;
+  }
+}
+
+
 /* :root { */
 /*   --text: #6b6375; */
 /*   --text-h: #08060d; */
