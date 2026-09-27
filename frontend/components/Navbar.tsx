@@ -1,5 +1,5 @@
 import plockIcon from '@/assets/plock-icon.svg'
-import { Avatar, Button, Label, SearchField } from '@heroui/react'
+import { Avatar, Button, SearchField } from '@heroui/react'
 import { PlockButton } from '../primitives/PlockButton'
 import { useTranslation } from "react-i18next";
 import { useEffect } from 'react';
@@ -43,11 +43,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </SearchField>
                 <PlockButton variant='citrus' size='lg' onPress={() => console.log("Button pressed")}>
                     <ScanText size={20}/>
-                    {t("navbar.scanReceipt")}
+                    {t("navbar.registerReceipt")}
                 </PlockButton>
             </div>
             <Avatar size='lg'>
-                <Avatar.Image alt="John Doe" src="https://HEJimg.heroui.chat/image/avatar?w=400&h=400&u=3" />
+                <Avatar.Image alt="John Doe" src="https://img.heroui.chat/image/avatar?w=400&h=400&u=3" />
                 <Avatar.Fallback>JD</Avatar.Fallback>
             </Avatar>
         </div>

@@ -3,7 +3,7 @@
     "week": "The Week",
     "receipts": "Receipts",
     "recipes": "Recipes",
-    "scanReceipt": "Scan receipt",
+    "registerReceipt": "Register receipt",
     "search": {
       "placeholder": "Search for a recipe or food product"
     },

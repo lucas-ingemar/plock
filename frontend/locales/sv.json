@@ -3,7 +3,7 @@
     "week": "Veckan",
     "receipts": "Kvitton",
     "recipes": "Recept",
-    "scanReceipt": "Skanna kvitto",
+    "registerReceipt": "Registrera kvitto",
     "search": {
       "placeholder": "Sök recept eller vara"
     },
