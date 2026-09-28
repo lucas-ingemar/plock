@@ -16,7 +16,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     const navigate = useNavigate();
 
     useEffect(() => {
-        i18n.changeLanguage("sv")
+        i18n.changeLanguage("en")
     }, [])
 
     return (

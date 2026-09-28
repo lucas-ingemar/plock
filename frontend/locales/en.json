@@ -1,13 +1,26 @@
 {
-  "navbar": {
-    "week": "The Week",
-    "receipts": "Receipts",
-    "recipes": "Recipes",
-    "registerReceipt": "Register receipt",
-    "search": {
-      "placeholder": "Search for a recipe or food product"
+    "navbar": {
+        "week": "The Week",
+        "receipts": "Receipts",
+        "recipes": "Recipes",
+        "registerReceipt": "Register receipt",
+        "search": {
+        "placeholder": "Search for a recipe or food product"
+        }
     },
-    "home": "Home",
-    "favorites": "Favorites"
-  }
+    "registerReceipt": {
+        "meter": {
+            "label": "New plock",
+            "stepLabel":"Step {{step}} of {{totalSteps}}"
+        },
+        "buttonBack": "Back",
+        "buttonNext": "Next",
+        "buttonSubmit": "Create plock",
+        "steps": {
+            "household": {
+                "title": "How many will eat?",
+                "subtitle": "Tell us who are around the table and we will adjust the recipes."
+            }
+        }
+    }
 }

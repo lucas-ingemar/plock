@@ -1,13 +1,26 @@
 {
-  "navbar": {
-    "week": "Veckan",
-    "receipts": "Kvitton",
-    "recipes": "Recept",
-    "registerReceipt": "Registrera kvitto",
-    "search": {
-      "placeholder": "Sök recept eller vara"
+    "navbar": {
+        "week": "Veckan",
+        "receipts": "Kvitton",
+        "recipes": "Recept",
+        "registerReceipt": "Registrera kvitto",
+        "search": {
+        "placeholder": "Sök recept eller vara"
+        }
     },
-    "home": "Home",
-    "favorites": "Favorites"
-  }
+    "registerReceipt": {
+        "meter": {
+            "label": "Nytt plock",
+            "stepLabel":"Steg {{step}} av {{totalSteps}}"
+        },
+        "buttonBack": "Tillbaka",
+        "buttonNext": "Nästa",
+        "buttonSubmit": "Skapa plock",
+        "steps": {
+            "household": {
+                "title": "Hur många ska äta?",
+                "subtitle": "Berätta vilka som sitter vid bordet så anpassar vi recepten."
+            }
+        }
+    }
 }

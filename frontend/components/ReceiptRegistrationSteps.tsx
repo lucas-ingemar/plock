@@ -23,8 +23,8 @@ export interface StepContentProps {
 
 export interface RegistrationStep {
     id: string
-    title: string
-    subtitle: string
+    title?: string
+    subtitle?: string
     image: string
     Content: React.FC<StepContentProps>
     isVisible?: (data: HaulRequest) => boolean
@@ -217,8 +217,6 @@ const CuisinesStep: React.FC<StepContentProps> = ({ data, update }) => (
 export const registrationSteps: RegistrationStep[] = [
     {
         id: "household",
-        title: "Hur många ska äta?",
-        subtitle: "Berätta vilka som sitter vid bordet, så anpassar vi recepten.",
         image: householdImage,
         Content: HouseholdStep,
     },

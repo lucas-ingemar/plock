@@ -5,6 +5,7 @@ import { PlockButton } from "../primitives/PlockButton"
 import { createHaul } from "../api"
 import { registrationSteps } from "../components/ReceiptRegistrationSteps"
 import { type HaulRequest, ProteinPreferenceElement } from "../types/haulrequest"
+import { useTranslation } from "react-i18next"
 
 const initialHaulRequest: HaulRequest = {
     household: {
@@ -28,6 +29,9 @@ export const RegisterReceiptPage: React.FC = () => {
     const [data, setData] = useState<HaulRequest>(initialHaulRequest)
     const [stepIndex, setStepIndex] = useState(0)
     const [isSubmitting, setIsSubmitting] = useState(false)
+
+
+    const { t } = useTranslation();
 
     const visibleSteps = useMemo(
         () => registrationSteps.filter((step) => step.isVisible?.(data) ?? true),
@@ -65,13 +69,13 @@ export const RegisterReceiptPage: React.FC = () => {
     return (
         <DefaultPageLayout className="flex flex-col flex-1 gap-8">
             <Meter
-                aria-label="Registrering"
+                aria-label="Registration"
                 className="w-full"
                 value={progress}
-                valueLabel={`Steg ${currentIndex + 1} av ${visibleSteps.length}`}
+                valueLabel={t("registerReceipt.meter.stepLabel", {step: currentIndex + 1, totalSteps: visibleSteps.length})}
                 size="sm"
             >
-                <Label>Nytt plock</Label>
+                <Label>{t("registerReceipt.meter.label")}</Label>
                 <Meter.Output />
                 <Meter.Track>
                     <Meter.Fill />
@@ -80,8 +84,8 @@ export const RegisterReceiptPage: React.FC = () => {
             <div className="flex flex-1 sm:p-20">
                 <div className="flex flex-col gap-10 justify-between w-full lg:w-1/2">
                     <div className="flex flex-col gap-2 pt-4">
-                        <h2>{step.title}</h2>
-                        <p>{step.subtitle}</p>
+                        <h2>{t("registerReceipt.steps." + step.id + ".title")}</h2>
+                        <p>{t("registerReceipt.steps." + step.id + ".subtitle")}</p>
                     </div>
                     <div key={step.id} className="flex flex-col gap-8 items-center">
                         <StepContent data={data} update={update} />
@@ -94,7 +98,7 @@ export const RegisterReceiptPage: React.FC = () => {
                             onPress={goBack}
                             className="w-full sm:w-auto"
                         >
-                            Tillbaka
+                           {t("registerReceipt.buttonBack")}
                         </PlockButton>
                         <PlockButton
                             variant="primary"
@@ -104,7 +108,7 @@ export const RegisterReceiptPage: React.FC = () => {
                             onPress={goNext}
                             className="w-full sm:w-auto"
                         >
-                            {isLastStep ? "Skapa plock" : "Nästa"}
+                            {isLastStep ? t("registerReceipt.buttonSubmit") : t("registerReceipt.buttonNext")}
                         </PlockButton>
                     </div>
                 </div>
