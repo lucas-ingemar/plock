@@ -8,7 +8,7 @@ interface ReceiptProps {
 export const Receipt: React.FC<ReceiptProps> = ({
 }) => {
     return (
-        <div className="p-6 rounded-t-2xl receipt bg-surface">
+        <div className="p-6 rounded-t-2xl receipt bg-surface w-100">
             <div className="flex justify-between items-center">
                 <p className="text-xl font-bold">Willys</p>
                 <p className="text-muted">31 aug 2026</p>
@@ -30,6 +30,14 @@ export const Receipt: React.FC<ReceiptProps> = ({
             <Separator variant="tertiary" className="my-6"/>
             <div className="flex flex-col gap-2">
                 <ReceiptItem item="Tofu fast 2st" price={51.8} usedInRecipe/>
+                <ReceiptItem item="Tofu fast 2st" price={51.8} usedInRecipe/>
+                <ReceiptItem item="Tofu fast 2st" price={51.8} usedInRecipe/>
+                <ReceiptItem item="Tofu fast 2st" price={51.8} usedInRecipe/>
+                <ReceiptItem item="Tofu fast 2st" price={51.8} usedInRecipe/>
+                <ReceiptItem item="Tofu fast 2st" price={51.8} usedInRecipe/>
+                <ReceiptItem item="Blandfärs 1.02 kg" price={115.49} />
+                <ReceiptItem item="Blandfärs 1.02 kg" price={115.49} />
+                <ReceiptItem item="Blandfärs 1.02 kg" price={115.49} />
                 <ReceiptItem item="Blandfärs 1.02 kg" price={115.49} />
             </div>
 

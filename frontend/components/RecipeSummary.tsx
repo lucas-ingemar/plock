@@ -8,14 +8,14 @@ interface RecipeSummaryProps {
 export const RecipeSummary: React.FC<RecipeSummaryProps> = ({
 }) => {
     return (
-        <div className="flex justify-between p-8 font-sans rounded-xl bg-accent text-accent-foreground">
+        <div className="flex gap-4 justify-between p-8 font-sans rounded-xl bg-accent text-accent-foreground">
             <div className="flex flex-col">
                 <div className="flex gap-3 items-center">
                     <PlockCheckCircle checked/>
                     <p className="text-accent-foreground/70">Recept 1</p>
                 </div>
                 <h2 className="mt-4 text-4xl font-black">Krispig sesamtofu med risnudlar</h2>
-                <div className="flex gap-4 mt-6">
+                <div className="flex flex-wrap gap-4 mt-6">
                     <PlockChip variant="recipeTag">25 min</PlockChip>
                     <PlockChip variant="recipeTag" className="hidden sm:flex">Kina och Östasien</PlockChip>
                     <PlockChip variant="recipeTag">Vegetarisk</PlockChip>
