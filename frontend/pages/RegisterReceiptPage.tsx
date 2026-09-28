@@ -51,7 +51,7 @@ export const RegisterReceiptPage: React.FC = () => {
             setStepIndex(currentIndex + 1)
             return
         }
-
+        console.log(data)
         setIsSubmitting(true)
         try {
             await createHaul(data)
