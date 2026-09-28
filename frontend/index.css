@@ -112,7 +112,11 @@
     @apply bg-background text-foreground font-sans antialiased;
   }
   h1, h2, h3, h4 {
-    @apply font-heading tracking-tight;
+    @apply font-heading tracking-tight font-black;
+  }
+
+  h2 {
+    @apply text-3xl;
   }
 }
 
@@ -137,7 +141,7 @@
   .chip--receipt {
     @apply bg-citrus-soft text-citrus-soft-foreground;
   }
-  .search-field__group {
+  .search-field__group, .number-field__group {
     @apply shadow-none border-1 border-border;
   }
 

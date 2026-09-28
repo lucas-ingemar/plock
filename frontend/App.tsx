@@ -1,13 +1,15 @@
 import { Navbar } from './components/Navbar'
 import { Route, Routes } from 'react-router-dom'
 import { WeekPage } from './pages/WeekPage'
+import { RegisterReceiptPage } from './pages/RegisterReceiptPage'
 
 function App() {
   return (
-    <div className="w-full h-full">
+    <div className="flex flex-col w-full min-w-0 min-h-dvh">
       <Navbar/>
       <Routes>
         <Route element={<WeekPage/>} path="/" />
+        <Route element={<RegisterReceiptPage/>} path="/register-receipt" />
       </Routes>
     </div>
   )

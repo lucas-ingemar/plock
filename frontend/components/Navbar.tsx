@@ -4,6 +4,7 @@ import { PlockButton } from '../primitives/PlockButton'
 import { useTranslation } from "react-i18next";
 import { useEffect } from 'react';
 import { ScanText } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface NavbarProps {
 }
@@ -12,12 +13,14 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
     const { t, i18n } = useTranslation();
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         i18n.changeLanguage("sv")
     }, [])
 
     return (
-        <div className="flex gap-8 justify-between items-center py-4 px-8 w-full border-b-2 bg-background border-border">
+        <div className="flex gap-8 justify-between items-center py-4 px-8 w-full border-b-2 shrink-0 bg-background border-border">
             <div className="flex gap-2 items-center">
                 <img src={plockIcon} className="w-14 h-14" alt="Plock logo" />
                 <h1 className="font-sans text-4xl font-bold text-accent">plock</h1>
@@ -41,7 +44,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <SearchField.ClearButton />
                 </SearchField.Group>
                 </SearchField>
-                <PlockButton variant='citrus' size='lg' onPress={() => console.log("Button pressed")}>
+                <PlockButton variant='citrus' size='lg' onPress={() => navigate("/register-receipt")}>
                     <ScanText size={20}/>
                     {t("navbar.registerReceipt")}
                 </PlockButton>
