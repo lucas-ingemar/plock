@@ -4,10 +4,28 @@ import { DefaultPageLayout } from "../layouts/DefaultPageLayout"
 import { PlockButton } from "../primitives/PlockButton"
 import { createHaul } from "../api"
 import { registrationSteps } from "../components/ReceiptRegistrationSteps"
-import { initialRegistrationData, type RegistrationData } from "../types"
+import { type HaulRequest, ProteinPreferenceElement } from "../types/haulrequest"
+
+const initialHaulRequest: HaulRequest = {
+    household: {
+        adults: 2,
+        children: [],
+    },
+    servings_per_meal: 2,
+    meal_count: 5,
+    max_cooking_minutes: 30,
+    protein_preferences: [
+        ProteinPreferenceElement.Chicken,
+        ProteinPreferenceElement.Beef,
+        ProteinPreferenceElement.Pork,
+        ProteinPreferenceElement.Fish,
+        ProteinPreferenceElement.Vegetarian,
+    ],
+    cuisine_preferences: [],
+}
 
 export const RegisterReceiptPage: React.FC = () => {
-    const [data, setData] = useState<RegistrationData>(initialRegistrationData)
+    const [data, setData] = useState<HaulRequest>(initialHaulRequest)
     const [stepIndex, setStepIndex] = useState(0)
     const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -23,7 +41,7 @@ export const RegisterReceiptPage: React.FC = () => {
     const canContinue = step.isValid?.(data) ?? true
     const progress = ((currentIndex + 1) / visibleSteps.length) * 100
 
-    const update = (patch: Partial<RegistrationData>) =>
+    const update = (patch: Partial<HaulRequest>) =>
         setData((previous) => ({ ...previous, ...patch }))
 
     const goBack = () => setStepIndex(Math.max(currentIndex - 1, 0))

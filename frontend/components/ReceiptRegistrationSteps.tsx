@@ -1,6 +1,4 @@
-import { Description, Label, NumberField, TextArea, TextField } from "@heroui/react"
-import { DropZone, FileTrigger } from "react-aria-components"
-import { PlockButton } from "../primitives/PlockButton"
+import { Description, Label, NumberField } from "@heroui/react"
 import householdImage from "@/assets/receipt-registration/step-household.svg"
 import childrenImage from "@/assets/receipt-registration/step-children.svg"
 import servingsImage from "@/assets/receipt-registration/step-servings.svg"
@@ -8,14 +6,19 @@ import mealsImage from "@/assets/receipt-registration/step-meals.svg"
 import timeImage from "@/assets/receipt-registration/step-time.svg"
 import proteinImage from "@/assets/receipt-registration/step-protein.svg"
 import cuisinesImage from "@/assets/receipt-registration/step-cuisines.svg"
-import receiptImage from "@/assets/receipt-registration/step-receipt.svg"
 import { ChoiceTiles } from "./ChoiceTiles"
 import { type MultiChoiceOption, MultiChoiceTiles } from "./MultiChoiceTiles"
-import { type Cuisine, DEFAULT_CHILD_AGE, type Protein, type RegistrationData, recommendedServings } from "../types"
+import {
+    CuisinePreferenceElement as Cuisine,
+    type HaulRequest,
+    ProteinPreferenceElement as Protein,
+} from "../types/haulrequest"
+
+const DEFAULT_CHILD_AGE = 4
 
 export interface StepContentProps {
-    data: RegistrationData
-    update: (patch: Partial<RegistrationData>) => void
+    data: HaulRequest
+    update: (patch: Partial<HaulRequest>) => void
 }
 
 export interface RegistrationStep {
@@ -24,8 +27,8 @@ export interface RegistrationStep {
     subtitle: string
     image: string
     Content: React.FC<StepContentProps>
-    isVisible?: (data: RegistrationData) => boolean
-    isValid?: (data: RegistrationData) => boolean
+    isVisible?: (data: HaulRequest) => boolean
+    isValid?: (data: HaulRequest) => boolean
 }
 
 interface CounterProps {
@@ -57,27 +60,33 @@ const Counter: React.FC<CounterProps> = ({ label, description, value, minValue, 
 )
 
 const HouseholdStep: React.FC<StepContentProps> = ({ data, update }) => {
+    const { household } = data
+
+    const setAdults = (adults: number) =>
+        update({
+            household: { ...household, adults },
+            servings_per_meal: adults + household.children.length,
+        })
+
     const setChildCount = (count: number) =>
         update({
-            children: Array.from(
-                { length: count },
-                (_, index) => data.children[index] ?? { ageYears: DEFAULT_CHILD_AGE },
-            ),
+            household: {
+                ...household,
+                children: Array.from(
+                    { length: count },
+                    (_, index) => household.children[index] ?? { age_years: DEFAULT_CHILD_AGE },
+                ),
+            },
+            servings_per_meal: household.adults + count,
         })
 
     return (
         <>
-            <Counter
-                label="Antal vuxna"
-                value={data.adults}
-                minValue={1}
-                maxValue={10}
-                onChange={(adults) => update({ adults })}
-            />
+            <Counter label="Antal vuxna" value={household.adults} minValue={1} maxValue={10} onChange={setAdults} />
             <Counter
                 label="Antal barn"
                 description="Under 18 år"
-                value={data.children.length}
+                value={household.children.length}
                 minValue={0}
                 maxValue={10}
                 onChange={setChildCount}
@@ -87,21 +96,24 @@ const HouseholdStep: React.FC<StepContentProps> = ({ data, update }) => {
 }
 
 const ChildrenStep: React.FC<StepContentProps> = ({ data, update }) => {
-    const setAge = (childIndex: number, ageYears: number) =>
+    const setAge = (childIndex: number, age_years: number) =>
         update({
-            children: data.children.map((child, index) =>
-                index === childIndex ? { ...child, ageYears } : child,
-            ),
+            household: {
+                ...data.household,
+                children: data.household.children.map((child, index) =>
+                    index === childIndex ? { ...child, age_years } : child,
+                ),
+            },
         })
 
     return (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {data.children.map((child, index) => (
+            {data.household.children.map((child, index) => (
                 <Counter
                     key={index}
                     label={`Barn ${index + 1}`}
                     description="Ålder i år"
-                    value={child.ageYears}
+                    value={child.age_years}
                     minValue={0}
                     maxValue={17}
                     onChange={(age) => setAge(index, age)}
@@ -112,7 +124,7 @@ const ChildrenStep: React.FC<StepContentProps> = ({ data, update }) => {
 }
 
 const ServingsStep: React.FC<StepContentProps> = ({ data, update }) => {
-    const recommended = recommendedServings(data)
+    const recommended = data.household.adults + data.household.children.length
 
     return (
         <ChoiceTiles
@@ -123,8 +135,8 @@ const ServingsStep: React.FC<StepContentProps> = ({ data, update }) => {
                 label: String(value),
                 caption: value === 1 ? "portion" : "portioner",
             }))}
-            value={data.servingsPerMeal ?? recommended}
-            onChange={(servingsPerMeal) => update({ servingsPerMeal })}
+            value={data.servings_per_meal}
+            onChange={(servings_per_meal) => update({ servings_per_meal })}
         />
     )
 }
@@ -133,8 +145,8 @@ const MealsStep: React.FC<StepContentProps> = ({ data, update }) => (
     <ChoiceTiles
         label="Antal middagar"
         options={[2, 3, 4, 5, 6, 7].map((value) => ({ value, label: String(value), caption: "middagar" }))}
-        value={data.mealCount}
-        onChange={(mealCount) => update({ mealCount })}
+        value={data.meal_count}
+        onChange={(meal_count) => update({ meal_count })}
     />
 )
 
@@ -142,48 +154,48 @@ const TimeStep: React.FC<StepContentProps> = ({ data, update }) => (
     <ChoiceTiles
         label="Max tid per middag"
         options={[20, 30, 45, 60].map((value) => ({ value, label: String(value), caption: "minuter" }))}
-        value={data.maxCookingMinutes}
-        onChange={(maxCookingMinutes) => update({ maxCookingMinutes })}
+        value={data.max_cooking_minutes}
+        onChange={(max_cooking_minutes) => update({ max_cooking_minutes })}
     />
 )
 
 const proteinOptions: MultiChoiceOption<Protein>[] = [
-    { value: "chicken", label: "Kyckling" },
-    { value: "beef", label: "Nötkött" },
-    { value: "pork", label: "Fläsk" },
-    { value: "lamb", label: "Lamm" },
-    { value: "fish", label: "Fisk" },
-    { value: "seafood", label: "Skaldjur" },
-    { value: "vegetarian", label: "Vegetariskt", caption: "Ägg, ost, bönor" },
-    { value: "vegan", label: "Veganskt", caption: "Tofu, linser, vego" },
+    { value: Protein.Chicken, label: "Kyckling" },
+    { value: Protein.Beef, label: "Nötkött" },
+    { value: Protein.Pork, label: "Fläsk" },
+    { value: Protein.Lamb, label: "Lamm" },
+    { value: Protein.Fish, label: "Fisk" },
+    { value: Protein.Seafood, label: "Skaldjur" },
+    { value: Protein.Vegetarian, label: "Vegetariskt", caption: "Ägg, ost, bönor" },
+    { value: Protein.Vegan, label: "Veganskt", caption: "Tofu, linser, vego" },
 ]
 
 const cuisineOptions: MultiChoiceOption<Cuisine>[] = [
-    { value: "swedish", label: "Svenskt" },
-    { value: "italian", label: "Italienskt" },
-    { value: "french", label: "Franskt" },
-    { value: "spanish", label: "Spanskt" },
-    { value: "greek", label: "Grekiskt" },
-    { value: "turkish", label: "Turkiskt" },
-    { value: "moroccan", label: "Marockanskt" },
-    { value: "indian", label: "Indiskt" },
-    { value: "chinese", label: "Kinesiskt" },
-    { value: "thai", label: "Thailändskt" },
-    { value: "japanese", label: "Japanskt" },
-    { value: "korean", label: "Koreanskt" },
-    { value: "vietnamese", label: "Vietnamesiskt" },
-    { value: "mexican", label: "Mexikanskt" },
-    { value: "american", label: "Amerikanskt" },
-    { value: "latin_american", label: "Latinamerikanskt" },
+    { value: Cuisine.Swedish, label: "Svenskt" },
+    { value: Cuisine.Italian, label: "Italienskt" },
+    { value: Cuisine.French, label: "Franskt" },
+    { value: Cuisine.Spanish, label: "Spanskt" },
+    { value: Cuisine.Greek, label: "Grekiskt" },
+    { value: Cuisine.Turkish, label: "Turkiskt" },
+    { value: Cuisine.Moroccan, label: "Marockanskt" },
+    { value: Cuisine.Indian, label: "Indiskt" },
+    { value: Cuisine.Chinese, label: "Kinesiskt" },
+    { value: Cuisine.Thai, label: "Thailändskt" },
+    { value: Cuisine.Japanese, label: "Japanskt" },
+    { value: Cuisine.Korean, label: "Koreanskt" },
+    { value: Cuisine.Vietnamese, label: "Vietnamesiskt" },
+    { value: Cuisine.Mexican, label: "Mexikanskt" },
+    { value: Cuisine.American, label: "Amerikanskt" },
+    { value: Cuisine.LatinAmerican, label: "Latinamerikanskt" },
 ]
 
 const ProteinStep: React.FC<StepContentProps> = ({ data, update }) => (
     <MultiChoiceTiles
         label="Protein"
-        description="Välj allt ni äter. Det ni väljer bort använder vi inte, även om det finns på kvittot."
+        description="Välj allt ni äter. Det ni väljer bort använder vi inte i recepten."
         options={proteinOptions}
-        value={data.proteins}
-        onChange={(proteins) => update({ proteins })}
+        value={data.protein_preferences}
+        onChange={(protein_preferences) => update({ protein_preferences })}
     />
 )
 
@@ -191,57 +203,15 @@ const CuisinesStep: React.FC<StepContentProps> = ({ data, update }) => (
     <MultiChoiceTiles
         label="Kök"
         description={
-            data.cuisines.length === 0
+            data.cuisine_preferences.length === 0
                 ? "Väljer ni inget blandar vi fritt mellan köken."
-                : `${data.cuisines.length} valda`
+                : `${data.cuisine_preferences.length} valda`
         }
         options={cuisineOptions}
-        value={data.cuisines}
-        onChange={(cuisines) => update({ cuisines })}
+        value={data.cuisine_preferences}
+        onChange={(cuisine_preferences) => update({ cuisine_preferences })}
         columns={3}
     />
-)
-
-const ReceiptStep: React.FC<StepContentProps> = ({ data, update }) => (
-    <div className="flex flex-col gap-6 w-full max-w-md">
-        <DropZone
-            onDrop={async (event) => {
-                const item = event.items.find((dropItem) => dropItem.kind === "file")
-                if (item?.kind === "file") {
-                    update({ receiptFile: await item.getFile() })
-                }
-            }}
-            className="flex flex-col gap-4 items-center p-8 text-center rounded-2xl border-2 border-dashed transition-colors border-border bg-surface data-drop-target:border-accent data-drop-target:bg-surface-secondary"
-        >
-            {data.receiptFile ? (
-                <>
-                    <p className="font-semibold break-all">{data.receiptFile.name}</p>
-                    <PlockButton variant="ghost" size="sm" onPress={() => update({ receiptFile: null })}>
-                        Ta bort
-                    </PlockButton>
-                </>
-            ) : (
-                <>
-                    <p className="text-muted">Dra in en bild eller PDF av kvittot hit</p>
-                    <FileTrigger
-                        acceptedFileTypes={["image/*", "application/pdf"]}
-                        onSelect={(files) => {
-                            const file = files?.[0]
-                            if (file) {
-                                update({ receiptFile: file })
-                            }
-                        }}
-                    >
-                        <PlockButton variant="primary">Välj fil</PlockButton>
-                    </FileTrigger>
-                </>
-            )}
-        </DropZone>
-        <TextField value={data.receiptText} onChange={(receiptText) => update({ receiptText })}>
-            <Label>Eller klistra in kvittot som text</Label>
-            <TextArea rows={5} placeholder="Från orderbekräftelsen eller appen" />
-        </TextField>
-    </div>
 )
 
 export const registrationSteps: RegistrationStep[] = [
@@ -252,14 +222,14 @@ export const registrationSteps: RegistrationStep[] = [
         image: householdImage,
         Content: HouseholdStep,
     },
-    // {
-    //     id: "children",
-    //     title: "Hur gamla är barnen?",
-    //     subtitle: "Då kan vi ge tips på hur maten passar de minsta.",
-    //     image: childrenImage,
-    //     Content: ChildrenStep,
-    //     isVisible: (data) => data.children.length > 0,
-    // },
+    {
+        id: "children",
+        title: "Hur gamla är barnen?",
+        subtitle: "Då kan vi ge tips på hur maten passar de minsta.",
+        image: childrenImage,
+        Content: ChildrenStep,
+        isVisible: (data) => data.household.children.length > 0,
+    },
     {
         id: "servings",
         title: "Hur många portioner per middag?",
@@ -287,7 +257,7 @@ export const registrationSteps: RegistrationStep[] = [
         subtitle: "Vi bygger recepten kring det ni gillar och hoppar över resten.",
         image: proteinImage,
         Content: ProteinStep,
-        isValid: (data) => data.proteins.length > 0,
+        isValid: (data) => data.protein_preferences.length > 0,
     },
     {
         id: "cuisines",
@@ -296,12 +266,4 @@ export const registrationSteps: RegistrationStep[] = [
         image: cuisinesImage,
         Content: CuisinesStep,
     },
-    // {
-    //     id: "receipt",
-    //     title: "Lägg till kvittot",
-    //     subtitle: "Ladda upp en bild eller PDF, eller klistra in texten från en näthandel.",
-    //     image: receiptImage,
-    //     Content: ReceiptStep,
-    //     isValid: (data) => data.receiptFile !== null || data.receiptText.trim().length > 20,
-    // },
 ]
