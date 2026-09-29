@@ -1,26 +1,91 @@
 {
-    "navbar": {
-        "week": "Veckan",
-        "receipts": "Kvitton",
-        "recipes": "Recept",
-        "registerReceipt": "Registrera kvitto",
-        "search": {
-        "placeholder": "Sök recept eller vara"
-        }
-    },
-    "registerReceipt": {
-        "meter": {
-            "label": "Nytt plock",
-            "stepLabel":"Steg {{step}} av {{totalSteps}}"
-        },
-        "buttonBack": "Tillbaka",
-        "buttonNext": "Nästa",
-        "buttonSubmit": "Skapa plock",
-        "steps": {
-            "household": {
-                "title": "Hur många ska äta?",
-                "subtitle": "Berätta vilka som sitter vid bordet så anpassar vi recepten."
-            }
-        }
+  "navbar": {
+    "week": "Veckan",
+    "receipts": "Kvitton",
+    "recipes": "Recept",
+    "registerReceipt": "Registrera kvitto",
+    "search": {
+      "placeholder": "Sök recept eller vara"
     }
+  },
+  "registerReceipt": {
+    "meter": {
+      "label": "Nytt plock",
+      "stepLabel": "Steg {{step}} av {{totalSteps}}"
+    },
+    "buttonBack": "Tillbaka",
+    "buttonNext": "Nästa",
+    "buttonSubmit": "Skapa plock",
+    "steps": {
+      "household": {
+        "title": "Hur många ska äta?",
+        "subtitle": "Berätta vilka som sitter vid bordet så anpassar vi recepten.",
+        "adultsLabel": "Antal vuxna",
+        "childrenLabel": "Antal barn",
+        "childrenDescLabel": "Under 12 år"
+      },
+      "children": {
+        "title": "Hur gamla är barnen?",
+        "subtitle": "Då kan vi ge tips på hur maten passar de minsta."
+      },
+      "servings": {
+        "title": "Hur många portioner per middag?",
+        "subtitle": "Räkna med extra portioner om ni vill ta med matlåda.",
+        "choiceLabel": "Portioner per middag",
+        "choiceDesc": "Förslag för ert hushåll: {{recommended}}. Välj fler om ni vill ha matlådor.",
+        "portion": "portion",
+        "portions": "portioner"
+      },
+      "meals": {
+        "title": "Hur många middagar?",
+        "subtitle": "Vi planerar så många rätter av det ni har handlat.",
+        "choiceLabel": "Antal middagar",
+        "dinners": "middagar"
+      },
+      "time": {
+        "title": "Hur mycket tid har ni?",
+        "subtitle": "Den längsta tid en middag får ta att laga en vanlig vardag.",
+        "choiceLabel": "Max tid per middag",
+        "minutes": "minuter"
+      },
+      "protein": {
+        "title": "Vad äter ni för protein?",
+        "subtitle": "Vi bygger recepten kring det ni gillar och hoppar över resten.",
+        "options": {
+          "chicken": "Kyckling",
+          "beef": "Nötkött",
+          "pork": "Fläsk",
+          "lamb": "Lamm",
+          "fish": "Fisk",
+          "seafood": "Skaldjur",
+          "vegetarian": "Vegetariskt",
+          "vegetarianCaption": "Ägg, ost, bönor",
+          "vegan": "Veganskt",
+          "veganCaption": "Tofu, linser, vego"
+        }
+      },
+      "cuisines": {
+        "title": "Vilka kök gillar ni?",
+        "subtitle": "Välj så många ni vill. Vi blandar mellan dem under veckan.",
+        "options": {
+          "swedish": "Svenskt",
+          "italian": "Italienskt",
+          "french": "Franskt",
+          "spanish": "Spanskt",
+          "greek": "Grekiskt",
+          "turkish": "Turkiskt",
+          "moroccan": "Marockanskt",
+          "indian": "Indiskt",
+          "chinese": "Kinesiskt",
+          "thai": "Thailändskt",
+          "japanese": "Japanskt",
+          "korean": "Koreanskt",
+          "vietnamese": "Vietnamesiskt",
+          "mexican": "Mexikanskt",
+          "american": "Amerikanskt",
+          "latinAmerican": "Latinamerikanskt"
+        }
+      }
+    }
+  }
 }

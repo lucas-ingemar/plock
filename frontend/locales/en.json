@@ -1,26 +1,61 @@
 {
-    "navbar": {
-        "week": "The Week",
-        "receipts": "Receipts",
-        "recipes": "Recipes",
-        "registerReceipt": "Register receipt",
-        "search": {
-        "placeholder": "Search for a recipe or food product"
-        }
-    },
-    "registerReceipt": {
-        "meter": {
-            "label": "New plock",
-            "stepLabel":"Step {{step}} of {{totalSteps}}"
-        },
-        "buttonBack": "Back",
-        "buttonNext": "Next",
-        "buttonSubmit": "Create plock",
-        "steps": {
-            "household": {
-                "title": "How many will eat?",
-                "subtitle": "Tell us who are around the table and we will adjust the recipes."
-            }
-        }
+  "navbar": {
+    "week": "The Week",
+    "receipts": "Receipts",
+    "recipes": "Recipes",
+    "registerReceipt": "Register receipt",
+    "search": {
+      "placeholder": "Search for a recipe or food product"
     }
+  },
+  "registerReceipt": {
+    "meter": {
+      "label": "New plock",
+      "stepLabel": "Step {{step}} of {{totalSteps}}"
+    },
+    "buttonBack": "Back",
+    "buttonNext": "Next",
+    "buttonSubmit": "Create plock",
+    "steps": {
+      "household": {
+        "title": "How many will eat?",
+        "subtitle": "Tell us who are around the table and we will adjust the recipes.",
+        "adultsLabel": "Number of adults",
+        "childrenLabel": "Number of children",
+        "childrenDescLabel": "Under 12 years"
+      },
+      "children": {
+        "title": "How old are the kids?",
+        "subtitle": "That way we can give tips on how the food works for the little ones."
+      },
+      "servings": {
+        "title": "How many servings per dinner?",
+        "subtitle": "Add extra servings if you want leftovers for lunch.",
+        "choiceLabel": "Portions per dinner",
+        "choiceDesc": "Suggestion for your household: {{recommended}}. Choose more if you want leftovers.",
+        "portion": "portion",
+        "portions": "portions"
+      },
+      "meals": {
+        "title": "How many dinners?",
+        "subtitle": "We'll plan that many dishes from what you've bought.",
+        "choiceLabel": "Antal middagar",
+        "dinners": "middagar"
+      },
+      "time": {
+        "title": "How much time do you have?",
+        "subtitle": "The longest a dinner should take to cook on a regular weekday.",
+        "choiceLabel": "Maximum time per dinner",
+        "minutes": "minutes"
+      },
+      "protein": {
+        "title": "What protein do you eat?",
+        "subtitle": "We'll build the recipes around what you like and skip the rest."
+      },
+      "cuisines": {
+        "title": "Which cuisines do you like?",
+        "subtitle": "Pick as many as you like. We'll mix them up throughout the week."
+      }
+    }
+  }
 }

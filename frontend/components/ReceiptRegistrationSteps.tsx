@@ -1,4 +1,5 @@
 import { Description, Label, NumberField } from "@heroui/react"
+import { useTranslation } from "react-i18next";
 import householdImage from "@/assets/receipt-registration/step-household.svg"
 import childrenImage from "@/assets/receipt-registration/step-children.svg"
 import servingsImage from "@/assets/receipt-registration/step-servings.svg"
@@ -13,6 +14,7 @@ import {
     type HaulRequest,
     ProteinPreferenceElement as Protein,
 } from "../types/haulrequest"
+import { useMemo } from "react"
 
 const DEFAULT_CHILD_AGE = 4
 
@@ -60,6 +62,7 @@ const Counter: React.FC<CounterProps> = ({ label, description, value, minValue, 
 )
 
 const HouseholdStep: React.FC<StepContentProps> = ({ data, update }) => {
+    const { t } = useTranslation();
     const { household } = data
 
     const setAdults = (adults: number) =>
@@ -82,10 +85,10 @@ const HouseholdStep: React.FC<StepContentProps> = ({ data, update }) => {
 
     return (
         <>
-            <Counter label="Antal vuxna" value={household.adults} minValue={1} maxValue={10} onChange={setAdults} />
+            <Counter label={t("registerReceipt.steps.household.adultsLabel")} value={household.adults} minValue={1} maxValue={10} onChange={setAdults} />
             <Counter
-                label="Antal barn"
-                description="Under 18 år"
+                label={t("registerReceipt.steps.household.childrenLabel")}
+                description={t("registerReceipt.steps.household.childrenDescLabel")}
                 value={household.children.length}
                 minValue={0}
                 maxValue={10}
@@ -126,14 +129,16 @@ const ChildrenStep: React.FC<StepContentProps> = ({ data, update }) => {
 const ServingsStep: React.FC<StepContentProps> = ({ data, update }) => {
     const recommended = data.household.adults + data.household.children.length
 
+    const { t } = useTranslation();
+
     return (
         <ChoiceTiles
-            label="Portioner per middag"
-            description={`Förslag för ert hushåll: ${recommended}. Välj fler om ni vill ha matlådor.`}
+            label={t("registerReceipt.steps.servings.choiceLabel")}
+            description={t("registerReceipt.steps.servings.choiceDesc", {recommended: recommended})}
             options={[1, 2, 3, 4, 5, 6, 7, 8].map((value) => ({
                 value,
                 label: String(value),
-                caption: value === 1 ? "portion" : "portioner",
+                caption: value === 1 ? t("registerReceipt.steps.servings.portion") : t("registerReceipt.steps.servings.portions"),
             }))}
             value={data.servings_per_meal}
             onChange={(servings_per_meal) => update({ servings_per_meal })}
@@ -141,78 +146,117 @@ const ServingsStep: React.FC<StepContentProps> = ({ data, update }) => {
     )
 }
 
-const MealsStep: React.FC<StepContentProps> = ({ data, update }) => (
-    <ChoiceTiles
-        label="Antal middagar"
-        options={[2, 3, 4, 5, 6, 7].map((value) => ({ value, label: String(value), caption: "middagar" }))}
-        value={data.meal_count}
-        onChange={(meal_count) => update({ meal_count })}
-    />
-)
+const MealsStep: React.FC<StepContentProps> = ({ data, update }) => {
+    const { t } = useTranslation();
+    return (
+        <ChoiceTiles
+            label={t("registerReceipt.steps.meals.choiceLabel")}
+            options={[2, 3, 4, 5, 6, 7].map((value) => ({ value, label: String(value), caption: t("registerReceipt.steps.meals.dinners") }))}
+            value={data.meal_count}
+            onChange={(meal_count) => update({ meal_count })}
+        />
+    )
+}
 
-const TimeStep: React.FC<StepContentProps> = ({ data, update }) => (
-    <ChoiceTiles
-        label="Max tid per middag"
-        options={[20, 30, 45, 60].map((value) => ({ value, label: String(value), caption: "minuter" }))}
-        value={data.max_cooking_minutes}
-        onChange={(max_cooking_minutes) => update({ max_cooking_minutes })}
-    />
-)
+const TimeStep: React.FC<StepContentProps> = ({ data, update }) => {
+    const { t } = useTranslation();
+    return (
+        <ChoiceTiles
+            label={t("registerReceipt.steps.time.choiceLabel")}
+            options={[20, 30, 45, 60].map((value) => ({ value, label: String(value), caption: t("registerReceipt.steps.time.minutes") }))}
+            value={data.max_cooking_minutes}
+            onChange={(max_cooking_minutes) => update({ max_cooking_minutes })}
+        />
+    )
+}
 
-const proteinOptions: MultiChoiceOption<Protein>[] = [
-    { value: Protein.Chicken, label: "Kyckling" },
-    { value: Protein.Beef, label: "Nötkött" },
-    { value: Protein.Pork, label: "Fläsk" },
-    { value: Protein.Lamb, label: "Lamm" },
-    { value: Protein.Fish, label: "Fisk" },
-    { value: Protein.Seafood, label: "Skaldjur" },
-    { value: Protein.Vegetarian, label: "Vegetariskt", caption: "Ägg, ost, bönor" },
-    { value: Protein.Vegan, label: "Veganskt", caption: "Tofu, linser, vego" },
-]
 
-const cuisineOptions: MultiChoiceOption<Cuisine>[] = [
-    { value: Cuisine.Swedish, label: "Svenskt" },
-    { value: Cuisine.Italian, label: "Italienskt" },
-    { value: Cuisine.French, label: "Franskt" },
-    { value: Cuisine.Spanish, label: "Spanskt" },
-    { value: Cuisine.Greek, label: "Grekiskt" },
-    { value: Cuisine.Turkish, label: "Turkiskt" },
-    { value: Cuisine.Moroccan, label: "Marockanskt" },
-    { value: Cuisine.Indian, label: "Indiskt" },
-    { value: Cuisine.Chinese, label: "Kinesiskt" },
-    { value: Cuisine.Thai, label: "Thailändskt" },
-    { value: Cuisine.Japanese, label: "Japanskt" },
-    { value: Cuisine.Korean, label: "Koreanskt" },
-    { value: Cuisine.Vietnamese, label: "Vietnamesiskt" },
-    { value: Cuisine.Mexican, label: "Mexikanskt" },
-    { value: Cuisine.American, label: "Amerikanskt" },
-    { value: Cuisine.LatinAmerican, label: "Latinamerikanskt" },
-]
+const P = "registerReceipt.steps.protein"
+const C = "registerReceipt.steps.cuisines"
 
-const ProteinStep: React.FC<StepContentProps> = ({ data, update }) => (
-    <MultiChoiceTiles
-        label="Protein"
-        description="Välj allt ni äter. Det ni väljer bort använder vi inte i recepten."
-        options={proteinOptions}
-        value={data.protein_preferences}
-        onChange={(protein_preferences) => update({ protein_preferences })}
-    />
-)
+const proteinOptions = [
+    { value: Protein.Chicken, labelKey: `${P}.options.chicken` },
+    { value: Protein.Beef, labelKey: `${P}.options.beef` },
+    { value: Protein.Pork, labelKey: `${P}.options.pork` },
+    { value: Protein.Lamb, labelKey: `${P}.options.lamb` },
+    { value: Protein.Fish, labelKey: `${P}.options.fish` },
+    { value: Protein.Seafood, labelKey: `${P}.options.seafood` },
+    { value: Protein.Vegetarian, labelKey: `${P}.options.vegetarian`, captionKey: `${P}.options.vegetarianCaption` },
+    { value: Protein.Vegan, labelKey: `${P}.options.vegan`, captionKey: `${P}.options.veganCaption` },
+] as const
 
-const CuisinesStep: React.FC<StepContentProps> = ({ data, update }) => (
-    <MultiChoiceTiles
-        label="Kök"
-        description={
-            data.cuisine_preferences.length === 0
-                ? "Väljer ni inget blandar vi fritt mellan köken."
-                : `${data.cuisine_preferences.length} valda`
-        }
-        options={cuisineOptions}
-        value={data.cuisine_preferences}
-        onChange={(cuisine_preferences) => update({ cuisine_preferences })}
-        columns={3}
-    />
-)
+const cuisineOptions = [
+    { value: Cuisine.Swedish, labelKey: `${C}.options.swedish` },
+    { value: Cuisine.Italian, labelKey: `${C}.options.italian` },
+    { value: Cuisine.French, labelKey: `${C}.options.french` },
+    { value: Cuisine.Spanish, labelKey: `${C}.options.spanish` },
+    { value: Cuisine.Greek, labelKey: `${C}.options.greek` },
+    { value: Cuisine.Turkish, labelKey: `${C}.options.turkish` },
+    { value: Cuisine.Moroccan, labelKey: `${C}.options.moroccan` },
+    { value: Cuisine.Indian, labelKey: `${C}.options.indian` },
+    { value: Cuisine.Chinese, labelKey: `${C}.options.chinese` },
+    { value: Cuisine.Thai, labelKey: `${C}.options.thai` },
+    { value: Cuisine.Japanese, labelKey: `${C}.options.japanese` },
+    { value: Cuisine.Korean, labelKey: `${C}.options.korean` },
+    { value: Cuisine.Vietnamese, labelKey: `${C}.options.vietnamese` },
+    { value: Cuisine.Mexican, labelKey: `${C}.options.mexican` },
+    { value: Cuisine.American, labelKey: `${C}.options.american` },
+    { value: Cuisine.LatinAmerican, labelKey: `${C}.options.latinAmerican` },
+] as const
+
+const ProteinStep: React.FC<StepContentProps> = ({ data, update }) => {
+    const { t } = useTranslation()
+
+    const options: MultiChoiceOption<Protein>[] = useMemo(
+        () =>
+            proteinOptions.map((o) => ({
+                value: o.value,
+                label: t(o.labelKey),
+                caption: "captionKey" in o ? t(o.captionKey) : undefined,
+            })),
+        [t]
+    )
+
+    return (
+        <MultiChoiceTiles
+            label={t(`${P}.choiceLabel`)}
+            description={t(`${P}.choiceDesc`)}
+            options={options}
+            value={data.proteins}
+            onChange={(proteins) => update({ proteins })}
+        />
+    )
+}
+
+const CuisinesStep: React.FC<StepContentProps> = ({ data, update }) => {
+    const { t } = useTranslation()
+
+    const options: MultiChoiceOption<Cuisine>[] = useMemo(
+        () =>
+            cuisineOptions.map((o) => ({
+                value: o.value,
+                label: t(o.labelKey),
+            })),
+        [t]
+    )
+
+    const count = data.cuisines.length
+
+    return (
+        <MultiChoiceTiles
+            label={t(`${C}.choiceLabel`)}
+            description={
+                count === 0
+                    ? t(`${C}.choiceDescNone`)
+                    : t(`${C}.selected`, { count })
+            }
+            options={options}
+            value={data.cuisines}
+            onChange={(cuisines) => update({ cuisines })}
+            columns={3}
+        />
+    )
+}
 
 export const registrationSteps: RegistrationStep[] = [
     {
@@ -220,47 +264,35 @@ export const registrationSteps: RegistrationStep[] = [
         image: householdImage,
         Content: HouseholdStep,
     },
-    {
-        id: "children",
-        title: "Hur gamla är barnen?",
-        subtitle: "Då kan vi ge tips på hur maten passar de minsta.",
-        image: childrenImage,
-        Content: ChildrenStep,
-        isVisible: (data) => data.household.children.length > 0,
-    },
+    // {
+    //     id: "children",
+    //     image: childrenImage,
+    //     Content: ChildrenStep,
+    //     isVisible: (data) => data.household.children.length > 0,
+    // },
     {
         id: "servings",
-        title: "Hur många portioner per middag?",
-        subtitle: "Räkna med extra portioner om ni vill ta med matlåda.",
         image: servingsImage,
         Content: ServingsStep,
     },
     {
         id: "meals",
-        title: "Hur många middagar?",
-        subtitle: "Vi planerar så många rätter av det ni har handlat.",
         image: mealsImage,
         Content: MealsStep,
     },
     {
         id: "time",
-        title: "Hur mycket tid har ni?",
-        subtitle: "Den längsta tid en middag får ta att laga en vanlig vardag.",
         image: timeImage,
         Content: TimeStep,
     },
     {
         id: "protein",
-        title: "Vad äter ni för protein?",
-        subtitle: "Vi bygger recepten kring det ni gillar och hoppar över resten.",
         image: proteinImage,
         Content: ProteinStep,
         isValid: (data) => data.protein_preferences.length > 0,
     },
     {
         id: "cuisines",
-        title: "Vilka kök gillar ni?",
-        subtitle: "Välj så många ni vill. Vi blandar mellan dem under veckan.",
         image: cuisinesImage,
         Content: CuisinesStep,
     },
