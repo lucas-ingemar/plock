@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"log/slog"
 	"os"
@@ -9,9 +10,13 @@ import (
 
 	"github.com/lmittmann/tint"
 	"github.com/lucas-ingemar/plock/pkg/database"
+	"github.com/lucas-ingemar/plock/pkg/kitchen"
+	"github.com/lucas-ingemar/plock/pkg/server"
 )
 
 func main() {
+	ctx := context.Background()
+
 	slogHandler := tint.NewTextHandler(os.Stderr, &tint.Options{
 		Level:      slog.LevelDebug,
 		TimeFormat: time.TimeOnly,
@@ -29,6 +34,15 @@ func main() {
 
 	db, err := database.NewDatabase(dbSqlite)
 	if err != nil {
+		slog.Error(err.Error())
+		return
+	}
+
+	k := kitchen.New(db)
+
+	s := server.New(&k)
+
+	if err = s.Start(ctx); err != nil {
 		slog.Error(err.Error())
 		return
 	}
