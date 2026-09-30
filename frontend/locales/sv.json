@@ -67,6 +67,9 @@
       "cuisines": {
         "title": "Vilka kök gillar ni?",
         "subtitle": "Välj så många ni vill. Vi blandar mellan dem under veckan.",
+        "choiceDescNone": "Väljer ni inget blandar vi fritt mellan köken.",
+        "selected_one": "{{count}} vald",
+        "selected_other": "{{count}} valda",
         "options": {
           "swedish": "Svenskt",
           "italian": "Italienskt",

@@ -1,7 +1,6 @@
 import { Description, Label, NumberField } from "@heroui/react"
 import { useTranslation } from "react-i18next";
 import householdImage from "@/assets/receipt-registration/step-household.svg"
-import childrenImage from "@/assets/receipt-registration/step-children.svg"
 import servingsImage from "@/assets/receipt-registration/step-servings.svg"
 import mealsImage from "@/assets/receipt-registration/step-meals.svg"
 import timeImage from "@/assets/receipt-registration/step-time.svg"
@@ -222,8 +221,8 @@ const ProteinStep: React.FC<StepContentProps> = ({ data, update }) => {
             label={t(`${P}.choiceLabel`)}
             description={t(`${P}.choiceDesc`)}
             options={options}
-            value={data.proteins}
-            onChange={(proteins) => update({ proteins })}
+            value={data.protein_preferences}
+            onChange={(protein_preferences) => update({ protein_preferences })}
         />
     )
 }
@@ -240,7 +239,7 @@ const CuisinesStep: React.FC<StepContentProps> = ({ data, update }) => {
         [t]
     )
 
-    const count = data.cuisines.length
+    const count = data.cuisine_preferences.length
 
     return (
         <MultiChoiceTiles
@@ -251,8 +250,8 @@ const CuisinesStep: React.FC<StepContentProps> = ({ data, update }) => {
                     : t(`${C}.selected`, { count })
             }
             options={options}
-            value={data.cuisines}
-            onChange={(cuisines) => update({ cuisines })}
+            value={data.cuisine_preferences}
+            onChange={(cuisine_preferences) => update({ cuisine_preferences })}
             columns={3}
         />
     )

@@ -39,8 +39,8 @@
       "meals": {
         "title": "How many dinners?",
         "subtitle": "We'll plan that many dishes from what you've bought.",
-        "choiceLabel": "Antal middagar",
-        "dinners": "middagar"
+        "choiceLabel": "Number of meals",
+        "dinners": "meals"
       },
       "time": {
         "title": "How much time do you have?",
@@ -48,13 +48,46 @@
         "choiceLabel": "Maximum time per dinner",
         "minutes": "minutes"
       },
-      "protein": {
-        "title": "What protein do you eat?",
-        "subtitle": "We'll build the recipes around what you like and skip the rest."
-      },
-      "cuisines": {
-        "title": "Which cuisines do you like?",
-        "subtitle": "Pick as many as you like. We'll mix them up throughout the week."
+"protein": {
+  "title": "What protein do you eat?",
+  "subtitle": "We build recipes around what you like and skip the rest.",
+  "options": {
+    "chicken": "Chicken",
+    "beef": "Beef",
+    "pork": "Pork",
+    "lamb": "Lamb",
+    "fish": "Fish",
+    "seafood": "Seafood",
+    "vegetarian": "Vegetarian",
+    "vegetarianCaption": "Eggs, cheese, beans",
+    "vegan": "Vegan",
+    "veganCaption": "Tofu, lentils, plant-based"
+  }
+},
+"cuisines": {
+  "title": "Which cuisines do you like?",
+  "subtitle": "Pick as many as you want. We'll mix them up over the week.",
+  "choiceDescNone": "If you don't pick any, we'll mix freely between cuisines.",
+  "selected_one": "{{count}} selected",
+  "selected_other": "{{count}} selected",
+  "options": {
+    "swedish": "Swedish",
+    "italian": "Italian",
+    "french": "French",
+    "spanish": "Spanish",
+    "greek": "Greek",
+    "turkish": "Turkish",
+    "moroccan": "Moroccan",
+    "indian": "Indian",
+    "chinese": "Chinese",
+    "thai": "Thai",
+    "japanese": "Japanese",
+    "korean": "Korean",
+    "vietnamese": "Vietnamese",
+    "mexican": "Mexican",
+    "american": "American",
+    "latinAmerican": "Latin American"
+        }
       }
     }
   }
