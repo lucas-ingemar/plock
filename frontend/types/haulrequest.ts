@@ -12,10 +12,17 @@
  */
 export interface HaulRequest {
     /**
+     * Number of adults in the household.
+     */
+    adults: number;
+    /**
+     * Number of children in the household.
+     */
+    children: number;
+    /**
      * Preferred cuisines. An empty list means any cuisine.
      */
     cuisine_preferences: CuisinePreferenceElement[];
-    household:           Household;
     /**
      * Maximum cooking time per meal.
      */
@@ -51,15 +58,6 @@ export enum CuisinePreferenceElement {
     Thai = "thai",
     Turkish = "turkish",
     Vietnamese = "vietnamese",
-}
-
-export interface Household {
-    adults:   number;
-    children: Child[];
-}
-
-export interface Child {
-    age_years: number;
 }
 
 export enum ProteinPreferenceElement {
@@ -239,19 +237,13 @@ function r(name: string) {
 
 const typeMap: any = {
     "HaulRequest": o([
+        { json: "adults", js: "adults", typ: 0 },
+        { json: "children", js: "children", typ: 0 },
         { json: "cuisine_preferences", js: "cuisine_preferences", typ: a(r("CuisinePreferenceElement")) },
-        { json: "household", js: "household", typ: r("Household") },
         { json: "max_cooking_minutes", js: "max_cooking_minutes", typ: 0 },
         { json: "meal_count", js: "meal_count", typ: 0 },
         { json: "protein_preferences", js: "protein_preferences", typ: a(r("ProteinPreferenceElement")) },
         { json: "servings_per_meal", js: "servings_per_meal", typ: 0 },
-    ], false),
-    "Household": o([
-        { json: "adults", js: "adults", typ: 0 },
-        { json: "children", js: "children", typ: a(r("Child")) },
-    ], false),
-    "Child": o([
-        { json: "age_years", js: "age_years", typ: 0 },
     ], false),
     "CuisinePreferenceElement": [
         "american",

@@ -15,7 +15,7 @@ import {
 } from "../types/haulrequest"
 import { useMemo } from "react"
 
-const DEFAULT_CHILD_AGE = 4
+// const DEFAULT_CHILD_AGE = 4
 
 export interface StepContentProps {
     data: HaulRequest
@@ -61,72 +61,59 @@ const Counter: React.FC<CounterProps> = ({ label, description, value, minValue, 
 )
 
 const HouseholdStep: React.FC<StepContentProps> = ({ data, update }) => {
-    const { t } = useTranslation();
-    const { household } = data
-
-    const setAdults = (adults: number) =>
-        update({
-            household: { ...household, adults },
-            servings_per_meal: adults + household.children.length,
-        })
-
-    const setChildCount = (count: number) =>
-        update({
-            household: {
-                ...household,
-                children: Array.from(
-                    { length: count },
-                    (_, index) => household.children[index] ?? { age_years: DEFAULT_CHILD_AGE },
-                ),
-            },
-            servings_per_meal: household.adults + count,
-        })
+    const { t } = useTranslation()
 
     return (
         <>
-            <Counter label={t("registerReceipt.steps.household.adultsLabel")} value={household.adults} minValue={1} maxValue={10} onChange={setAdults} />
+            <Counter
+                label={t("registerReceipt.steps.household.adultsLabel")}
+                value={data.adults}
+                minValue={1}
+                maxValue={10}
+                onChange={(adults) => update({ adults, servings_per_meal: adults + data.children })}
+            />
             <Counter
                 label={t("registerReceipt.steps.household.childrenLabel")}
                 description={t("registerReceipt.steps.household.childrenDescLabel")}
-                value={household.children.length}
+                value={data.children}
                 minValue={0}
                 maxValue={10}
-                onChange={setChildCount}
+                onChange={(children) => update({ children, servings_per_meal: data.adults + children })}
             />
         </>
     )
 }
 
-const ChildrenStep: React.FC<StepContentProps> = ({ data, update }) => {
-    const setAge = (childIndex: number, age_years: number) =>
-        update({
-            household: {
-                ...data.household,
-                children: data.household.children.map((child, index) =>
-                    index === childIndex ? { ...child, age_years } : child,
-                ),
-            },
-        })
+// const ChildrenStep: React.FC<StepContentProps> = ({ data, update }) => {
+//     const setAge = (childIndex: number, age_years: number) =>
+//         update({
+//             household: {
+//                 ...data.household,
+//                 children: data.household.children.map((child, index) =>
+//                     index === childIndex ? { ...child, age_years } : child,
+//                 ),
+//             },
+//         })
 
-    return (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {data.household.children.map((child, index) => (
-                <Counter
-                    key={index}
-                    label={`Barn ${index + 1}`}
-                    description="Ålder i år"
-                    value={child.age_years}
-                    minValue={0}
-                    maxValue={17}
-                    onChange={(age) => setAge(index, age)}
-                />
-            ))}
-        </div>
-    )
-}
+//     return (
+//         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+//             {data.household.children.map((child, index) => (
+//                 <Counter
+//                     key={index}
+//                     label={`Barn ${index + 1}`}
+//                     description="Ålder i år"
+//                     value={child.age_years}
+//                     minValue={0}
+//                     maxValue={17}
+//                     onChange={(age) => setAge(index, age)}
+//                 />
+//             ))}
+//         </div>
+//     )
+// }
 
 const ServingsStep: React.FC<StepContentProps> = ({ data, update }) => {
-    const recommended = data.household.adults + data.household.children.length
+    const recommended = data.adults + data.children
 
     const { t } = useTranslation();
 

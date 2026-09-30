@@ -6,7 +6,8 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "household",
+    "adults",
+    "children",
     "servings_per_meal",
     "meal_count",
     "max_cooking_minutes",
@@ -14,33 +15,17 @@
     "cuisine_preferences"
   ],
   "properties": {
-    "household": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["adults", "children"],
-      "properties": {
-        "adults": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 10
-        },
-        "children": {
-          "type": "array",
-          "maxItems": 10,
-          "items": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": ["age_years"],
-            "properties": {
-              "age_years": {
-                "type": "integer",
-                "minimum": 0,
-                "maximum": 17
-              }
-            }
-          }
-        }
-      }
+    "adults": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10,
+      "description": "Number of adults in the household."
+    },
+    "children": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10,
+      "description": "Number of children in the household."
     },
     "servings_per_meal": {
       "type": "integer",
@@ -102,10 +87,8 @@
   },
   "examples": [
     {
-      "household": {
-        "adults": 2,
-        "children": [{ "age_years": 2 }]
-      },
+      "adults": 2,
+      "children": 1,
       "servings_per_meal": 4,
       "meal_count": 5,
       "max_cooking_minutes": 30,

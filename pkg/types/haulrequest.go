@@ -20,9 +20,12 @@ func (r *HaulRequest) Marshal() ([]byte, error) {
 
 // Household and meal preferences used to generate recipes.
 type HaulRequest struct {
+	// Number of adults in the household.                                                                    
+	Adults                                                                        int64                      `json:"adults"`
+	// Number of children in the household.                                                                  
+	Children                                                                      int64                      `json:"children"`
 	// Preferred cuisines. An empty list means any cuisine.                                                  
 	CuisinePreferences                                                            []CuisinePreferenceElement `json:"cuisine_preferences"`
-	Household                                                                     Household                  `json:"household"`
 	// Maximum cooking time per meal.                                                                        
 	MaxCookingMinutes                                                             int64                      `json:"max_cooking_minutes"`
 	// Number of meals to plan.                                                                              
@@ -31,15 +34,6 @@ type HaulRequest struct {
 	ProteinPreferences                                                            []ProteinPreferenceElement `json:"protein_preferences"`
 	// Servings per meal, including any extra portions for leftovers.                                        
 	ServingsPerMeal                                                               int64                      `json:"servings_per_meal"`
-}
-
-type Household struct {
-	Adults   int64   `json:"adults"`
-	Children []Child `json:"children"`
-}
-
-type Child struct {
-	AgeYears int64 `json:"age_years"`
 }
 
 type CuisinePreferenceElement string

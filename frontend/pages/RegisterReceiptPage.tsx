@@ -8,10 +8,8 @@ import { type HaulRequest, ProteinPreferenceElement } from "../types/haulrequest
 import { useTranslation } from "react-i18next"
 
 const initialHaulRequest: HaulRequest = {
-    household: {
-        adults: 2,
-        children: [],
-    },
+    adults: 2,
+    children: 0,
     servings_per_meal: 2,
     meal_count: 5,
     max_cooking_minutes: 30,
