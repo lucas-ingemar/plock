@@ -1,4 +1,26 @@
 {
+  "processing": {
+    "quips": [
+      "Chopping the onions…",
+      "Reading the receipt with glasses on…",
+      "Tasting the sauce…",
+      "Negotiating with the broccoli…",
+      "Looking for the garlic…",
+      "Counting the meatballs…",
+      "Flipping the pancake…",
+      "Letting the dough rise…",
+      "Picking some basil…",
+      "Measuring a pinch of salt…",
+      "Asking grandma for advice…",
+      "Warming the plates…",
+      "Sorting groceries by flavor…",
+      "Bringing ideas to a boil…",
+      "Convincing the toddler about zucchini…",
+      "Peeling a stubborn pumpkin…",
+      "Hiding the veggies in the sauce…",
+      "Packing the lunchboxes…"
+    ]
+  },
   "navbar": {
     "week": "The Week",
     "receipts": "Receipts",
@@ -9,6 +31,7 @@
     }
   },
   "registerReceipt": {
+    "creating": "Creating new haul",
     "meter": {
       "label": "New plock",
       "stepLabel": "Step {{step}} of {{totalSteps}}"

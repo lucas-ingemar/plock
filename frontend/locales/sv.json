@@ -1,4 +1,26 @@
 {
+  "processing": {
+    "quips": [
+      "Hackar löken…",
+      "Läser kvittot med glasögonen på…",
+      "Smakar av såsen…",
+      "Förhandlar med broccolin…",
+      "Letar efter vitlöken…",
+      "Räknar köttbullarna…",
+      "Vänder pannkakan…",
+      "Låter degen jäsa…",
+      "Plockar basilika…",
+      "Mäter upp en nypa salt…",
+      "Frågar mormor om råd…",
+      "Värmer tallrikarna…",
+      "Sorterar varorna efter smak…",
+      "Kokar upp idéer…",
+      "Övertalar tvååringen om zucchini…",
+      "Skalar en envis pumpa…",
+      "Gömmer grönsakerna i såsen…",
+      "Dukar fram matlådorna…"
+    ]
+  },
   "navbar": {
     "week": "Veckan",
     "receipts": "Kvitton",
@@ -9,6 +31,7 @@
     }
   },
   "registerReceipt": {
+    "creating": "Skapar nytt plock",
     "meter": {
       "label": "Nytt plock",
       "stepLabel": "Steg {{step}} av {{totalSteps}}"

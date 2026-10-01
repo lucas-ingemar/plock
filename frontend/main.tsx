@@ -6,6 +6,7 @@ import App from './App.tsx'
 import { BrowserRouter } from 'react-router-dom';
 import { ApiProvider } from './api/ApiContext.tsx';
 import { ServerApi } from './api/ServerApi.ts';
+import { ProcessingProvider } from './processingProvider/ProcessingProvider.tsx';
 
 
 const api = new ServerApi()
@@ -14,7 +15,9 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ApiProvider api={api}>
       <BrowserRouter>
-        <App />
+        <ProcessingProvider>
+          <App />
+        </ProcessingProvider>
       </BrowserRouter>
     </ApiProvider>
   </StrictMode>,

@@ -7,6 +7,7 @@ import { type HaulRequest, Protein, type Haul} from "../types/types"
 import { useTranslation } from "react-i18next"
 import { useApi } from "../api/ApiContext"
 import { useNavigate } from "react-router-dom"
+import { useProcessing } from "../processingProvider/ProcessingProvider"
 
 const initialHaulRequest: HaulRequest = {
     adults: 2,
@@ -33,6 +34,7 @@ export const RegisterReceiptPage: React.FC = () => {
     const { t } = useTranslation();
     const api = useApi();
     const navigate = useNavigate();
+    const processing = useProcessing()
 
 
     const visibleSteps = useMemo(
@@ -59,10 +61,15 @@ export const RegisterReceiptPage: React.FC = () => {
         }
 
         setIsSubmitting(true)
-        api.addHaul(data).then((h: Haul) => {
+        processing.run(api.addHaul(data), t("registerReceipt.creating")).then((h: Haul) => {
             setIsSubmitting(false)
             navigate("/hauls/" + h.id)
         })
+        //     navigate("/hauls/" + h.id)
+        // api.addHaul(data).then((h: Haul) => {
+        //     setIsSubmitting(false)
+        //     navigate("/hauls/" + h.id)
+        // })
     }
 
     const StepContent = step.Content
