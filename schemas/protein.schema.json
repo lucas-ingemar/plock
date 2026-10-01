@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://plock.dev/schemas/protein.schema.json",
+  "title": "Protein",
+  "goJSONSchema": {
+    "identifier": "Protein"
+  },
+  "type": "string",
+  "enum": [
+    "chicken",
+    "beef",
+    "pork",
+    "lamb",
+    "fish",
+    "seafood",
+    "vegetarian",
+    "vegan"
+  ]
+}

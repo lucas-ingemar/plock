@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://plock.dev/schemas/cuisine.schema.json",
+  "title": "Cuisine",
+  "goJSONSchema": {
+    "identifier": "Cuisine"
+  },
+  "type": "string",
+  "enum": [
+    "swedish",
+    "italian",
+    "french",
+    "spanish",
+    "greek",
+    "turkish",
+    "moroccan",
+    "indian",
+    "chinese",
+    "thai",
+    "japanese",
+    "korean",
+    "vietnamese",
+    "mexican",
+    "american",
+    "latin_american"
+  ]
+}

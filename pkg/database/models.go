@@ -6,26 +6,31 @@ package database
 
 import (
 	"time"
+
+	uuid "github.com/gofrs/uuid/v5"
+	"github.com/lucas-ingemar/plock/pkg/types"
 )
 
-type HaulRequest struct {
-	ID                string    `json:"id"`
-	Adults            int64     `json:"adults"`
-	Children          int64     `json:"children"`
-	ServingsPerMeal   int64     `json:"servings_per_meal"`
-	MealCount         int64     `json:"meal_count"`
-	MaxCookingMinutes int64     `json:"max_cooking_minutes"`
-	CreatedAt         time.Time `json:"created_at"`
+type Haul struct {
+	ID                uuid.UUID            `json:"id"`
+	Status            types.Status         `json:"status"`
+	Adults            int64                `json:"adults"`
+	Children          int64                `json:"children"`
+	ServingsPerMeal   int64                `json:"servings_per_meal"`
+	MealCount         int64                `json:"meal_count"`
+	MaxCookingMinutes types.CookingMinutes `json:"max_cooking_minutes"`
+	CreatedAt         time.Time            `json:"created_at"`
+	UpdatedAt         time.Time            `json:"updated_at"`
 }
 
-type HaulRequestCuisine struct {
-	HaulRequestID string `json:"haul_request_id"`
-	Cuisine       string `json:"cuisine"`
+type HaulCuisine struct {
+	HaulID  uuid.UUID     `json:"haul_id"`
+	Cuisine types.Cuisine `json:"cuisine"`
 }
 
-type HaulRequestProtein struct {
-	HaulRequestID string `json:"haul_request_id"`
-	Protein       string `json:"protein"`
+type HaulProtein struct {
+	HaulID  uuid.UUID     `json:"haul_id"`
+	Protein types.Protein `json:"protein"`
 }
 
 type SchemaMigration struct {

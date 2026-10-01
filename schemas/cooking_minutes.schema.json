@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://plock.dev/schemas/cooking_minutes.schema.json",
+  "title": "CookingMinutes",
+  "goJSONSchema": {
+    "identifier": "CookingMinutes"
+  },
+  "description": "Maximum cooking time per meal, in minutes.",
+  "type": "integer",
+  "enum": [
+    20,
+    30,
+    45,
+    60
+  ]
+}

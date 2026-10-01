@@ -9,10 +9,10 @@ import cuisinesImage from "@/assets/receipt-registration/step-cuisines.svg"
 import { ChoiceTiles } from "./ChoiceTiles"
 import { type MultiChoiceOption, MultiChoiceTiles } from "./MultiChoiceTiles"
 import {
-    CuisinePreferenceElement as Cuisine,
+    Cuisine,
     type HaulRequest,
-    ProteinPreferenceElement as Protein,
-} from "../types/haulrequest"
+    Protein,
+} from "../types/types"
 import { useMemo } from "react"
 
 // const DEFAULT_CHILD_AGE = 4

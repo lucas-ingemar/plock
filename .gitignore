@@ -57,4 +57,4 @@ dist-ssr
 *.sln
 *.sw?
 
-devdb.db
+devdb.db*

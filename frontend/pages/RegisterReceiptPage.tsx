@@ -2,10 +2,11 @@ import { useMemo, useState } from "react"
 import { Label, Meter } from "@heroui/react"
 import { DefaultPageLayout } from "../layouts/DefaultPageLayout"
 import { PlockButton } from "../primitives/PlockButton"
-import { createHaul } from "../api"
 import { registrationSteps } from "../components/ReceiptRegistrationSteps"
-import { type HaulRequest, ProteinPreferenceElement } from "../types/haulrequest"
+import { type HaulRequest, Protein, type Haul} from "../types/types"
 import { useTranslation } from "react-i18next"
+import { useApi } from "../api/ApiContext"
+import { useNavigate } from "react-router-dom"
 
 const initialHaulRequest: HaulRequest = {
     adults: 2,
@@ -14,11 +15,11 @@ const initialHaulRequest: HaulRequest = {
     meal_count: 5,
     max_cooking_minutes: 30,
     protein_preferences: [
-        ProteinPreferenceElement.Chicken,
-        ProteinPreferenceElement.Beef,
-        ProteinPreferenceElement.Pork,
-        ProteinPreferenceElement.Fish,
-        ProteinPreferenceElement.Vegetarian,
+        Protein.Chicken,
+        Protein.Beef,
+        Protein.Pork,
+        Protein.Fish,
+        Protein.Vegetarian,
     ],
     cuisine_preferences: [],
 }
@@ -30,6 +31,9 @@ export const RegisterReceiptPage: React.FC = () => {
 
 
     const { t } = useTranslation();
+    const api = useApi();
+    const navigate = useNavigate();
+
 
     const visibleSteps = useMemo(
         () => registrationSteps.filter((step) => step.isVisible?.(data) ?? true),
@@ -53,13 +57,12 @@ export const RegisterReceiptPage: React.FC = () => {
             setStepIndex(currentIndex + 1)
             return
         }
-        console.log(data)
+
         setIsSubmitting(true)
-        try {
-            await createHaul(data)
-        } finally {
+        api.addHaul(data).then((h: Haul) => {
             setIsSubmitting(false)
-        }
+            navigate("/hauls/" + h.id)
+        })
     }
 
     const StepContent = step.Content

@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://plock.dev/schemas/haul.schema.json",
+  "title": "Haul",
+  "goJSONSchema": {
+    "identifier": "Haul"
+  },
+  "description": "A grocery haul with the household and meal preferences used to plan it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "status",
+    "adults",
+    "children",
+    "servings_per_meal",
+    "meal_count",
+    "max_cooking_minutes",
+    "protein_preferences",
+    "cuisine_preferences",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "UUID v4.",
+      "goJSONSchema": {
+        "type": "uuid.UUID",
+        "imports": [
+          "github.com/gofrs/uuid/v5"
+        ]
+      }
+    },
+    "status": {
+      "$ref": "#/$defs/status"
+    },
+    "adults": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10,
+      "description": "Number of adults in the household."
+    },
+    "children": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10,
+      "description": "Number of children in the household."
+    },
+    "servings_per_meal": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 8,
+      "description": "Servings per meal, including any extra portions for leftovers."
+    },
+    "meal_count": {
+      "type": "integer",
+      "minimum": 2,
+      "maximum": 7,
+      "description": "Number of meals to plan."
+    },
+    "max_cooking_minutes": {
+      "$ref": "cooking_minutes.schema.json"
+    },
+    "protein_preferences": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "Proteins the household eats. Proteins not listed are excluded from recipes.",
+      "items": {
+        "$ref": "protein.schema.json"
+      }
+    },
+    "cuisine_preferences": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Preferred cuisines. An empty list means any cuisine.",
+      "items": {
+        "$ref": "cuisine.schema.json"
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "$defs": {
+    "status": {
+      "title": "Status",
+      "goJSONSchema": {
+        "identifier": "Status"
+      },
+      "type": "string",
+      "enum": [
+        "draft",
+        "processing",
+        "ready",
+        "failed",
+        "archived"
+      ],
+      "description": "draft: preferences saved, no receipt yet. processing: receipt received, recipes being generated. ready: recipes available. failed: processing failed. archived: no longer active."
+    }
+  },
+  "examples": [
+    {
+      "id": "3f8c2a6e-9b4d-4e1f-a7c5-2d6b8e0f1a93",
+      "status": "draft",
+      "adults": 2,
+      "children": 1,
+      "servings_per_meal": 4,
+      "meal_count": 5,
+      "max_cooking_minutes": 30,
+      "protein_preferences": [
+        "chicken",
+        "pork",
+        "fish",
+        "vegetarian"
+      ],
+      "cuisine_preferences": [
+        "italian",
+        "indian",
+        "mexican",
+        "chinese"
+      ],
+      "created_at": "2026-09-30T08:15:00Z",
+      "updated_at": "2026-09-30T08:15:00Z"
+    }
+  ]
+}

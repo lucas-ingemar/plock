@@ -9,9 +9,9 @@ import (
 )
 
 type Querier interface {
-	AddHaulRequestCuisine(ctx context.Context, arg AddHaulRequestCuisineParams) error
-	AddHaulRequestProtein(ctx context.Context, arg AddHaulRequestProteinParams) error
-	CreateHaulRequest(ctx context.Context, arg CreateHaulRequestParams) (HaulRequest, error)
+	AddHaulCuisine(ctx context.Context, arg AddHaulCuisineParams) error
+	AddHaulProtein(ctx context.Context, arg AddHaulProteinParams) error
+	CreateHaul(ctx context.Context, arg CreateHaulParams) (Haul, error)
 }
 
 var _ Querier = (*Queries)(nil)

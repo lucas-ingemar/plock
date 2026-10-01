@@ -76,11 +76,12 @@ func (p PlockErrFactory) ReqMalformedJSON(err error, offset int64) *PlockErr {
 	e := ErrReqMalformedJSON
 	e.Module = p.module
 	e.Err = err
-	if offset >= 0 {
-		e.Message = fmt.Sprintf("Request body contains malformed JSON at position %d", offset)
-	} else {
-		e.Message = "Request body contains malformed JSON"
-	}
+	e.Message = err.Error()
+	// if offset >= 0 {
+	// 	e.Message = fmt.Sprintf("Request body contains malformed JSON at position %d", offset)
+	// } else {
+	// 	e.Message = "Request body contains malformed JSON"
+	// }
 	return &e
 }
 

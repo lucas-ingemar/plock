@@ -11,3 +11,36 @@ sql:
         emit_empty_slices: true
         emit_interface: true
         output_db_file_name: "queries.go"
+        overrides:
+          - column: hauls.id
+            go_type:
+              import: github.com/gofrs/uuid/v5
+              package: uuid
+              type: UUID
+          - column: haul_proteins.haul_id
+            go_type:
+              import: github.com/gofrs/uuid/v5
+              package: uuid
+              type: UUID
+          - column: haul_cuisines.haul_id
+            go_type:
+              import: github.com/gofrs/uuid/v5
+              package: uuid
+              type: UUID
+
+          - column: hauls.status
+            go_type:
+              import: github.com/lucas-ingemar/plock/pkg/types
+              type: Status
+          - column: hauls.max_cooking_minutes
+            go_type:
+              import: github.com/lucas-ingemar/plock/pkg/types
+              type: CookingMinutes
+          - column: haul_proteins.protein
+            go_type:
+              import: github.com/lucas-ingemar/plock/pkg/types
+              type: Protein
+          - column: haul_cuisines.cuisine
+            go_type:
+              import: github.com/lucas-ingemar/plock/pkg/types
+              type: Cuisine

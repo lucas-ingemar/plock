@@ -1,8 +1,12 @@
 // To parse this data:
 //
-//   import { Convert, HaulRequest } from "./file";
+//   import { Convert, Cuisine, HaulRequest, Haul, Protein } from "./file";
 //
+//   const cookingMinutes = Convert.toCookingMinutes(json);
+//   const cuisine = Convert.toCuisine(json);
 //   const haulRequest = Convert.toHaulRequest(json);
+//   const haul = Convert.toHaul(json);
+//   const protein = Convert.toProtein(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
@@ -22,10 +26,7 @@ export interface HaulRequest {
     /**
      * Preferred cuisines. An empty list means any cuisine.
      */
-    cuisine_preferences: CuisinePreferenceElement[];
-    /**
-     * Maximum cooking time per meal.
-     */
+    cuisine_preferences: Cuisine[];
     max_cooking_minutes: number;
     /**
      * Number of meals to plan.
@@ -34,14 +35,14 @@ export interface HaulRequest {
     /**
      * Proteins the household eats. Proteins not listed are excluded from recipes.
      */
-    protein_preferences: ProteinPreferenceElement[];
+    protein_preferences: Protein[];
     /**
      * Servings per meal, including any extra portions for leftovers.
      */
     servings_per_meal: number;
 }
 
-export enum CuisinePreferenceElement {
+export enum Cuisine {
     American = "american",
     Chinese = "chinese",
     French = "french",
@@ -60,7 +61,7 @@ export enum CuisinePreferenceElement {
     Vietnamese = "vietnamese",
 }
 
-export enum ProteinPreferenceElement {
+export enum Protein {
     Beef = "beef",
     Chicken = "chicken",
     Fish = "fish",
@@ -71,15 +72,98 @@ export enum ProteinPreferenceElement {
     Vegetarian = "vegetarian",
 }
 
+/**
+ * A grocery haul with the household and meal preferences used to plan it.
+ */
+export interface Haul {
+    /**
+     * Number of adults in the household.
+     */
+    adults: number;
+    /**
+     * Number of children in the household.
+     */
+    children:   number;
+    created_at: Date;
+    /**
+     * Preferred cuisines. An empty list means any cuisine.
+     */
+    cuisine_preferences: Cuisine[];
+    /**
+     * UUID v4.
+     */
+    id:                  string;
+    max_cooking_minutes: number;
+    /**
+     * Number of meals to plan.
+     */
+    meal_count: number;
+    /**
+     * Proteins the household eats. Proteins not listed are excluded from recipes.
+     */
+    protein_preferences: Protein[];
+    /**
+     * Servings per meal, including any extra portions for leftovers.
+     */
+    servings_per_meal: number;
+    status:            Status;
+    updated_at:        Date;
+}
+
+/**
+ * draft: preferences saved, no receipt yet. processing: receipt received, recipes being
+ * generated. ready: recipes available. failed: processing failed. archived: no longer
+ * active.
+ */
+export enum Status {
+    Archived = "archived",
+    Draft = "draft",
+    Failed = "failed",
+    Processing = "processing",
+    Ready = "ready",
+}
+
 // Converts JSON strings to/from your types
 // and asserts the results of JSON.parse at runtime
 export class Convert {
+    public static toCookingMinutes(json: string): number {
+        return cast(JSON.parse(json), 0);
+    }
+
+    public static cookingMinutesToJson(value: number): string {
+        return JSON.stringify(uncast(value, 0), null, 2);
+    }
+
+    public static toCuisine(json: string): Cuisine {
+        return cast(JSON.parse(json), r("Cuisine"));
+    }
+
+    public static cuisineToJson(value: Cuisine): string {
+        return JSON.stringify(uncast(value, r("Cuisine")), null, 2);
+    }
+
     public static toHaulRequest(json: string): HaulRequest {
         return cast(JSON.parse(json), r("HaulRequest"));
     }
 
     public static haulRequestToJson(value: HaulRequest): string {
         return JSON.stringify(uncast(value, r("HaulRequest")), null, 2);
+    }
+
+    public static toHaul(json: string): Haul {
+        return cast(JSON.parse(json), r("Haul"));
+    }
+
+    public static haulToJson(value: Haul): string {
+        return JSON.stringify(uncast(value, r("Haul")), null, 2);
+    }
+
+    public static toProtein(json: string): Protein {
+        return cast(JSON.parse(json), r("Protein"));
+    }
+
+    public static proteinToJson(value: Protein): string {
+        return JSON.stringify(uncast(value, r("Protein")), null, 2);
     }
 }
 
@@ -239,13 +323,26 @@ const typeMap: any = {
     "HaulRequest": o([
         { json: "adults", js: "adults", typ: 0 },
         { json: "children", js: "children", typ: 0 },
-        { json: "cuisine_preferences", js: "cuisine_preferences", typ: a(r("CuisinePreferenceElement")) },
+        { json: "cuisine_preferences", js: "cuisine_preferences", typ: a(r("Cuisine")) },
         { json: "max_cooking_minutes", js: "max_cooking_minutes", typ: 0 },
         { json: "meal_count", js: "meal_count", typ: 0 },
-        { json: "protein_preferences", js: "protein_preferences", typ: a(r("ProteinPreferenceElement")) },
+        { json: "protein_preferences", js: "protein_preferences", typ: a(r("Protein")) },
         { json: "servings_per_meal", js: "servings_per_meal", typ: 0 },
     ], false),
-    "CuisinePreferenceElement": [
+    "Haul": o([
+        { json: "adults", js: "adults", typ: 0 },
+        { json: "children", js: "children", typ: 0 },
+        { json: "created_at", js: "created_at", typ: Date },
+        { json: "cuisine_preferences", js: "cuisine_preferences", typ: a(r("Cuisine")) },
+        { json: "id", js: "id", typ: "" },
+        { json: "max_cooking_minutes", js: "max_cooking_minutes", typ: 0 },
+        { json: "meal_count", js: "meal_count", typ: 0 },
+        { json: "protein_preferences", js: "protein_preferences", typ: a(r("Protein")) },
+        { json: "servings_per_meal", js: "servings_per_meal", typ: 0 },
+        { json: "status", js: "status", typ: r("Status") },
+        { json: "updated_at", js: "updated_at", typ: Date },
+    ], false),
+    "Cuisine": [
         "american",
         "chinese",
         "french",
@@ -263,7 +360,7 @@ const typeMap: any = {
         "turkish",
         "vietnamese",
     ],
-    "ProteinPreferenceElement": [
+    "Protein": [
         "beef",
         "chicken",
         "fish",
@@ -272,5 +369,12 @@ const typeMap: any = {
         "seafood",
         "vegan",
         "vegetarian",
+    ],
+    "Status": [
+        "archived",
+        "draft",
+        "failed",
+        "processing",
+        "ready",
     ],
 };

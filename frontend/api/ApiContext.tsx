@@ -1,0 +1,28 @@
+import { createContext, useContext } from "react";
+import type { Api } from "./Api";
+
+const ApiContext = createContext<Api | null>(null);
+
+export function ApiProvider({
+  api,
+  children,
+}: {
+  api: Api;
+  children: React.ReactNode;
+}) {
+  return (
+    <ApiContext.Provider value={api}>
+        {children}
+    </ApiContext.Provider>
+  );
+}
+
+export function useApi(): Api {
+  const api = useContext(ApiContext);
+
+  if (!api) {
+    throw new Error("ApiProvider missing");
+  }
+
+  return api;
+}
