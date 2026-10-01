@@ -12,6 +12,7 @@ type Querier interface {
 	AddHaulCuisine(ctx context.Context, arg AddHaulCuisineParams) error
 	AddHaulProtein(ctx context.Context, arg AddHaulProteinParams) error
 	CreateHaul(ctx context.Context, arg CreateHaulParams) (Haul, error)
+	ListHauls(ctx context.Context) ([]Haul, error)
 }
 
 var _ Querier = (*Queries)(nil)

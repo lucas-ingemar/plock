@@ -18,6 +18,8 @@ func (s *Server) returnJSON(ctx context.Context, w http.ResponseWriter, r *http.
 		return
 	}
 
+	w.Header().Add("Content-Type", "application/json")
+
 	w.WriteHeader(status)
 
 	if _, err := w.Write(pb); err != nil {

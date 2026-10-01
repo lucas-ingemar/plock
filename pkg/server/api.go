@@ -11,6 +11,7 @@ func (s *Server) api() http.Handler {
 
 	// r.Use(s.authPkg.Middleware)
 	//
+	r.Get("/hauls", s.listHauls())
 	r.Post("/hauls", s.addHaul())
 
 	// r.Get("/info", s.apiInfo())

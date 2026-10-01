@@ -78,3 +78,28 @@ func (k *Kitchen) AddHaul(ctx context.Context, h types.HaulRequest) (types.Haul,
 
 	return haul, nil
 }
+
+func (k *Kitchen) ListHauls(ctx context.Context) (hauls []types.Haul, err error) {
+	dbHauls, err := k.db.ListHauls(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, h := range dbHauls {
+		hauls = append(hauls, types.Haul{
+			Adults:             int(h.Adults),
+			Children:           int(h.Children),
+			CreatedAt:          h.CreatedAt,
+			CuisinePreferences: []types.Cuisine{},
+			ID:                 h.ID,
+			MaxCookingMinutes:  h.MaxCookingMinutes,
+			MealCount:          int(h.MealCount),
+			ProteinPreferences: []types.Protein{},
+			ServingsPerMeal:    int(h.ServingsPerMeal),
+			Status:             h.Status,
+			UpdatedAt:          h.UpdatedAt,
+		})
+	}
+
+	return hauls, nil
+}

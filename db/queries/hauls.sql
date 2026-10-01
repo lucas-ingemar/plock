@@ -21,3 +21,6 @@ ON CONFLICT DO NOTHING;
 INSERT INTO haul_cuisines (haul_id, cuisine)
 VALUES (?, ?)
 ON CONFLICT DO NOTHING;
+
+-- name: ListHauls :many
+SELECT * from hauls;

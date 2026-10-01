@@ -27,7 +27,7 @@ func (s *Server) Handler() http.Handler {
 	r := chi.NewRouter()
 	r.Use(LoggerMiddleware(*s.log, []string{"/healthz"}))
 
-	r.Get("/*", s.frontend(s.distFs))
+	// r.Get("/*", s.frontend(s.distFs))
 
 	r.Get("/healthz", s.healthz())
 	// r.Get("/readyz", s.readyz())

@@ -26,3 +26,17 @@ func (s *Server) addHaul() http.HandlerFunc {
 		s.returnJSON(ctx, w, r, http.StatusCreated, haul)
 	}
 }
+
+func (s *Server) listHauls() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+
+		hauls, err := s.k.ListHauls(ctx)
+		if err != nil {
+			s.handleError(ctx, err, w, r)
+			return
+		}
+
+		s.returnJSON(ctx, w, r, http.StatusOK, hauls)
+	}
+}

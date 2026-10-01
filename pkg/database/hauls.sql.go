@@ -91,3 +91,40 @@ func (q *Queries) CreateHaul(ctx context.Context, arg CreateHaulParams) (Haul, e
 	)
 	return i, err
 }
+
+const listHauls = `-- name: ListHauls :many
+SELECT id, status, adults, children, servings_per_meal, meal_count, max_cooking_minutes, created_at, updated_at from hauls
+`
+
+func (q *Queries) ListHauls(ctx context.Context) ([]Haul, error) {
+	rows, err := q.db.QueryContext(ctx, listHauls)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Haul{}
+	for rows.Next() {
+		var i Haul
+		if err := rows.Scan(
+			&i.ID,
+			&i.Status,
+			&i.Adults,
+			&i.Children,
+			&i.ServingsPerMeal,
+			&i.MealCount,
+			&i.MaxCookingMinutes,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
