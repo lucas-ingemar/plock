@@ -23,11 +23,28 @@
   },
   "navbar": {
     "week": "The Week",
-    "receipts": "Receipts",
+    "hauls": "Hauls",
     "recipes": "Recipes",
     "registerReceipt": "Register receipt",
     "search": {
       "placeholder": "Search for a recipe or food product"
+    }
+  },
+  "haulsPage": {
+    "title": "Your Hauls",
+    "subtitle": "Each haul is one grocery run and the dinners you make from it.",
+    "newHaul": "New haul",
+    "filters": {
+      "all": "All"
+    }
+  },
+  "haulCard": {
+    "meal_count": "{{meal_count}} dinners",
+    "portions": "{{portions}} servings",
+    "max_cooking_minutes": "max {{max_cooking_minutes}} min",
+    "draft": {
+      "title": "Waiting for receipt",
+      "addReceipt": "Add receipt"
     }
   },
   "registerReceipt": {

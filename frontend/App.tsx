@@ -2,6 +2,7 @@ import { Navbar } from './components/Navbar'
 import { Route, Routes } from 'react-router-dom'
 import { WeekPage } from './pages/WeekPage'
 import { RegisterReceiptPage } from './pages/RegisterReceiptPage'
+import { HaulsPage } from './pages/HaulsPage'
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <Navbar/>
       <Routes>
         <Route element={<WeekPage/>} path="/" />
+        <Route element={<HaulsPage/>} path="/hauls" />
         <Route element={<RegisterReceiptPage/>} path="/register-receipt" />
       </Routes>
     </div>

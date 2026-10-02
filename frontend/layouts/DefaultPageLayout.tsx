@@ -8,7 +8,7 @@ export const DefaultPageLayout: React.FC<DefaultPageLayoutProps> = ({
     children,
 }) => {
   return (
-    <div className={"w-full flex-1 p-8 min-h-0" + " " + className}>
+    <div className={"w-full flex-1 p-6 sm:p-10 min-h-0" + " " + className}>
         {children}
     </div>
   );

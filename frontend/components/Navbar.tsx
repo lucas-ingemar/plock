@@ -16,7 +16,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     const navigate = useNavigate();
 
     useEffect(() => {
-        i18n.changeLanguage("en")
+        i18n.changeLanguage("sv")
     }, [])
 
     return (
@@ -29,8 +29,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <Button variant='primary' size='lg' onPress={() => console.log("Button pressed")}>
                     {t("navbar.week")}
                 </Button>
-                <Button variant='ghost' size='lg' onPress={() => console.log("Button pressed")}>
-                    {t("navbar.receipts")}
+                <Button variant='ghost' size='lg' onPress={() => navigate("/hauls")}>
+                    {t("navbar.hauls")}
                 </Button>
                 <PlockButton variant='ghost' size='lg' onPress={() => console.log("Button pressed")}>
                     {t("navbar.recipes")}

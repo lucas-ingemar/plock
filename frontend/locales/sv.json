@@ -24,10 +24,27 @@
   "navbar": {
     "week": "Veckan",
     "receipts": "Kvitton",
-    "recipes": "Recept",
+    "hauls": "Plock",
     "registerReceipt": "Registrera kvitto",
     "search": {
       "placeholder": "Sök recept eller vara"
+    }
+  },
+  "haulsPage": {
+    "title": "Dina plock",
+    "subtitle": "Varje plock är en handling och middagarna du lagar av den.",
+    "newHaul": "Nytt plock",
+    "filters": {
+      "all": "Alla"
+    }
+  },
+  "haulCard": {
+    "meal_count": "{{meal_count}} middagar",
+    "portions": "{{portions}} portioner",
+    "max_cooking_minutes": "max {{max_cooking_minutes}} min",
+    "draft": {
+      "title": "Väntar på kvitto",
+      "addReceipt": "Lägg till kvitto"
     }
   },
   "registerReceipt": {

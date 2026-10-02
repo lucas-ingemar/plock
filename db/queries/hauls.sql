@@ -23,4 +23,4 @@ VALUES (?, ?)
 ON CONFLICT DO NOTHING;
 
 -- name: ListHauls :many
-SELECT * from hauls;
+SELECT * from hauls ORDER by created_at DESC;

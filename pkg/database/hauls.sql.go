@@ -93,7 +93,7 @@ func (q *Queries) CreateHaul(ctx context.Context, arg CreateHaulParams) (Haul, e
 }
 
 const listHauls = `-- name: ListHauls :many
-SELECT id, status, adults, children, servings_per_meal, meal_count, max_cooking_minutes, created_at, updated_at from hauls
+SELECT id, status, adults, children, servings_per_meal, meal_count, max_cooking_minutes, created_at, updated_at from hauls ORDER by created_at DESC
 `
 
 func (q *Queries) ListHauls(ctx context.Context) ([]Haul, error) {

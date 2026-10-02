@@ -1,6 +1,6 @@
 
 interface PlockChipProps {
-    variant?: "haulTag" | "haulIngredient" | "haulPantry" | "recipeTag"
+    variant?: "haulTag" | "haulIngredient" | "haulPantry" | "recipeTag" | "filterSelected"
     className?: string;
     children: React.ReactNode;
 }
@@ -28,6 +28,10 @@ export const PlockChip: React.FC<PlockChipProps> = ({
 
         case "recipeTag":
             cn = "bg-accent-foreground/10 text-accent-foreground py-2 px-4"
+            break
+
+        case "filterSelected":
+            cn = "bg-accent text-accent-foreground py-2 px-6"
             break
     }
 
