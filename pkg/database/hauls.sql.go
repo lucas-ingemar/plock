@@ -92,6 +92,84 @@ func (q *Queries) CreateHaul(ctx context.Context, arg CreateHaulParams) (Haul, e
 	return i, err
 }
 
+const getHaul = `-- name: GetHaul :one
+SELECT id, status, adults, children, servings_per_meal, meal_count, max_cooking_minutes, created_at, updated_at FROM hauls
+WHERE id = ? LIMIT 1
+`
+
+func (q *Queries) GetHaul(ctx context.Context, id uuid.UUID) (Haul, error) {
+	row := q.db.QueryRowContext(ctx, getHaul, id)
+	var i Haul
+	err := row.Scan(
+		&i.ID,
+		&i.Status,
+		&i.Adults,
+		&i.Children,
+		&i.ServingsPerMeal,
+		&i.MealCount,
+		&i.MaxCookingMinutes,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const getHaulCuisines = `-- name: GetHaulCuisines :many
+SELECT haul_id, cuisine FROM haul_cuisines
+WHERE haul_id = ?
+`
+
+func (q *Queries) GetHaulCuisines(ctx context.Context, haulID uuid.UUID) ([]HaulCuisine, error) {
+	rows, err := q.db.QueryContext(ctx, getHaulCuisines, haulID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []HaulCuisine{}
+	for rows.Next() {
+		var i HaulCuisine
+		if err := rows.Scan(&i.HaulID, &i.Cuisine); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getHaulProteins = `-- name: GetHaulProteins :many
+SELECT haul_id, protein FROM haul_proteins
+WHERE haul_id = ?
+`
+
+func (q *Queries) GetHaulProteins(ctx context.Context, haulID uuid.UUID) ([]HaulProtein, error) {
+	rows, err := q.db.QueryContext(ctx, getHaulProteins, haulID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []HaulProtein{}
+	for rows.Next() {
+		var i HaulProtein
+		if err := rows.Scan(&i.HaulID, &i.Protein); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listHauls = `-- name: ListHauls :many
 SELECT id, status, adults, children, servings_per_meal, meal_count, max_cooking_minutes, created_at, updated_at from hauls ORDER by created_at DESC
 `

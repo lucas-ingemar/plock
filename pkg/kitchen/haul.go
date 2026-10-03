@@ -2,10 +2,13 @@ package kitchen
 
 import (
 	"context"
+	"fmt"
+	"strings"
 
 	"github.com/gofrs/uuid/v5"
 	"github.com/lucas-ingemar/plock/pkg/database"
 	"github.com/lucas-ingemar/plock/pkg/types"
+	"github.com/samber/lo"
 )
 
 func (k *Kitchen) AddHaul(ctx context.Context, h types.HaulRequest) (types.Haul, error) {
@@ -79,6 +82,46 @@ func (k *Kitchen) AddHaul(ctx context.Context, h types.HaulRequest) (types.Haul,
 	return haul, nil
 }
 
+func (k *Kitchen) GetHaul(ctx context.Context, id uuid.UUID) (haul types.Haul, err error) {
+	h, err := k.db.GetHaul(ctx, id)
+	if err != nil {
+		return types.Haul{}, err
+	}
+
+	// FIXME: Add more data
+	haul = types.Haul{
+		Adults:            int(h.Adults),
+		Children:          int(h.Children),
+		CreatedAt:         h.CreatedAt,
+		ID:                h.ID,
+		MaxCookingMinutes: h.MaxCookingMinutes,
+		MealCount:         int(h.MealCount),
+		ServingsPerMeal:   int(h.ServingsPerMeal),
+		Status:            h.Status,
+		UpdatedAt:         h.UpdatedAt,
+	}
+
+	hp, err := k.db.GetHaulProteins(ctx, id)
+	if err != nil {
+		return types.Haul{}, err
+	}
+
+	hc, err := k.db.GetHaulCuisines(ctx, id)
+	if err != nil {
+		return types.Haul{}, err
+	}
+
+	haul.ProteinPreferences = lo.Map(hp, func(item database.HaulProtein, _ int) types.Protein {
+		return item.Protein
+	})
+
+	haul.CuisinePreferences = lo.Map(hc, func(item database.HaulCuisine, _ int) types.Cuisine {
+		return item.Cuisine
+	})
+
+	return haul, nil
+}
+
 func (k *Kitchen) ListHauls(ctx context.Context) (hauls []types.Haul, err error) {
 	dbHauls, err := k.db.ListHauls(ctx)
 	if err != nil {
@@ -102,4 +145,18 @@ func (k *Kitchen) ListHauls(ctx context.Context) (hauls []types.Haul, err error)
 	}
 
 	return hauls, nil
+}
+
+func (k *Kitchen) GenerateHaulPrompt(ctx context.Context, haulID uuid.UUID) (haulPrompt types.HaulPrompt, err error) {
+	haul, err := k.GetHaul(ctx, haulID)
+	if err != nil {
+		return types.HaulPrompt{}, err
+	}
+
+	cstr := lo.Map(haul.CuisinePreferences, func(item types.Cuisine, _ int) string { return string(item) })
+	pstr := lo.Map(haul.ProteinPreferences, func(item types.Protein, _ int) string { return string(item) })
+
+	prompt := fmt.Sprintf("This is a prompt for id %s. We want cusinies from %s, using proteins %s.", haul.ID.String(), strings.Join(cstr, ", "), strings.Join(pstr, ", "))
+
+	return types.HaulPrompt{Prompt: prompt}, nil
 }

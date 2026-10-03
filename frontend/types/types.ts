@@ -1,15 +1,26 @@
 // To parse this data:
 //
-//   import { Convert, Cuisine, HaulRequest, Haul, Protein } from "./file";
+//   import { Convert, Cuisine, HaulPrompt, HaulRequest, Haul, Protein } from "./file";
 //
 //   const cookingMinutes = Convert.toCookingMinutes(json);
 //   const cuisine = Convert.toCuisine(json);
+//   const haulPrompt = Convert.toHaulPrompt(json);
 //   const haulRequest = Convert.toHaulRequest(json);
 //   const haul = Convert.toHaul(json);
 //   const protein = Convert.toProtein(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
+
+/**
+ * A generated prompt the user can copy into their own AI assistant.
+ */
+export interface HaulPrompt {
+    /**
+     * The full prompt text.
+     */
+    prompt: string;
+}
 
 /**
  * Household and meal preferences used to generate recipes.
@@ -140,6 +151,14 @@ export class Convert {
 
     public static cuisineToJson(value: Cuisine): string {
         return JSON.stringify(uncast(value, r("Cuisine")), null, 2);
+    }
+
+    public static toHaulPrompt(json: string): HaulPrompt {
+        return cast(JSON.parse(json), r("HaulPrompt"));
+    }
+
+    public static haulPromptToJson(value: HaulPrompt): string {
+        return JSON.stringify(uncast(value, r("HaulPrompt")), null, 2);
     }
 
     public static toHaulRequest(json: string): HaulRequest {
@@ -320,6 +339,9 @@ function r(name: string) {
 }
 
 const typeMap: any = {
+    "HaulPrompt": o([
+        { json: "prompt", js: "prompt", typ: "" },
+    ], false),
     "HaulRequest": o([
         { json: "adults", js: "adults", typ: 0 },
         { json: "children", js: "children", typ: 0 },

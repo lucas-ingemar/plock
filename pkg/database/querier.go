@@ -6,12 +6,17 @@ package database
 
 import (
 	"context"
+
+	uuid "github.com/gofrs/uuid/v5"
 )
 
 type Querier interface {
 	AddHaulCuisine(ctx context.Context, arg AddHaulCuisineParams) error
 	AddHaulProtein(ctx context.Context, arg AddHaulProteinParams) error
 	CreateHaul(ctx context.Context, arg CreateHaulParams) (Haul, error)
+	GetHaul(ctx context.Context, id uuid.UUID) (Haul, error)
+	GetHaulCuisines(ctx context.Context, haulID uuid.UUID) ([]HaulCuisine, error)
+	GetHaulProteins(ctx context.Context, haulID uuid.UUID) ([]HaulProtein, error)
 	ListHauls(ctx context.Context) ([]Haul, error)
 }
 

@@ -11,4 +11,9 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.52
 )
 
-require gopkg.in/yaml.v3 v3.0.1 // indirect
+require golang.org/x/text v0.22.0 // indirect
+
+require (
+	github.com/samber/lo v1.53.0
+	gopkg.in/yaml.v3 v3.0.1 // indirect
+)

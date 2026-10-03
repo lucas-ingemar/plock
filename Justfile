@@ -23,12 +23,15 @@ generate-types-go:
         --schema-root-type={{schema_base}}/cooking_minutes.schema.json=CookingMinutes \
         --schema-root-type={{schema_base}}/haul_request.schema.json=HaulRequest \
         --schema-root-type={{schema_base}}/haul.schema.json=Haul \
+        --schema-root-type={{schema_base}}/haul_prompt.schema.json=HaulPrompt \
         --schema-output={{schema_base}}/protein.schema.json=pkg/types/protein.go \
         --schema-output={{schema_base}}/cuisine.schema.json=pkg/types/cuisine.go \
         --schema-output={{schema_base}}/cooking_minutes.schema.json=pkg/types/cooking_minutes.go \
         --schema-output={{schema_base}}/haul_request.schema.json=pkg/types/haul_request.go \
         --schema-output={{schema_base}}/haul.schema.json=pkg/types/haul.go \
+        --schema-output={{schema_base}}/haul_prompt.schema.json=pkg/types/haul_prompt.go \
         schemas/haul.schema.json \
+        schemas/haul_prompt.schema.json \
         schemas/haul_request.schema.json
 
 migrate: migrate-db generate-sqlc

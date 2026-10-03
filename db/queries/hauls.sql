@@ -22,5 +22,17 @@ INSERT INTO haul_cuisines (haul_id, cuisine)
 VALUES (?, ?)
 ON CONFLICT DO NOTHING;
 
+-- name: GetHaul :one
+SELECT * FROM hauls
+WHERE id = ? LIMIT 1;
+
+-- name: GetHaulProteins :many
+SELECT * FROM haul_proteins
+WHERE haul_id = ?;
+
+-- name: GetHaulCuisines :many
+SELECT * FROM haul_cuisines
+WHERE haul_id = ?;
+
 -- name: ListHauls :many
 SELECT * from hauls ORDER by created_at DESC;

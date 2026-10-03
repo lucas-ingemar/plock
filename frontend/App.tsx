@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import { WeekPage } from './pages/WeekPage'
 import { RegisterReceiptPage } from './pages/RegisterReceiptPage'
 import { HaulsPage } from './pages/HaulsPage'
+import { HaulPage } from './pages/HaulPage'
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route element={<WeekPage/>} path="/" />
         <Route element={<HaulsPage/>} path="/hauls" />
+        <Route element={<HaulPage/>} path="/hauls/:haulID" />
         <Route element={<RegisterReceiptPage/>} path="/register-receipt" />
       </Routes>
     </div>
