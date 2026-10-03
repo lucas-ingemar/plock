@@ -1,6 +1,6 @@
 schema_base := "https://plock.dev/schemas"
 
-generate-types: generate-types-ts generate-types-go
+generate-types: generate-types-ts generate-types-go bundle-prompt-schemas
 
 generate-types-ts:
     #!/usr/bin/env bash
@@ -54,6 +54,10 @@ generate-types-go:
         schemas/haul_request.schema.json \
         schemas/haul_prompt.schema.json \
         schemas/haul_response.schema.json
+
+bundle-prompt-schemas:
+    mkdir -p assets/schemas
+    python bin/bundle_schema_prompt.py schemas/haul_response.schema.json > assets/schemas/haul_prompt_response.schema.json
 
 migrate: migrate-db generate-sqlc
 

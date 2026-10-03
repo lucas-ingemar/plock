@@ -1,0 +1,380 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HaulResponse",
+  "description": "Receipt analysis and recipes returned by the AI assistant.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "title",
+    "language",
+    "generated_by",
+    "receipt",
+    "recipes"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Short title for the whole set of recipes."
+    },
+    "language": {
+      "type": "string",
+      "description": "BCP 47 tag for all free text, e.g. sv-SE."
+    },
+    "generated_by": {
+      "description": "The assistant that generated the response.",
+      "$ref": "#/$defs/GeneratedBy"
+    },
+    "receipt": {
+      "description": "Analysis of the receipt.",
+      "$ref": "#/$defs/Receipt"
+    },
+    "recipes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/Recipe"
+      },
+      "description": "Generated recipes, one per planned meal."
+    }
+  },
+  "$defs": {
+    "GeneratedBy": {
+      "title": "GeneratedBy",
+      "description": "The AI assistant that generated the response, as reported by the assistant itself.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assistant",
+        "model"
+      ],
+      "properties": {
+        "assistant": {
+          "type": "string",
+          "description": "Assistant name, e.g. Claude or ChatGPT."
+        },
+        "model": {
+          "type": "string",
+          "description": "Model identifier as reported by the assistant."
+        }
+      }
+    },
+    "Receipt": {
+      "title": "Receipt",
+      "description": "Analysis of the grocery receipt.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "store",
+        "date",
+        "currency",
+        "total",
+        "item_count",
+        "summary",
+        "items"
+      ],
+      "properties": {
+        "store": {
+          "type": "string",
+          "description": "Store or chain name, e.g. Willys."
+        },
+        "date": {
+          "type": "string",
+          "format": "date",
+          "description": "Purchase date."
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$",
+          "description": "ISO 4217 code, e.g. SEK."
+        },
+        "total": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Total amount paid, including fees."
+        },
+        "total_savings": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Total discounts on the receipt, when printed."
+        },
+        "item_count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of items according to the receipt."
+        },
+        "summary": {
+          "type": "string",
+          "description": "One or two sentences describing the purchase."
+        },
+        "items": {
+          "type": "array",
+          "description": "Every line on the receipt, including non-food items.",
+          "items": {
+            "$ref": "#/$defs/ReceiptItem"
+          }
+        }
+      }
+    },
+    "ReceiptItem": {
+      "title": "ReceiptItem",
+      "description": "One line on the receipt.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "quantity",
+        "unit",
+        "price",
+        "category",
+        "is_food"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Normalized item name."
+        },
+        "brand": {
+          "type": "string",
+          "description": "Brand name, when printed on the receipt."
+        },
+        "quantity": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Total amount, e.g. 800 for two packs of 400 g."
+        },
+        "unit": {
+          "description": "Unit for quantity.",
+          "$ref": "#/$defs/Unit"
+        },
+        "price": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Line total before discount."
+        },
+        "discount": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Discount as a positive number."
+        },
+        "category": {
+          "description": "Item category.",
+          "$ref": "#/$defs/ItemCategory"
+        },
+        "is_food": {
+          "type": "boolean",
+          "description": "False for non-food items like detergent or diapers."
+        }
+      }
+    },
+    "Unit": {
+      "title": "Unit",
+      "description": "Unit of measurement. Displayed in the user's language by the app.",
+      "type": "string",
+      "enum": [
+        "g",
+        "kg",
+        "ml",
+        "dl",
+        "l",
+        "tsp",
+        "tbsp",
+        "pinch",
+        "piece",
+        "clove",
+        "can",
+        "package"
+      ]
+    },
+    "ItemCategory": {
+      "title": "ItemCategory",
+      "description": "Category of a receipt item.",
+      "type": "string",
+      "enum": [
+        "protein",
+        "dairy",
+        "vegetables",
+        "fruit",
+        "pantry",
+        "bread",
+        "frozen",
+        "ready_meals",
+        "baby",
+        "snacks",
+        "beverages",
+        "household",
+        "hygiene",
+        "other"
+      ]
+    },
+    "Recipe": {
+      "title": "Recipe",
+      "description": "A recipe generated from the receipt and household preferences.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "description",
+        "cuisine",
+        "protein",
+        "servings",
+        "total_time_minutes",
+        "difficulty",
+        "ingredients",
+        "steps"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Recipe name."
+        },
+        "description": {
+          "type": "string",
+          "description": "One or two sentences describing the dish."
+        },
+        "cuisine": {
+          "description": "Cuisine the recipe belongs to.",
+          "$ref": "#/$defs/Cuisine"
+        },
+        "protein": {
+          "description": "Main protein in the recipe.",
+          "$ref": "#/$defs/Protein"
+        },
+        "servings": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of servings the ingredient amounts are for."
+        },
+        "total_time_minutes": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Total time from start to served, in minutes."
+        },
+        "difficulty": {
+          "description": "How demanding the recipe is to cook.",
+          "$ref": "#/$defs/Difficulty"
+        },
+        "ingredients": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Ingredient"
+          },
+          "description": "Ingredients with amounts for the given servings."
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/RecipeStep"
+          },
+          "description": "Cooking steps in order."
+        },
+        "kid_tips": {
+          "type": "string",
+          "description": "Adaptations for children in the household. Omitted when not relevant."
+        }
+      }
+    },
+    "Cuisine": {
+      "title": "Cuisine",
+      "description": "Cuisine a recipe belongs to or a household prefers.",
+      "type": "string",
+      "enum": [
+        "swedish",
+        "italian",
+        "french",
+        "spanish",
+        "greek",
+        "turkish",
+        "moroccan",
+        "indian",
+        "chinese",
+        "thai",
+        "japanese",
+        "korean",
+        "vietnamese",
+        "mexican",
+        "american",
+        "latin_american"
+      ]
+    },
+    "Protein": {
+      "title": "Protein",
+      "description": "Main protein source in a recipe or a household preference.",
+      "type": "string",
+      "enum": [
+        "chicken",
+        "beef",
+        "pork",
+        "lamb",
+        "fish",
+        "seafood",
+        "vegetarian",
+        "vegan"
+      ]
+    },
+    "Difficulty": {
+      "title": "Difficulty",
+      "description": "How demanding a recipe is to cook.",
+      "type": "string",
+      "enum": [
+        "easy",
+        "medium",
+        "hard"
+      ]
+    },
+    "Ingredient": {
+      "title": "Ingredient",
+      "description": "An ingredient in a recipe.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "from_receipt"
+      ],
+      "properties": {
+        "quantity": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Omitted for amounts like 'to taste'."
+        },
+        "unit": {
+          "description": "Unit for quantity. Omitted for countless amounts like 'to taste'.",
+          "$ref": "#/$defs/Unit"
+        },
+        "name": {
+          "type": "string",
+          "description": "Ingredient name in the response language."
+        },
+        "note": {
+          "type": "string",
+          "description": "Preparation or usage note, e.g. 'drained'."
+        },
+        "from_receipt": {
+          "type": "boolean",
+          "description": "True if the ingredient comes from the receipt, false if it is a pantry staple."
+        }
+      }
+    },
+    "RecipeStep": {
+      "title": "RecipeStep",
+      "description": "One step in a recipe.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text"
+      ],
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Instruction for the step."
+        },
+        "timer_minutes": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Set when the step involves waiting or cooking for a fixed time."
+        }
+      }
+    }
+  }
+}
