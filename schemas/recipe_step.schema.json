@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://plock.dev/schemas/recipe_step.schema.json",
+  "title": "RecipeStep",
+  "description": "One step in a recipe.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "text"
+  ],
+  "properties": {
+    "text": {
+      "type": "string",
+      "description": "Instruction for the step."
+    },
+    "timer_minutes": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Set when the step involves waiting or cooking for a fixed time."
+    }
+  }
+}

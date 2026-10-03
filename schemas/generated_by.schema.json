@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://plock.dev/schemas/generated_by.schema.json",
+  "title": "GeneratedBy",
+  "description": "The AI assistant that generated the response, as reported by the assistant itself.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "assistant",
+    "model"
+  ],
+  "properties": {
+    "assistant": {
+      "type": "string",
+      "description": "Assistant name, e.g. Claude or ChatGPT."
+    },
+    "model": {
+      "type": "string",
+      "description": "Model identifier as reported by the assistant."
+    }
+  }
+}

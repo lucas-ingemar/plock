@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://plock.dev/schemas/difficulty.schema.json",
+  "title": "Difficulty",
+  "description": "How demanding a recipe is to cook.",
+  "type": "string",
+  "enum": [
+    "easy",
+    "medium",
+    "hard"
+  ]
+}

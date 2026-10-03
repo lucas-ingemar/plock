@@ -54,14 +54,3 @@ generate-types-go:
         schemas/haul_request.schema.json \
         schemas/haul_prompt.schema.json \
         schemas/haul_response.schema.json
-
-migrate: migrate-db generate-sqlc
-
-generate-sqlc:
-    sqlc generate
-
-migrate-db:
-    dbmate -d ./db/migrations up
-
-serve:
-    go run cmd/plock/main.go

@@ -34,6 +34,7 @@
       }
     },
     "status": {
+      "description": "Processing status of the haul.",
       "$ref": "#/$defs/status"
     },
     "adults": {
@@ -61,6 +62,7 @@
       "description": "Number of meals to plan."
     },
     "max_cooking_minutes": {
+      "description": "Maximum cooking time per meal.",
       "$ref": "cooking_minutes.schema.json"
     },
     "protein_preferences": {
@@ -82,11 +84,13 @@
     },
     "created_at": {
       "type": "string",
-      "format": "date-time"
+      "format": "date-time",
+      "description": "When the haul was created."
     },
     "updated_at": {
       "type": "string",
-      "format": "date-time"
+      "format": "date-time",
+      "description": "When the haul was last updated."
     }
   },
   "$defs": {

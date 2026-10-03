@@ -17,7 +17,7 @@ type Haul struct {
 	// Number of children in the household.
 	Children int `json:"children"`
 
-	// CreatedAt corresponds to the JSON schema field "created_at".
+	// When the haul was created.
 	CreatedAt time.Time `json:"created_at"`
 
 	// Preferred cuisines. An empty list means any cuisine.
@@ -26,7 +26,7 @@ type Haul struct {
 	// UUID v4.
 	ID uuid.UUID `json:"id"`
 
-	// MaxCookingMinutes corresponds to the JSON schema field "max_cooking_minutes".
+	// Maximum cooking time per meal.
 	MaxCookingMinutes CookingMinutes `json:"max_cooking_minutes"`
 
 	// Number of meals to plan.
@@ -38,10 +38,10 @@ type Haul struct {
 	// Servings per meal, including any extra portions for leftovers.
 	ServingsPerMeal int `json:"servings_per_meal"`
 
-	// Status corresponds to the JSON schema field "status".
+	// Processing status of the haul.
 	Status Status `json:"status"`
 
-	// UpdatedAt corresponds to the JSON schema field "updated_at".
+	// When the haul was last updated.
 	UpdatedAt time.Time `json:"updated_at"`
 }
 

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://plock.dev/schemas/unit.schema.json",
+  "title": "Unit",
+  "description": "Unit of measurement. Displayed in the user's language by the app.",
+  "type": "string",
+  "enum": [
+    "g",
+    "kg",
+    "ml",
+    "dl",
+    "l",
+    "tsp",
+    "tbsp",
+    "pinch",
+    "piece",
+    "clove",
+    "can",
+    "package"
+  ]
+}

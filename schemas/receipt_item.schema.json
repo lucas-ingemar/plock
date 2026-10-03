@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://plock.dev/schemas/receipt_item.schema.json",
+  "title": "ReceiptItem",
+  "description": "One line on the receipt.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "name",
+    "quantity",
+    "unit",
+    "price",
+    "category",
+    "is_food"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Normalized item name."
+    },
+    "brand": {
+      "type": "string",
+      "description": "Brand name, when printed on the receipt."
+    },
+    "quantity": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Total amount, e.g. 800 for two packs of 400 g."
+    },
+    "unit": {
+      "description": "Unit for quantity.",
+      "$ref": "unit.schema.json"
+    },
+    "price": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Line total before discount."
+    },
+    "discount": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Discount as a positive number."
+    },
+    "category": {
+      "description": "Item category.",
+      "$ref": "item_category.schema.json"
+    },
+    "is_food": {
+      "type": "boolean",
+      "description": "False for non-food items like detergent or diapers."
+    }
+  }
+}

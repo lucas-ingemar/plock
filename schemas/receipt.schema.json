@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://plock.dev/schemas/receipt.schema.json",
+  "title": "Receipt",
+  "description": "Analysis of the grocery receipt.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "store",
+    "date",
+    "currency",
+    "total",
+    "item_count",
+    "summary",
+    "items"
+  ],
+  "properties": {
+    "store": {
+      "type": "string",
+      "description": "Store or chain name, e.g. Willys."
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Purchase date."
+    },
+    "currency": {
+      "type": "string",
+      "pattern": "^[A-Z]{3}$",
+      "description": "ISO 4217 code, e.g. SEK."
+    },
+    "total": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Total amount paid, including fees."
+    },
+    "total_savings": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Total discounts on the receipt, when printed."
+    },
+    "item_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of items according to the receipt."
+    },
+    "summary": {
+      "type": "string",
+      "description": "One or two sentences describing the purchase."
+    },
+    "items": {
+      "type": "array",
+      "description": "Every line on the receipt, including non-food items.",
+      "items": {
+        "$ref": "receipt_item.schema.json"
+      }
+    }
+  }
+}

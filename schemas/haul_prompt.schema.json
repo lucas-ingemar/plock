@@ -2,13 +2,12 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://plock.dev/schemas/haul_prompt.schema.json",
   "title": "HaulPrompt",
-  "goJSONSchema": {
-    "identifier": "HaulPrompt"
-  },
   "description": "A generated prompt the user can copy into their own AI assistant.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["prompt"],
+  "required": [
+    "prompt"
+  ],
   "properties": {
     "prompt": {
       "type": "string",

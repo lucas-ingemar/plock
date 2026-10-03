@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://plock.dev/schemas/protein.schema.json",
   "title": "Protein",
+  "description": "Main protein source in a recipe or a household preference.",
   "goJSONSchema": {
     "identifier": "Protein"
   },

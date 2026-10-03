@@ -1,13 +1,23 @@
 // To parse this data:
 //
-//   import { Convert, Cuisine, HaulPrompt, HaulRequest, Haul, Protein } from "./file";
+//   import { Convert, Cuisine, Difficulty, GeneratedBy, HaulPrompt, HaulRequest, HaulResponse, Haul, Ingredient, ItemCategory, Protein, ReceiptItem, Receipt, Recipe, RecipeStep, Unit } from "./file";
 //
 //   const cookingMinutes = Convert.toCookingMinutes(json);
 //   const cuisine = Convert.toCuisine(json);
+//   const difficulty = Convert.toDifficulty(json);
+//   const generatedBy = Convert.toGeneratedBy(json);
 //   const haulPrompt = Convert.toHaulPrompt(json);
 //   const haulRequest = Convert.toHaulRequest(json);
+//   const haulResponse = Convert.toHaulResponse(json);
 //   const haul = Convert.toHaul(json);
+//   const ingredient = Convert.toIngredient(json);
+//   const itemCategory = Convert.toItemCategory(json);
 //   const protein = Convert.toProtein(json);
+//   const receiptItem = Convert.toReceiptItem(json);
+//   const receipt = Convert.toReceipt(json);
+//   const recipe = Convert.toRecipe(json);
+//   const recipeStep = Convert.toRecipeStep(json);
+//   const unit = Convert.toUnit(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
@@ -38,6 +48,9 @@ export interface HaulRequest {
      * Preferred cuisines. An empty list means any cuisine.
      */
     cuisine_preferences: Cuisine[];
+    /**
+     * Maximum cooking time per meal.
+     */
     max_cooking_minutes: number;
     /**
      * Number of meals to plan.
@@ -53,6 +66,11 @@ export interface HaulRequest {
     servings_per_meal: number;
 }
 
+/**
+ * Cuisine a recipe belongs to or a household prefers.
+ *
+ * Cuisine the recipe belongs to.
+ */
 export enum Cuisine {
     American = "american",
     Chinese = "chinese",
@@ -72,6 +90,11 @@ export enum Cuisine {
     Vietnamese = "vietnamese",
 }
 
+/**
+ * Main protein source in a recipe or a household preference.
+ *
+ * Main protein in the recipe.
+ */
 export enum Protein {
     Beef = "beef",
     Chicken = "chicken",
@@ -81,6 +104,267 @@ export enum Protein {
     Seafood = "seafood",
     Vegan = "vegan",
     Vegetarian = "vegetarian",
+}
+
+/**
+ * Receipt analysis and recipes returned by the AI assistant.
+ */
+export interface HaulResponse {
+    /**
+     * The assistant that generated the response.
+     */
+    generated_by: GeneratedBy;
+    /**
+     * BCP 47 tag for all free text, e.g. sv-SE.
+     */
+    language: string;
+    /**
+     * Analysis of the receipt.
+     */
+    receipt: Receipt;
+    /**
+     * Generated recipes, one per planned meal.
+     */
+    recipes: Recipe[];
+    /**
+     * Short title for the whole set of recipes.
+     */
+    title: string;
+}
+
+/**
+ * The AI assistant that generated the response, as reported by the assistant itself.
+ *
+ * The assistant that generated the response.
+ */
+export interface GeneratedBy {
+    /**
+     * Assistant name, e.g. Claude or ChatGPT.
+     */
+    assistant: string;
+    /**
+     * Model identifier as reported by the assistant.
+     */
+    model: string;
+}
+
+/**
+ * Analysis of the receipt.
+ *
+ * Analysis of the grocery receipt.
+ */
+export interface Receipt {
+    /**
+     * ISO 4217 code, e.g. SEK.
+     */
+    currency: string;
+    /**
+     * Purchase date.
+     */
+    date: Date;
+    /**
+     * Number of items according to the receipt.
+     */
+    item_count: number;
+    /**
+     * Every line on the receipt, including non-food items.
+     */
+    items: ReceiptItem[];
+    /**
+     * Store or chain name, e.g. Willys.
+     */
+    store: string;
+    /**
+     * One or two sentences describing the purchase.
+     */
+    summary: string;
+    /**
+     * Total amount paid, including fees.
+     */
+    total: number;
+    /**
+     * Total discounts on the receipt, when printed.
+     */
+    total_savings?: number;
+}
+
+/**
+ * One line on the receipt.
+ */
+export interface ReceiptItem {
+    /**
+     * Brand name, when printed on the receipt.
+     */
+    brand?: string;
+    /**
+     * Item category.
+     */
+    category: ItemCategory;
+    /**
+     * Discount as a positive number.
+     */
+    discount?: number;
+    /**
+     * False for non-food items like detergent or diapers.
+     */
+    is_food: boolean;
+    /**
+     * Normalized item name.
+     */
+    name: string;
+    /**
+     * Line total before discount.
+     */
+    price: number;
+    /**
+     * Total amount, e.g. 800 for two packs of 400 g.
+     */
+    quantity: number;
+    /**
+     * Unit for quantity.
+     */
+    unit: Unit;
+}
+
+/**
+ * Item category.
+ *
+ * Category of a receipt item.
+ */
+export enum ItemCategory {
+    Baby = "baby",
+    Beverages = "beverages",
+    Bread = "bread",
+    Dairy = "dairy",
+    Frozen = "frozen",
+    Fruit = "fruit",
+    Household = "household",
+    Hygiene = "hygiene",
+    Other = "other",
+    Pantry = "pantry",
+    Protein = "protein",
+    ReadyMeals = "ready_meals",
+    Snacks = "snacks",
+    Vegetables = "vegetables",
+}
+
+/**
+ * Unit for quantity.
+ *
+ * Unit of measurement. Displayed in the user's language by the app.
+ *
+ * Unit for quantity. Omitted for countless amounts like 'to taste'.
+ */
+export enum Unit {
+    Can = "can",
+    Clove = "clove",
+    DL = "dl",
+    G = "g",
+    Kg = "kg",
+    L = "l",
+    Ml = "ml",
+    Package = "package",
+    Piece = "piece",
+    Pinch = "pinch",
+    TSP = "tsp",
+    Tbsp = "tbsp",
+}
+
+/**
+ * A recipe generated from the receipt and household preferences.
+ */
+export interface Recipe {
+    /**
+     * Cuisine the recipe belongs to.
+     */
+    cuisine: Cuisine;
+    /**
+     * One or two sentences describing the dish.
+     */
+    description: string;
+    /**
+     * How demanding the recipe is to cook.
+     */
+    difficulty: Difficulty;
+    /**
+     * Ingredients with amounts for the given servings.
+     */
+    ingredients: Ingredient[];
+    /**
+     * Adaptations for children in the household. Omitted when not relevant.
+     */
+    kid_tips?: string;
+    /**
+     * Main protein in the recipe.
+     */
+    protein: Protein;
+    /**
+     * Number of servings the ingredient amounts are for.
+     */
+    servings: number;
+    /**
+     * Cooking steps in order.
+     */
+    steps: RecipeStep[];
+    /**
+     * Recipe name.
+     */
+    title: string;
+    /**
+     * Total time from start to served, in minutes.
+     */
+    total_time_minutes: number;
+}
+
+/**
+ * How demanding a recipe is to cook.
+ *
+ * How demanding the recipe is to cook.
+ */
+export enum Difficulty {
+    Easy = "easy",
+    Hard = "hard",
+    Medium = "medium",
+}
+
+/**
+ * An ingredient in a recipe.
+ */
+export interface Ingredient {
+    /**
+     * True if the ingredient comes from the receipt, false if it is a pantry staple.
+     */
+    from_receipt: boolean;
+    /**
+     * Ingredient name in the response language.
+     */
+    name: string;
+    /**
+     * Preparation or usage note, e.g. 'drained'.
+     */
+    note?: string;
+    /**
+     * Omitted for amounts like 'to taste'.
+     */
+    quantity?: number;
+    /**
+     * Unit for quantity. Omitted for countless amounts like 'to taste'.
+     */
+    unit?: Unit;
+}
+
+/**
+ * One step in a recipe.
+ */
+export interface RecipeStep {
+    /**
+     * Instruction for the step.
+     */
+    text: string;
+    /**
+     * Set when the step involves waiting or cooking for a fixed time.
+     */
+    timer_minutes?: number;
 }
 
 /**
@@ -94,7 +378,10 @@ export interface Haul {
     /**
      * Number of children in the household.
      */
-    children:   number;
+    children: number;
+    /**
+     * When the haul was created.
+     */
     created_at: Date;
     /**
      * Preferred cuisines. An empty list means any cuisine.
@@ -103,7 +390,10 @@ export interface Haul {
     /**
      * UUID v4.
      */
-    id:                  string;
+    id: string;
+    /**
+     * Maximum cooking time per meal.
+     */
     max_cooking_minutes: number;
     /**
      * Number of meals to plan.
@@ -117,11 +407,19 @@ export interface Haul {
      * Servings per meal, including any extra portions for leftovers.
      */
     servings_per_meal: number;
-    status:            Status;
-    updated_at:        Date;
+    /**
+     * Processing status of the haul.
+     */
+    status: Status;
+    /**
+     * When the haul was last updated.
+     */
+    updated_at: Date;
 }
 
 /**
+ * Processing status of the haul.
+ *
  * draft: preferences saved, no receipt yet. processing: receipt received, recipes being
  * generated. ready: recipes available. failed: processing failed. archived: no longer
  * active.
@@ -153,6 +451,22 @@ export class Convert {
         return JSON.stringify(uncast(value, r("Cuisine")), null, 2);
     }
 
+    public static toDifficulty(json: string): Difficulty {
+        return cast(JSON.parse(json), r("Difficulty"));
+    }
+
+    public static difficultyToJson(value: Difficulty): string {
+        return JSON.stringify(uncast(value, r("Difficulty")), null, 2);
+    }
+
+    public static toGeneratedBy(json: string): GeneratedBy {
+        return cast(JSON.parse(json), r("GeneratedBy"));
+    }
+
+    public static generatedByToJson(value: GeneratedBy): string {
+        return JSON.stringify(uncast(value, r("GeneratedBy")), null, 2);
+    }
+
     public static toHaulPrompt(json: string): HaulPrompt {
         return cast(JSON.parse(json), r("HaulPrompt"));
     }
@@ -169,6 +483,14 @@ export class Convert {
         return JSON.stringify(uncast(value, r("HaulRequest")), null, 2);
     }
 
+    public static toHaulResponse(json: string): HaulResponse {
+        return cast(JSON.parse(json), r("HaulResponse"));
+    }
+
+    public static haulResponseToJson(value: HaulResponse): string {
+        return JSON.stringify(uncast(value, r("HaulResponse")), null, 2);
+    }
+
     public static toHaul(json: string): Haul {
         return cast(JSON.parse(json), r("Haul"));
     }
@@ -177,12 +499,68 @@ export class Convert {
         return JSON.stringify(uncast(value, r("Haul")), null, 2);
     }
 
+    public static toIngredient(json: string): Ingredient {
+        return cast(JSON.parse(json), r("Ingredient"));
+    }
+
+    public static ingredientToJson(value: Ingredient): string {
+        return JSON.stringify(uncast(value, r("Ingredient")), null, 2);
+    }
+
+    public static toItemCategory(json: string): ItemCategory {
+        return cast(JSON.parse(json), r("ItemCategory"));
+    }
+
+    public static itemCategoryToJson(value: ItemCategory): string {
+        return JSON.stringify(uncast(value, r("ItemCategory")), null, 2);
+    }
+
     public static toProtein(json: string): Protein {
         return cast(JSON.parse(json), r("Protein"));
     }
 
     public static proteinToJson(value: Protein): string {
         return JSON.stringify(uncast(value, r("Protein")), null, 2);
+    }
+
+    public static toReceiptItem(json: string): ReceiptItem {
+        return cast(JSON.parse(json), r("ReceiptItem"));
+    }
+
+    public static receiptItemToJson(value: ReceiptItem): string {
+        return JSON.stringify(uncast(value, r("ReceiptItem")), null, 2);
+    }
+
+    public static toReceipt(json: string): Receipt {
+        return cast(JSON.parse(json), r("Receipt"));
+    }
+
+    public static receiptToJson(value: Receipt): string {
+        return JSON.stringify(uncast(value, r("Receipt")), null, 2);
+    }
+
+    public static toRecipe(json: string): Recipe {
+        return cast(JSON.parse(json), r("Recipe"));
+    }
+
+    public static recipeToJson(value: Recipe): string {
+        return JSON.stringify(uncast(value, r("Recipe")), null, 2);
+    }
+
+    public static toRecipeStep(json: string): RecipeStep {
+        return cast(JSON.parse(json), r("RecipeStep"));
+    }
+
+    public static recipeStepToJson(value: RecipeStep): string {
+        return JSON.stringify(uncast(value, r("RecipeStep")), null, 2);
+    }
+
+    public static toUnit(json: string): Unit {
+        return cast(JSON.parse(json), r("Unit"));
+    }
+
+    public static unitToJson(value: Unit): string {
+        return JSON.stringify(uncast(value, r("Unit")), null, 2);
     }
 }
 
@@ -351,6 +729,60 @@ const typeMap: any = {
         { json: "protein_preferences", js: "protein_preferences", typ: a(r("Protein")) },
         { json: "servings_per_meal", js: "servings_per_meal", typ: 0 },
     ], false),
+    "HaulResponse": o([
+        { json: "generated_by", js: "generated_by", typ: r("GeneratedBy") },
+        { json: "language", js: "language", typ: "" },
+        { json: "receipt", js: "receipt", typ: r("Receipt") },
+        { json: "recipes", js: "recipes", typ: a(r("Recipe")) },
+        { json: "title", js: "title", typ: "" },
+    ], false),
+    "GeneratedBy": o([
+        { json: "assistant", js: "assistant", typ: "" },
+        { json: "model", js: "model", typ: "" },
+    ], false),
+    "Receipt": o([
+        { json: "currency", js: "currency", typ: "" },
+        { json: "date", js: "date", typ: Date },
+        { json: "item_count", js: "item_count", typ: 0 },
+        { json: "items", js: "items", typ: a(r("ReceiptItem")) },
+        { json: "store", js: "store", typ: "" },
+        { json: "summary", js: "summary", typ: "" },
+        { json: "total", js: "total", typ: 3.14 },
+        { json: "total_savings", js: "total_savings", typ: u(undefined, 3.14) },
+    ], false),
+    "ReceiptItem": o([
+        { json: "brand", js: "brand", typ: u(undefined, "") },
+        { json: "category", js: "category", typ: r("ItemCategory") },
+        { json: "discount", js: "discount", typ: u(undefined, 3.14) },
+        { json: "is_food", js: "is_food", typ: true },
+        { json: "name", js: "name", typ: "" },
+        { json: "price", js: "price", typ: 3.14 },
+        { json: "quantity", js: "quantity", typ: 3.14 },
+        { json: "unit", js: "unit", typ: r("Unit") },
+    ], false),
+    "Recipe": o([
+        { json: "cuisine", js: "cuisine", typ: r("Cuisine") },
+        { json: "description", js: "description", typ: "" },
+        { json: "difficulty", js: "difficulty", typ: r("Difficulty") },
+        { json: "ingredients", js: "ingredients", typ: a(r("Ingredient")) },
+        { json: "kid_tips", js: "kid_tips", typ: u(undefined, "") },
+        { json: "protein", js: "protein", typ: r("Protein") },
+        { json: "servings", js: "servings", typ: 0 },
+        { json: "steps", js: "steps", typ: a(r("RecipeStep")) },
+        { json: "title", js: "title", typ: "" },
+        { json: "total_time_minutes", js: "total_time_minutes", typ: 0 },
+    ], false),
+    "Ingredient": o([
+        { json: "from_receipt", js: "from_receipt", typ: true },
+        { json: "name", js: "name", typ: "" },
+        { json: "note", js: "note", typ: u(undefined, "") },
+        { json: "quantity", js: "quantity", typ: u(undefined, 3.14) },
+        { json: "unit", js: "unit", typ: u(undefined, r("Unit")) },
+    ], false),
+    "RecipeStep": o([
+        { json: "text", js: "text", typ: "" },
+        { json: "timer_minutes", js: "timer_minutes", typ: u(undefined, 0) },
+    ], false),
     "Haul": o([
         { json: "adults", js: "adults", typ: 0 },
         { json: "children", js: "children", typ: 0 },
@@ -391,6 +823,41 @@ const typeMap: any = {
         "seafood",
         "vegan",
         "vegetarian",
+    ],
+    "ItemCategory": [
+        "baby",
+        "beverages",
+        "bread",
+        "dairy",
+        "frozen",
+        "fruit",
+        "household",
+        "hygiene",
+        "other",
+        "pantry",
+        "protein",
+        "ready_meals",
+        "snacks",
+        "vegetables",
+    ],
+    "Unit": [
+        "can",
+        "clove",
+        "dl",
+        "g",
+        "kg",
+        "l",
+        "ml",
+        "package",
+        "piece",
+        "pinch",
+        "tsp",
+        "tbsp",
+    ],
+    "Difficulty": [
+        "easy",
+        "hard",
+        "medium",
     ],
     "Status": [
         "archived",

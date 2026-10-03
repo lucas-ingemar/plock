@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://plock.dev/schemas/item_category.schema.json",
+  "title": "ItemCategory",
+  "description": "Category of a receipt item.",
+  "type": "string",
+  "enum": [
+    "protein",
+    "dairy",
+    "vegetables",
+    "fruit",
+    "pantry",
+    "bread",
+    "frozen",
+    "ready_meals",
+    "baby",
+    "snacks",
+    "beverages",
+    "household",
+    "hygiene",
+    "other"
+  ]
+}

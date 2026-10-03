@@ -43,6 +43,7 @@
       "description": "Number of meals to plan."
     },
     "max_cooking_minutes": {
+      "description": "Maximum cooking time per meal.",
       "$ref": "cooking_minutes.schema.json"
     },
     "protein_preferences": {

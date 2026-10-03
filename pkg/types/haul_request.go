@@ -17,7 +17,7 @@ type HaulRequest struct {
 	// Preferred cuisines. An empty list means any cuisine.
 	CuisinePreferences []Cuisine `json:"cuisine_preferences"`
 
-	// MaxCookingMinutes corresponds to the JSON schema field "max_cooking_minutes".
+	// Maximum cooking time per meal.
 	MaxCookingMinutes CookingMinutes `json:"max_cooking_minutes"`
 
 	// Number of meals to plan.

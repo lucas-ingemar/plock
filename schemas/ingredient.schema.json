@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://plock.dev/schemas/ingredient.schema.json",
+  "title": "Ingredient",
+  "description": "An ingredient in a recipe.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "name",
+    "from_receipt"
+  ],
+  "properties": {
+    "quantity": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Omitted for amounts like 'to taste'."
+    },
+    "unit": {
+      "description": "Unit for quantity. Omitted for countless amounts like 'to taste'.",
+      "$ref": "unit.schema.json"
+    },
+    "name": {
+      "type": "string",
+      "description": "Ingredient name in the response language."
+    },
+    "note": {
+      "type": "string",
+      "description": "Preparation or usage note, e.g. 'drained'."
+    },
+    "from_receipt": {
+      "type": "boolean",
+      "description": "True if the ingredient comes from the receipt, false if it is a pantry staple."
+    }
+  }
+}
