@@ -29,7 +29,7 @@ export const HaulPrompt: React.FC<HaulPromptProps> = ({
                 <p className="mt-8 font-medium text-justify text-muted">Plock har generat en prompt till dig som du ska ge till din AI. Du ska kopiera texten nedan, antingen genom att markera allt eller klicka på kopiera-knappen. Du börjar med att bifoga kvittot till din AI och i samma prompt skickar du med texten nedan. Du ska inte ändra eller ta bort någonting i texten.</p>
                 <div className="flex flex-col gap-2 items-end mt-8">
                     <CopyButton text={prompt}/>
-                    <div className="overflow-y-scroll p-4 h-60 font-mono text-sm rounded-md bg-surface border-1 border-border">
+                    <div className="overflow-y-scroll p-4 h-60 font-mono text-sm whitespace-pre-wrap rounded-md bg-surface border-1 border-border">
                         {prompt}
                     </div>
                 </div>

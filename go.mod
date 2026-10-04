@@ -11,7 +11,10 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.52
 )
 
-require golang.org/x/text v0.22.0 // indirect
+require (
+	github.com/atombender/go-jsonschema v0.24.1 // indirect
+	golang.org/x/text v0.22.0 // indirect
+)
 
 require (
 	github.com/samber/lo v1.53.0

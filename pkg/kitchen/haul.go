@@ -2,11 +2,11 @@ package kitchen
 
 import (
 	"context"
-	"fmt"
-	"strings"
 
 	"github.com/gofrs/uuid/v5"
+	"github.com/lucas-ingemar/plock/assets"
 	"github.com/lucas-ingemar/plock/pkg/database"
+	"github.com/lucas-ingemar/plock/pkg/llm"
 	"github.com/lucas-ingemar/plock/pkg/types"
 	"github.com/samber/lo"
 )
@@ -153,10 +153,22 @@ func (k *Kitchen) GenerateHaulPrompt(ctx context.Context, haulID uuid.UUID) (hau
 		return types.HaulPrompt{}, err
 	}
 
-	cstr := lo.Map(haul.CuisinePreferences, func(item types.Cuisine, _ int) string { return string(item) })
-	pstr := lo.Map(haul.ProteinPreferences, func(item types.Protein, _ int) string { return string(item) })
+	promptParams := types.PromptParams{
+		Adults:            haul.Adults,
+		Children:          haul.Children,
+		ServingsPerMeal:   haul.ServingsPerMeal,
+		MealCount:         haul.MealCount,
+		MaxCookingMinutes: int(haul.MaxCookingMinutes),
+		Proteins:          lo.Map(haul.ProteinPreferences, func(p types.Protein, _ int) string { return string(p) }),
+		Cuisines:          lo.Map(haul.CuisinePreferences, func(p types.Cuisine, _ int) string { return string(p) }),
+		Language:          "swedish",
+		Schema:            assets.HaulPromptResponseSchema,
+	}
 
-	prompt := fmt.Sprintf("This is a prompt for id %s. We want cusinies from %s, using proteins %s.", haul.ID.String(), strings.Join(cstr, ", "), strings.Join(pstr, ", "))
+	prompt, err := llm.GeneratePrompt(ctx, promptParams)
+	if err != nil {
+		return types.HaulPrompt{}, err
+	}
 
 	return types.HaulPrompt{Prompt: prompt}, nil
 }
