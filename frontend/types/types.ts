@@ -136,6 +136,8 @@ export interface HaulResponse {
  * The AI assistant that generated the response, as reported by the assistant itself.
  *
  * The assistant that generated the response.
+ *
+ * The assistant that generated the recipes. Set once the AI response has been added.
  */
 export interface GeneratedBy {
     /**
@@ -152,6 +154,8 @@ export interface GeneratedBy {
  * Analysis of the receipt.
  *
  * Analysis of the grocery receipt.
+ *
+ * Analysis of the receipt. Set once the AI response has been added.
  */
 export interface Receipt {
     /**
@@ -388,9 +392,18 @@ export interface Haul {
      */
     cuisine_preferences: Cuisine[];
     /**
+     * The assistant that generated the recipes. Set once the AI response has been added.
+     */
+    generated_by?: GeneratedBy;
+    /**
      * UUID v4.
      */
     id: string;
+    /**
+     * BCP 47 tag for all free text in the recipes, e.g. sv-SE. Set once the AI response has
+     * been added.
+     */
+    language?: string;
     /**
      * Maximum cooking time per meal.
      */
@@ -404,6 +417,14 @@ export interface Haul {
      */
     protein_preferences: Protein[];
     /**
+     * Analysis of the receipt. Set once the AI response has been added.
+     */
+    receipt?: Receipt;
+    /**
+     * Generated recipes, one per planned meal. Set once the AI response has been added.
+     */
+    recipes?: Recipe[];
+    /**
      * Servings per meal, including any extra portions for leftovers.
      */
     servings_per_meal: number;
@@ -411,6 +432,10 @@ export interface Haul {
      * Processing status of the haul.
      */
     status: Status;
+    /**
+     * Short title for the whole set of recipes. Set once the AI response has been added.
+     */
+    title?: string;
     /**
      * When the haul was last updated.
      */
@@ -788,12 +813,17 @@ const typeMap: any = {
         { json: "children", js: "children", typ: 0 },
         { json: "created_at", js: "created_at", typ: Date },
         { json: "cuisine_preferences", js: "cuisine_preferences", typ: a(r("Cuisine")) },
+        { json: "generated_by", js: "generated_by", typ: u(undefined, r("GeneratedBy")) },
         { json: "id", js: "id", typ: "" },
+        { json: "language", js: "language", typ: u(undefined, "") },
         { json: "max_cooking_minutes", js: "max_cooking_minutes", typ: 0 },
         { json: "meal_count", js: "meal_count", typ: 0 },
         { json: "protein_preferences", js: "protein_preferences", typ: a(r("Protein")) },
+        { json: "receipt", js: "receipt", typ: u(undefined, r("Receipt")) },
+        { json: "recipes", js: "recipes", typ: u(undefined, a(r("Recipe"))) },
         { json: "servings_per_meal", js: "servings_per_meal", typ: 0 },
         { json: "status", js: "status", typ: r("Status") },
+        { json: "title", js: "title", typ: u(undefined, "") },
         { json: "updated_at", js: "updated_at", typ: Date },
     ], false),
     "Cuisine": [

@@ -12,7 +12,13 @@ import (
 
 type Querier interface {
 	AddHaulCuisine(ctx context.Context, arg AddHaulCuisineParams) error
+	AddHaulPromptResponse(ctx context.Context, arg AddHaulPromptResponseParams) error
 	AddHaulProtein(ctx context.Context, arg AddHaulProteinParams) error
+	AddReceipt(ctx context.Context, arg AddReceiptParams) error
+	AddReceiptItem(ctx context.Context, arg AddReceiptItemParams) error
+	AddRecipe(ctx context.Context, arg AddRecipeParams) error
+	AddRecipeIngredient(ctx context.Context, arg AddRecipeIngredientParams) error
+	AddRecipeStep(ctx context.Context, arg AddRecipeStepParams) error
 	CreateHaul(ctx context.Context, arg CreateHaulParams) (Haul, error)
 	GetHaul(ctx context.Context, id uuid.UUID) (Haul, error)
 	GetHaulCuisines(ctx context.Context, haulID uuid.UUID) ([]HaulCuisine, error)

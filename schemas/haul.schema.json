@@ -37,6 +37,18 @@
       "description": "Processing status of the haul.",
       "$ref": "#/$defs/status"
     },
+    "title": {
+      "type": "string",
+      "description": "Short title for the whole set of recipes. Set once the AI response has been added."
+    },
+    "language": {
+      "type": "string",
+      "description": "BCP 47 tag for all free text in the recipes, e.g. sv-SE. Set once the AI response has been added."
+    },
+    "generated_by": {
+      "description": "The assistant that generated the recipes. Set once the AI response has been added.",
+      "$ref": "generated_by.schema.json"
+    },
     "adults": {
       "type": "integer",
       "minimum": 1,
@@ -80,6 +92,17 @@
       "description": "Preferred cuisines. An empty list means any cuisine.",
       "items": {
         "$ref": "cuisine.schema.json"
+      }
+    },
+    "receipt": {
+      "description": "Analysis of the receipt. Set once the AI response has been added.",
+      "$ref": "receipt.schema.json"
+    },
+    "recipes": {
+      "type": "array",
+      "description": "Generated recipes, one per planned meal. Set once the AI response has been added.",
+      "items": {
+        "$ref": "recipe.schema.json"
       }
     },
     "created_at": {
@@ -133,6 +156,35 @@
       ],
       "created_at": "2026-09-30T08:15:00Z",
       "updated_at": "2026-09-30T08:15:00Z"
+    },
+    {
+      "id": "3f8c2a6e-9b4d-4e1f-a7c5-2d6b8e0f1a93",
+      "status": "ready",
+      "title": "Snabba vardagsmiddagar med smak från hela världen",
+      "language": "sv-SE",
+      "generated_by": {
+        "assistant": "Claude",
+        "model": "claude-opus-5-5"
+      },
+      "adults": 2,
+      "children": 1,
+      "servings_per_meal": 4,
+      "meal_count": 5,
+      "max_cooking_minutes": 30,
+      "protein_preferences": [
+        "chicken",
+        "pork",
+        "fish",
+        "vegetarian"
+      ],
+      "cuisine_preferences": [
+        "italian",
+        "indian",
+        "mexican",
+        "chinese"
+      ],
+      "created_at": "2026-09-30T08:15:00Z",
+      "updated_at": "2026-09-30T08:42:00Z"
     }
   ]
 }

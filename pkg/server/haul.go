@@ -58,7 +58,6 @@ func (s *Server) generateHaulPrompt() http.HandlerFunc {
 		ctx := r.Context()
 
 		haulID := chi.URLParam(r, "haulID")
-		fmt.Println(haulID)
 
 		haulUID, err := uuid.FromString(haulID)
 		if err != nil {
@@ -73,6 +72,35 @@ func (s *Server) generateHaulPrompt() http.HandlerFunc {
 		}
 
 		s.returnJSON(ctx, w, r, http.StatusOK, haulPrompt)
+	}
+}
+
+func (s *Server) addHaulPromptResponse() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+
+		haulResp := types.HaulResponse{}
+
+		haulID := chi.URLParam(r, "haulID")
+
+		haulUID, err := uuid.FromString(haulID)
+		if err != nil {
+			s.handleError(ctx, err, w, r)
+			return
+		}
+
+		if err := s.decodeJSON(w, r, &haulResp); err != nil {
+			s.handleError(ctx, err, w, r)
+			return
+		}
+
+		haul, err := s.k.AddHaulPromptResponse(ctx, haulUID, haulResp)
+		if err != nil {
+			s.handleError(ctx, err, w, r)
+			return
+		}
+
+		s.returnJSON(ctx, w, r, http.StatusCreated, haul)
 	}
 }
 

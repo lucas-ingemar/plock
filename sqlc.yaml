@@ -44,3 +44,58 @@ sql:
             go_type:
               import: github.com/lucas-ingemar/plock/pkg/types
               type: Cuisine
+
+          - column: "receipts.id"
+            go_type:
+              import: github.com/gofrs/uuid/v5
+              package: uuid
+              type: UUID
+          - column: "receipts.haul_id"
+            go_type:
+              import: github.com/gofrs/uuid/v5
+              package: uuid
+              type: UUID
+          - column: "receipt_items.id"
+            go_type:
+              import: github.com/gofrs/uuid/v5
+              package: uuid
+              type: UUID
+          - column: "receipt_items.receipt_id"
+            go_type:
+              import: github.com/gofrs/uuid/v5
+              package: uuid
+              type: UUID
+          - column: "receipt_items.is_food"
+            go_type: "bool"
+
+          # recipes
+          - column: "recipes.id"
+            go_type:
+              import: github.com/gofrs/uuid/v5
+              package: uuid
+              type: UUID
+          - column: "recipes.haul_id"
+            go_type:
+              import: github.com/gofrs/uuid/v5
+              package: uuid
+              type: UUID
+          - column: "recipe_ingredients.id"
+            go_type:
+              import: github.com/gofrs/uuid/v5
+              package: uuid
+              type: UUID
+          - column: "recipe_ingredients.recipe_id"
+            go_type:
+              import: github.com/gofrs/uuid/v5
+              package: uuid
+              type: UUID
+          - column: "recipe_steps.id"
+            go_type:
+              import: github.com/gofrs/uuid/v5
+              package: uuid
+              type: UUID
+          - column: "recipe_steps.recipe_id"
+            go_type:
+              import: github.com/gofrs/uuid/v5
+              package: uuid
+              type: UUID

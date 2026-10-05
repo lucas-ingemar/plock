@@ -1,12 +1,21 @@
 import ky from "ky";
 import type { Api } from "./Api";
-import type { Haul, HaulPrompt, HaulRequest } from "../types/types";
+import type { Haul, HaulPrompt, HaulRequest, HaulResponse } from "../types/types";
 
 const isoDate = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$/
+
+const DATE_ONLY_KEYS = new Set(["date"])
 
 const reviveDates = (key: string, value: unknown) =>
     key.endsWith("_at") && typeof value === "string" && isoDate.test(value) ? new Date(value) : value
 
+const toJsonWithDates = (value: unknown) =>
+    JSON.stringify(value, function (key, serialized) {
+        const original = this[key]
+        return original instanceof Date && DATE_ONLY_KEYS.has(key)
+            ? original.toISOString().slice(0, 10)
+            : serialized
+    })
 
 export class ServerApi implements Api {
 
@@ -64,6 +73,15 @@ export class ServerApi implements Api {
 
     async addHaul(haul: HaulRequest): Promise<Haul> {
         return await this.api.post(`/hauls`, { json: haul}).json<Haul>();
+    }
+
+    async addHaulPromptResponse(id: string, haul: HaulResponse): Promise<Haul> {
+        return await this.api
+            .post(`hauls/${id}/prompt`, {
+                body: toJsonWithDates(haul),
+                headers: { "Content-Type": "application/json" },
+            })
+            .json<Haul>()
     }
 
     async getHaul(id: string): Promise<Haul> {

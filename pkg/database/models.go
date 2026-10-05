@@ -5,6 +5,7 @@
 package database
 
 import (
+	"database/sql"
 	"time"
 
 	uuid "github.com/gofrs/uuid/v5"
@@ -21,6 +22,10 @@ type Haul struct {
 	MaxCookingMinutes types.CookingMinutes `json:"max_cooking_minutes"`
 	CreatedAt         time.Time            `json:"created_at"`
 	UpdatedAt         time.Time            `json:"updated_at"`
+	Language          sql.NullString       `json:"language"`
+	Title             sql.NullString       `json:"title"`
+	Assistant         sql.NullString       `json:"assistant"`
+	AssistantModel    sql.NullString       `json:"assistant_model"`
 }
 
 type HaulCuisine struct {
@@ -31,6 +36,75 @@ type HaulCuisine struct {
 type HaulProtein struct {
 	HaulID  uuid.UUID     `json:"haul_id"`
 	Protein types.Protein `json:"protein"`
+}
+
+type Receipt struct {
+	ID           uuid.UUID       `json:"id"`
+	HaulID       uuid.UUID       `json:"haul_id"`
+	Currency     string          `json:"currency"`
+	Date         string          `json:"date"`
+	ItemCount    int64           `json:"item_count"`
+	Store        string          `json:"store"`
+	Summary      string          `json:"summary"`
+	Total        float64         `json:"total"`
+	TotalSavings sql.NullFloat64 `json:"total_savings"`
+	CreatedAt    time.Time       `json:"created_at"`
+	UpdatedAt    time.Time       `json:"updated_at"`
+}
+
+type ReceiptItem struct {
+	ID        uuid.UUID       `json:"id"`
+	ReceiptID uuid.UUID       `json:"receipt_id"`
+	Idx       int64           `json:"idx"`
+	Brand     sql.NullString  `json:"brand"`
+	Category  sql.NullString  `json:"category"`
+	Discount  sql.NullFloat64 `json:"discount"`
+	IsFood    bool            `json:"is_food"`
+	Name      string          `json:"name"`
+	Price     float64         `json:"price"`
+	Quantity  float64         `json:"quantity"`
+	Unit      string          `json:"unit"`
+	CreatedAt time.Time       `json:"created_at"`
+	UpdatedAt time.Time       `json:"updated_at"`
+}
+
+type Recipe struct {
+	ID               uuid.UUID      `json:"id"`
+	HaulID           uuid.UUID      `json:"haul_id"`
+	HaulIdx          int64          `json:"haul_idx"`
+	Cuisine          string         `json:"cuisine"`
+	Description      string         `json:"description"`
+	Difficulty       string         `json:"difficulty"`
+	KidTips          sql.NullString `json:"kid_tips"`
+	Protein          string         `json:"protein"`
+	Servings         int64          `json:"servings"`
+	Title            string         `json:"title"`
+	TotalTimeMinutes int64          `json:"total_time_minutes"`
+	CreatedAt        time.Time      `json:"created_at"`
+	UpdatedAt        time.Time      `json:"updated_at"`
+}
+
+type RecipeIngredient struct {
+	ID          uuid.UUID       `json:"id"`
+	RecipeID    uuid.UUID       `json:"recipe_id"`
+	Idx         int64           `json:"idx"`
+	FromReceipt bool            `json:"from_receipt"`
+	Name        string          `json:"name"`
+	Note        sql.NullString  `json:"note"`
+	Quantity    sql.NullFloat64 `json:"quantity"`
+	Unit        sql.NullString  `json:"unit"`
+	CreatedAt   time.Time       `json:"created_at"`
+	UpdatedAt   time.Time       `json:"updated_at"`
+}
+
+type RecipeStep struct {
+	ID           uuid.UUID     `json:"id"`
+	RecipeID     uuid.UUID     `json:"recipe_id"`
+	Idx          int64         `json:"idx"`
+	Text         string        `json:"text"`
+	TimerMinutes sql.NullInt64 `json:"timer_minutes"`
+	CreatedAt    time.Time     `json:"created_at"`
+	UpdatedAt    time.Time     `json:"updated_at"`
 }
 
 type SchemaMigration struct {

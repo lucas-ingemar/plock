@@ -11,6 +11,7 @@ import (
 
 const promptTemplate = `
 You are a practical home cook and meal planner. I'm attaching a grocery receipt. Read it carefully, work out what I bought, and plan dinners that use those groceries.
+The title of the haul should be a bit catchy and poetic. Do not mention where the shopping was made and so on.
 
 ## Household
 
@@ -57,6 +58,8 @@ If no reciept is attached you will answer with an error message asking me to att
 ## Output
 
 Respond with a single JSON object that follows the JSON Schema below. Output only the JSON: no explanation, no markdown and no code fences.
+It is very important the json follows the schema below. You need to be a 100 percent sure it is correct JSON and matching the schema. If not, re run the analysis.
+If a parameter is optional, leave it from the response. Do not use null.
 
 {{.Schema}}
 

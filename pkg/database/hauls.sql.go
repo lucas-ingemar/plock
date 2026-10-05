@@ -7,6 +7,7 @@ package database
 
 import (
 	"context"
+	"database/sql"
 
 	uuid "github.com/gofrs/uuid/v5"
 	"github.com/lucas-ingemar/plock/pkg/types"
@@ -25,6 +26,36 @@ type AddHaulCuisineParams struct {
 
 func (q *Queries) AddHaulCuisine(ctx context.Context, arg AddHaulCuisineParams) error {
 	_, err := q.db.ExecContext(ctx, addHaulCuisine, arg.HaulID, arg.Cuisine)
+	return err
+}
+
+const addHaulPromptResponse = `-- name: AddHaulPromptResponse :exec
+UPDATE hauls SET
+    title = ?,
+    language = ?,
+    assistant = ?,
+    assistant_model = ?,
+    status = "ready",
+    updated_at = CURRENT_TIMESTAMP
+WHERE id = ?
+`
+
+type AddHaulPromptResponseParams struct {
+	Title          sql.NullString `json:"title"`
+	Language       sql.NullString `json:"language"`
+	Assistant      sql.NullString `json:"assistant"`
+	AssistantModel sql.NullString `json:"assistant_model"`
+	ID             uuid.UUID      `json:"id"`
+}
+
+func (q *Queries) AddHaulPromptResponse(ctx context.Context, arg AddHaulPromptResponseParams) error {
+	_, err := q.db.ExecContext(ctx, addHaulPromptResponse,
+		arg.Title,
+		arg.Language,
+		arg.Assistant,
+		arg.AssistantModel,
+		arg.ID,
+	)
 	return err
 }
 
@@ -56,7 +87,7 @@ INSERT INTO hauls (
 ) VALUES (
     ?, "draft", ?, ?, ?, ?, ?
 )
-RETURNING id, status, adults, children, servings_per_meal, meal_count, max_cooking_minutes, created_at, updated_at
+RETURNING id, status, adults, children, servings_per_meal, meal_count, max_cooking_minutes, created_at, updated_at, language, title, assistant, assistant_model
 `
 
 type CreateHaulParams struct {
@@ -88,12 +119,16 @@ func (q *Queries) CreateHaul(ctx context.Context, arg CreateHaulParams) (Haul, e
 		&i.MaxCookingMinutes,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.Language,
+		&i.Title,
+		&i.Assistant,
+		&i.AssistantModel,
 	)
 	return i, err
 }
 
 const getHaul = `-- name: GetHaul :one
-SELECT id, status, adults, children, servings_per_meal, meal_count, max_cooking_minutes, created_at, updated_at FROM hauls
+SELECT id, status, adults, children, servings_per_meal, meal_count, max_cooking_minutes, created_at, updated_at, language, title, assistant, assistant_model FROM hauls
 WHERE id = ? LIMIT 1
 `
 
@@ -110,6 +145,10 @@ func (q *Queries) GetHaul(ctx context.Context, id uuid.UUID) (Haul, error) {
 		&i.MaxCookingMinutes,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.Language,
+		&i.Title,
+		&i.Assistant,
+		&i.AssistantModel,
 	)
 	return i, err
 }
@@ -171,7 +210,7 @@ func (q *Queries) GetHaulProteins(ctx context.Context, haulID uuid.UUID) ([]Haul
 }
 
 const listHauls = `-- name: ListHauls :many
-SELECT id, status, adults, children, servings_per_meal, meal_count, max_cooking_minutes, created_at, updated_at from hauls ORDER by created_at DESC
+SELECT id, status, adults, children, servings_per_meal, meal_count, max_cooking_minutes, created_at, updated_at, language, title, assistant, assistant_model from hauls ORDER by created_at DESC
 `
 
 func (q *Queries) ListHauls(ctx context.Context) ([]Haul, error) {
@@ -193,6 +232,10 @@ func (q *Queries) ListHauls(ctx context.Context) ([]Haul, error) {
 			&i.MaxCookingMinutes,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.Language,
+			&i.Title,
+			&i.Assistant,
+			&i.AssistantModel,
 		); err != nil {
 			return nil, err
 		}

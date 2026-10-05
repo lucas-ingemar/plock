@@ -1,5 +1,5 @@
-import { TextArea } from "@heroui/react";
-import type { Haul } from "../types/types";
+import { cn, TextArea } from "@heroui/react";
+import { Convert, type Haul, type HaulResponse } from "../types/types";
 import { useEffect, useState } from "react";
 import { useApi } from "../api/ApiContext";
 import { ArrowBigDown, ArrowDown } from "lucide-react";
@@ -15,11 +15,33 @@ export const HaulPrompt: React.FC<HaulPromptProps> = ({
 }) => {
 
     const [prompt, setPrompt] = useState("")
+    const [canSubmit, setCanSubmit] = useState(false)
+    const [validationError, setValidationError] = useState("")
+    const [haulResponse, setHaulResponse] = useState<HaulResponse|undefined>()
     const api = useApi()
 
     useEffect(() => {
         api.getHaulPrompt(haul.id).then((h) => {setPrompt(h.prompt)})
     }, [api])
+
+    const validateResponse = (resp: string) => {
+        try {
+            const hr = Convert.toHaulResponse(resp)
+            setHaulResponse(hr)
+            setValidationError("")
+            setCanSubmit(true)
+        } catch (e) {
+            setValidationError(e instanceof Error ? e.message : String(e))
+            setCanSubmit(false)
+            setHaulResponse(undefined)
+        }
+    }
+
+    const onSubmit = () => {
+        if (haulResponse) {
+            api.addHaulPromptResponse(haul.id, haulResponse)
+        }
+    }
 
     return (
         <div className="flex flex-col items-center">
@@ -38,11 +60,18 @@ export const HaulPrompt: React.FC<HaulPromptProps> = ({
 
                 <h2 className="mt-12 text-4xl">Steg 2</h2>
                 <p className="mt-8 font-medium text-justify text-muted">Svaret som du får tillbaka från din AI ska du klistra in i rutan under. Det är den datan som kommer att användas för att sedan generera recpt. Datan kommer på ett strukturerat format så var säker på att kopierar och klistrar in precis allt som AI:n svarade. Annars kommer det inte att kunna analyseras.</p>
-                <TextArea className="mt-8 w-full h-60 font-mono rounded-md shadow-none border-1 border-border"/>
+
+                <div className="flex relative flex-col gap-2 items-end mt-8 w-full">
+                    <p className={
+                        cn(validationError == "" ? "hidden" : "",
+                        "absolute  bg-danger/85 rounded-md py-1 backdrop-blur-md text-danger-foreground px-8"
+                    )}>{validationError}</p>
+                    <TextArea className="w-full h-60 font-mono rounded-md shadow-none border-1 border-border" onChange={(e) => {validateResponse(e.target.value)}}/>
+                </div>
 
                 <ArrowDown className="mt-12 text-muted" size={60}/>
 
-                <PlockButton size="xl" className="mt-12 w-full sm:w-auto">Analysera</PlockButton>
+                <PlockButton isDisabled={!canSubmit} onClick={onSubmit} size="xl" className="mt-12 w-full sm:w-auto">Analysera</PlockButton>
             </div>
         </div>
     )

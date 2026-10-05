@@ -23,8 +23,16 @@ type Haul struct {
 	// Preferred cuisines. An empty list means any cuisine.
 	CuisinePreferences []Cuisine `json:"cuisine_preferences"`
 
+	// The assistant that generated the recipes. Set once the AI response has been
+	// added.
+	GeneratedBy *GeneratedBy `json:"generated_by,omitempty,omitzero"`
+
 	// UUID v4.
 	ID uuid.UUID `json:"id"`
+
+	// BCP 47 tag for all free text in the recipes, e.g. sv-SE. Set once the AI
+	// response has been added.
+	Language *string `json:"language,omitempty,omitzero"`
 
 	// Maximum cooking time per meal.
 	MaxCookingMinutes CookingMinutes `json:"max_cooking_minutes"`
@@ -35,11 +43,22 @@ type Haul struct {
 	// Proteins the household eats. Proteins not listed are excluded from recipes.
 	ProteinPreferences []Protein `json:"protein_preferences"`
 
+	// Analysis of the receipt. Set once the AI response has been added.
+	Receipt *Receipt `json:"receipt,omitempty,omitzero"`
+
+	// Generated recipes, one per planned meal. Set once the AI response has been
+	// added.
+	Recipes []Recipe `json:"recipes,omitempty,omitzero"`
+
 	// Servings per meal, including any extra portions for leftovers.
 	ServingsPerMeal int `json:"servings_per_meal"`
 
 	// Processing status of the haul.
 	Status Status `json:"status"`
+
+	// Short title for the whole set of recipes. Set once the AI response has been
+	// added.
+	Title *string `json:"title,omitempty,omitzero"`
 
 	// When the haul was last updated.
 	UpdatedAt time.Time `json:"updated_at"`

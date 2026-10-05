@@ -2,6 +2,7 @@ package kitchen
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/gofrs/uuid/v5"
 	"github.com/lucas-ingemar/plock/assets"
@@ -88,8 +89,20 @@ func (k *Kitchen) GetHaul(ctx context.Context, id uuid.UUID) (haul types.Haul, e
 		return types.Haul{}, err
 	}
 
+	var generatedBy *types.GeneratedBy
+
+	if h.Assistant.Valid {
+		generatedBy = &types.GeneratedBy{
+			Assistant: h.Assistant.String,
+			Model:     h.AssistantModel.String,
+		}
+	}
+
 	// FIXME: Add more data
 	haul = types.Haul{
+		Title:             database.NilStr(h.Title),
+		Language:          database.NilStr(h.Language),
+		GeneratedBy:       generatedBy,
 		Adults:            int(h.Adults),
 		Children:          int(h.Children),
 		CreatedAt:         h.CreatedAt,
@@ -129,7 +142,19 @@ func (k *Kitchen) ListHauls(ctx context.Context) (hauls []types.Haul, err error)
 	}
 
 	for _, h := range dbHauls {
+		var generatedBy *types.GeneratedBy
+
+		if h.Assistant.Valid {
+			generatedBy = &types.GeneratedBy{
+				Assistant: h.Assistant.String,
+				Model:     h.AssistantModel.String,
+			}
+		}
+
 		hauls = append(hauls, types.Haul{
+			Title:              database.NilStr(h.Title),
+			Language:           database.NilStr(h.Language),
+			GeneratedBy:        generatedBy,
 			Adults:             int(h.Adults),
 			Children:           int(h.Children),
 			CreatedAt:          h.CreatedAt,
@@ -171,4 +196,131 @@ func (k *Kitchen) GenerateHaulPrompt(ctx context.Context, haulID uuid.UUID) (hau
 	}
 
 	return types.HaulPrompt{Prompt: prompt}, nil
+}
+
+func (k *Kitchen) AddHaulPromptResponse(ctx context.Context, haulID uuid.UUID, h types.HaulResponse) (types.Haul, error) {
+	tx, err := k.db.Begin(ctx)
+	if err != nil {
+		return types.Haul{}, err
+	}
+	defer tx.Rollback()
+
+	err = tx.AddHaulPromptResponse(ctx, database.AddHaulPromptResponseParams{
+		Title:          sql.NullString{Valid: true, String: h.Title},
+		Language:       sql.NullString{Valid: true, String: h.Language},
+		Assistant:      sql.NullString{Valid: true, String: h.GeneratedBy.Assistant},
+		AssistantModel: sql.NullString{Valid: true, String: h.GeneratedBy.Model},
+		ID:             haulID,
+	})
+	if err != nil {
+		return types.Haul{}, err
+	}
+
+	receiptID, err := uuid.NewV4()
+	if err != nil {
+		return types.Haul{}, err
+	}
+
+	if err = tx.AddReceipt(ctx, database.AddReceiptParams{
+		ID:           receiptID,
+		HaulID:       haulID,
+		Currency:     h.Receipt.Currency,
+		Date:         h.Receipt.Date.Format("20060102"),
+		ItemCount:    int64(h.Receipt.ItemCount),
+		Store:        h.Receipt.Store,
+		Summary:      h.Receipt.Summary,
+		Total:        h.Receipt.Total,
+		TotalSavings: database.SqlFloat64(h.Receipt.TotalSavings),
+	}); err != nil {
+		return types.Haul{}, err
+	}
+
+	for idx, ri := range h.Receipt.Items {
+		receiptItemID, err := uuid.NewV4()
+		if err != nil {
+			return types.Haul{}, err
+		}
+
+		if err = tx.AddReceiptItem(ctx, database.AddReceiptItemParams{
+			ID:        receiptItemID,
+			ReceiptID: receiptID,
+			Idx:       int64(idx),
+			Brand:     database.SqlString(ri.Brand),
+			Category:  database.SqlString((*string)(&ri.Category)),
+			Discount:  database.SqlFloat64(ri.Discount),
+			IsFood:    ri.IsFood,
+			Name:      ri.Name,
+			Price:     ri.Price,
+			Quantity:  ri.Quantity,
+			Unit:      string(ri.Unit),
+		}); err != nil {
+			return types.Haul{}, err
+		}
+	}
+
+	for recipeIdx, recipe := range h.Recipes {
+		recipeID, err := uuid.NewV4()
+		if err != nil {
+			return types.Haul{}, err
+		}
+
+		if err := tx.AddRecipe(ctx, database.AddRecipeParams{
+			ID:               recipeID,
+			HaulID:           haulID,
+			HaulIdx:          int64(recipeIdx),
+			Cuisine:          string(recipe.Cuisine),
+			Description:      recipe.Description,
+			Difficulty:       string(recipe.Difficulty),
+			KidTips:          database.SqlString(recipe.KidTips),
+			Protein:          string(recipe.Protein),
+			Servings:         int64(recipe.Servings),
+			Title:            recipe.Title,
+			TotalTimeMinutes: int64(recipe.TotalTimeMinutes),
+		}); err != nil {
+			return types.Haul{}, err
+		}
+
+		for ingIdx, ing := range recipe.Ingredients {
+			ingID, err := uuid.NewV4()
+			if err != nil {
+				return types.Haul{}, err
+			}
+
+			if err := tx.AddRecipeIngredient(ctx, database.AddRecipeIngredientParams{
+				ID:          ingID,
+				RecipeID:    recipeID,
+				Idx:         int64(ingIdx),
+				FromReceipt: ing.FromReceipt,
+				Name:        ing.Name,
+				Note:        database.SqlString(ing.Note),
+				Quantity:    database.SqlFloat64(ing.Quantity),
+				Unit:        database.SqlString((*string)(ing.Unit)),
+			}); err != nil {
+				return types.Haul{}, err
+			}
+		}
+
+		for stepIdx, step := range recipe.Steps {
+			stepID, err := uuid.NewV4()
+			if err != nil {
+				return types.Haul{}, err
+			}
+
+			if err := tx.AddRecipeStep(ctx, database.AddRecipeStepParams{
+				ID:           stepID,
+				RecipeID:     recipeID,
+				Idx:          int64(stepIdx),
+				Text:         step.Text,
+				TimerMinutes: database.SqlInt64(step.TimerMinutes),
+			}); err != nil {
+				return types.Haul{}, err
+			}
+		}
+	}
+
+	if err := tx.Commit(); err != nil {
+		return types.Haul{}, err
+	}
+
+	return types.Haul{}, nil
 }

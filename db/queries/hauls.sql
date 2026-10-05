@@ -36,3 +36,13 @@ WHERE haul_id = ?;
 
 -- name: ListHauls :many
 SELECT * from hauls ORDER by created_at DESC;
+
+-- name: AddHaulPromptResponse :exec
+UPDATE hauls SET
+    title = ?,
+    language = ?,
+    assistant = ?,
+    assistant_model = ?,
+    status = "ready",
+    updated_at = CURRENT_TIMESTAMP
+WHERE id = ?;

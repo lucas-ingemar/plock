@@ -15,6 +15,7 @@ func (s *Server) api() http.Handler {
 	r.Post("/hauls", s.addHaul())
 	r.Get("/hauls/{haulID}", s.getHaul())
 	r.Get("/hauls/{haulID}/prompt", s.generateHaulPrompt())
+	r.Post("/hauls/{haulID}/prompt", s.addHaulPromptResponse())
 
 	// r.Get("/info", s.apiInfo())
 	// r.Get("/user", s.user())
