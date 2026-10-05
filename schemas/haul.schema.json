@@ -2,98 +2,14 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://plock.dev/schemas/haul.schema.json",
   "title": "Haul",
-  "goJSONSchema": {
-    "identifier": "Haul"
-  },
-  "description": "A grocery haul with the household and meal preferences used to plan it.",
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "id",
-    "status",
-    "adults",
-    "children",
-    "servings_per_meal",
-    "meal_count",
-    "max_cooking_minutes",
-    "protein_preferences",
-    "cuisine_preferences",
-    "created_at",
-    "updated_at"
+  "description": "A grocery haul with the household and meal preferences used to plan it, the receipt analysis and the recipes.",
+  "allOf": [
+    {
+      "$ref": "haul_base.schema.json"
+    }
   ],
+  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "UUID v4.",
-      "goJSONSchema": {
-        "type": "uuid.UUID",
-        "imports": [
-          "github.com/gofrs/uuid/v5"
-        ]
-      }
-    },
-    "status": {
-      "description": "Processing status of the haul.",
-      "$ref": "#/$defs/status"
-    },
-    "title": {
-      "type": "string",
-      "description": "Short title for the whole set of recipes. Set once the AI response has been added."
-    },
-    "language": {
-      "type": "string",
-      "description": "BCP 47 tag for all free text in the recipes, e.g. sv-SE. Set once the AI response has been added."
-    },
-    "generated_by": {
-      "description": "The assistant that generated the recipes. Set once the AI response has been added.",
-      "$ref": "generated_by.schema.json"
-    },
-    "adults": {
-      "type": "integer",
-      "minimum": 1,
-      "maximum": 10,
-      "description": "Number of adults in the household."
-    },
-    "children": {
-      "type": "integer",
-      "minimum": 0,
-      "maximum": 10,
-      "description": "Number of children in the household."
-    },
-    "servings_per_meal": {
-      "type": "integer",
-      "minimum": 1,
-      "maximum": 8,
-      "description": "Servings per meal, including any extra portions for leftovers."
-    },
-    "meal_count": {
-      "type": "integer",
-      "minimum": 2,
-      "maximum": 7,
-      "description": "Number of meals to plan."
-    },
-    "max_cooking_minutes": {
-      "description": "Maximum cooking time per meal.",
-      "$ref": "cooking_minutes.schema.json"
-    },
-    "protein_preferences": {
-      "type": "array",
-      "minItems": 1,
-      "uniqueItems": true,
-      "description": "Proteins the household eats. Proteins not listed are excluded from recipes.",
-      "items": {
-        "$ref": "protein.schema.json"
-      }
-    },
-    "cuisine_preferences": {
-      "type": "array",
-      "uniqueItems": true,
-      "description": "Preferred cuisines. An empty list means any cuisine.",
-      "items": {
-        "$ref": "cuisine.schema.json"
-      }
-    },
     "receipt": {
       "description": "Analysis of the receipt. Set once the AI response has been added.",
       "$ref": "receipt.schema.json"
@@ -104,35 +20,9 @@
       "items": {
         "$ref": "recipe.schema.json"
       }
-    },
-    "created_at": {
-      "type": "string",
-      "format": "date-time",
-      "description": "When the haul was created."
-    },
-    "updated_at": {
-      "type": "string",
-      "format": "date-time",
-      "description": "When the haul was last updated."
     }
   },
-  "$defs": {
-    "status": {
-      "title": "Status",
-      "goJSONSchema": {
-        "identifier": "Status"
-      },
-      "type": "string",
-      "enum": [
-        "draft",
-        "processing",
-        "ready",
-        "failed",
-        "archived"
-      ],
-      "description": "draft: preferences saved, no receipt yet. processing: receipt received, recipes being generated. ready: recipes available. failed: processing failed. archived: no longer active."
-    }
-  },
+  "unevaluatedProperties": false,
   "examples": [
     {
       "id": "3f8c2a6e-9b4d-4e1f-a7c5-2d6b8e0f1a93",

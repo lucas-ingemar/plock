@@ -8,9 +8,8 @@ import "github.com/gofrs/uuid/v5"
 import yaml "gopkg.in/yaml.v3"
 import "time"
 
-// A grocery haul with the household and meal preferences used to plan it, the
-// receipt analysis and the recipes.
-type Haul struct {
+// Fields shared by Haul and HaulSummary.
+type HaulBase struct {
 	// Number of adults in the household.
 	Adults int `json:"adults"`
 
@@ -43,13 +42,6 @@ type Haul struct {
 	// Proteins the household eats. Proteins not listed are excluded from recipes.
 	ProteinPreferences []Protein `json:"protein_preferences"`
 
-	// Analysis of the receipt. Set once the AI response has been added.
-	Receipt *Receipt `json:"receipt,omitempty,omitzero"`
-
-	// Generated recipes, one per planned meal. Set once the AI response has been
-	// added.
-	Recipes []Recipe `json:"recipes,omitempty,omitzero"`
-
 	// Servings per meal, including any extra portions for leftovers.
 	ServingsPerMeal int `json:"servings_per_meal"`
 
@@ -65,45 +57,45 @@ type Haul struct {
 }
 
 // UnmarshalJSON implements json.Unmarshaler.
-func (j *Haul) UnmarshalJSON(value []byte) error {
+func (j *HaulBase) UnmarshalJSON(value []byte) error {
 	var raw map[string]interface{}
 	if err := json.Unmarshal(value, &raw); err != nil {
 		return err
 	}
 	if _, ok := raw["adults"]; raw != nil && !ok {
-		return fmt.Errorf("field adults in Haul: required")
+		return fmt.Errorf("field adults in HaulBase: required")
 	}
 	if _, ok := raw["children"]; raw != nil && !ok {
-		return fmt.Errorf("field children in Haul: required")
+		return fmt.Errorf("field children in HaulBase: required")
 	}
 	if _, ok := raw["created_at"]; raw != nil && !ok {
-		return fmt.Errorf("field created_at in Haul: required")
+		return fmt.Errorf("field created_at in HaulBase: required")
 	}
 	if _, ok := raw["cuisine_preferences"]; raw != nil && !ok {
-		return fmt.Errorf("field cuisine_preferences in Haul: required")
+		return fmt.Errorf("field cuisine_preferences in HaulBase: required")
 	}
 	if _, ok := raw["id"]; raw != nil && !ok {
-		return fmt.Errorf("field id in Haul: required")
+		return fmt.Errorf("field id in HaulBase: required")
 	}
 	if _, ok := raw["max_cooking_minutes"]; raw != nil && !ok {
-		return fmt.Errorf("field max_cooking_minutes in Haul: required")
+		return fmt.Errorf("field max_cooking_minutes in HaulBase: required")
 	}
 	if _, ok := raw["meal_count"]; raw != nil && !ok {
-		return fmt.Errorf("field meal_count in Haul: required")
+		return fmt.Errorf("field meal_count in HaulBase: required")
 	}
 	if _, ok := raw["protein_preferences"]; raw != nil && !ok {
-		return fmt.Errorf("field protein_preferences in Haul: required")
+		return fmt.Errorf("field protein_preferences in HaulBase: required")
 	}
 	if _, ok := raw["servings_per_meal"]; raw != nil && !ok {
-		return fmt.Errorf("field servings_per_meal in Haul: required")
+		return fmt.Errorf("field servings_per_meal in HaulBase: required")
 	}
 	if _, ok := raw["status"]; raw != nil && !ok {
-		return fmt.Errorf("field status in Haul: required")
+		return fmt.Errorf("field status in HaulBase: required")
 	}
 	if _, ok := raw["updated_at"]; raw != nil && !ok {
-		return fmt.Errorf("field updated_at in Haul: required")
+		return fmt.Errorf("field updated_at in HaulBase: required")
 	}
-	type Plain Haul
+	type Plain HaulBase
 	var plain Plain
 	if err := json.Unmarshal(value, &plain); err != nil {
 		return err
@@ -135,50 +127,50 @@ func (j *Haul) UnmarshalJSON(value []byte) error {
 	if 1 > plain.ServingsPerMeal {
 		return fmt.Errorf("field %s: must be >= %v", "servings_per_meal", 1)
 	}
-	*j = Haul(plain)
+	*j = HaulBase(plain)
 	return nil
 }
 
 // UnmarshalYAML implements yaml.Unmarshaler.
-func (j *Haul) UnmarshalYAML(value *yaml.Node) error {
+func (j *HaulBase) UnmarshalYAML(value *yaml.Node) error {
 	var raw map[string]interface{}
 	if err := value.Decode(&raw); err != nil {
 		return err
 	}
 	if _, ok := raw["adults"]; raw != nil && !ok {
-		return fmt.Errorf("field adults in Haul: required")
+		return fmt.Errorf("field adults in HaulBase: required")
 	}
 	if _, ok := raw["children"]; raw != nil && !ok {
-		return fmt.Errorf("field children in Haul: required")
+		return fmt.Errorf("field children in HaulBase: required")
 	}
 	if _, ok := raw["created_at"]; raw != nil && !ok {
-		return fmt.Errorf("field created_at in Haul: required")
+		return fmt.Errorf("field created_at in HaulBase: required")
 	}
 	if _, ok := raw["cuisine_preferences"]; raw != nil && !ok {
-		return fmt.Errorf("field cuisine_preferences in Haul: required")
+		return fmt.Errorf("field cuisine_preferences in HaulBase: required")
 	}
 	if _, ok := raw["id"]; raw != nil && !ok {
-		return fmt.Errorf("field id in Haul: required")
+		return fmt.Errorf("field id in HaulBase: required")
 	}
 	if _, ok := raw["max_cooking_minutes"]; raw != nil && !ok {
-		return fmt.Errorf("field max_cooking_minutes in Haul: required")
+		return fmt.Errorf("field max_cooking_minutes in HaulBase: required")
 	}
 	if _, ok := raw["meal_count"]; raw != nil && !ok {
-		return fmt.Errorf("field meal_count in Haul: required")
+		return fmt.Errorf("field meal_count in HaulBase: required")
 	}
 	if _, ok := raw["protein_preferences"]; raw != nil && !ok {
-		return fmt.Errorf("field protein_preferences in Haul: required")
+		return fmt.Errorf("field protein_preferences in HaulBase: required")
 	}
 	if _, ok := raw["servings_per_meal"]; raw != nil && !ok {
-		return fmt.Errorf("field servings_per_meal in Haul: required")
+		return fmt.Errorf("field servings_per_meal in HaulBase: required")
 	}
 	if _, ok := raw["status"]; raw != nil && !ok {
-		return fmt.Errorf("field status in Haul: required")
+		return fmt.Errorf("field status in HaulBase: required")
 	}
 	if _, ok := raw["updated_at"]; raw != nil && !ok {
-		return fmt.Errorf("field updated_at in Haul: required")
+		return fmt.Errorf("field updated_at in HaulBase: required")
 	}
-	type Plain Haul
+	type Plain HaulBase
 	var plain Plain
 	if err := value.Decode(&plain); err != nil {
 		return err
@@ -210,6 +202,6 @@ func (j *Haul) UnmarshalYAML(value *yaml.Node) error {
 	if 1 > plain.ServingsPerMeal {
 		return fmt.Errorf("field %s: must be >= %v", "servings_per_meal", 1)
 	}
-	*j = Haul(plain)
+	*j = HaulBase(plain)
 	return nil
 }

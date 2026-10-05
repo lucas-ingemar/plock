@@ -125,3 +125,35 @@ func (q *Queries) AddRecipeStep(ctx context.Context, arg AddRecipeStepParams) er
 	)
 	return err
 }
+
+const getRecipeSummaries = `-- name: GetRecipeSummaries :many
+SELECT id, title from recipes WHERE haul_id = ? ORDER by haul_idx ASC
+`
+
+type GetRecipeSummariesRow struct {
+	ID    uuid.UUID `json:"id"`
+	Title string    `json:"title"`
+}
+
+func (q *Queries) GetRecipeSummaries(ctx context.Context, haulID uuid.UUID) ([]GetRecipeSummariesRow, error) {
+	rows, err := q.db.QueryContext(ctx, getRecipeSummaries, haulID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetRecipeSummariesRow{}
+	for rows.Next() {
+		var i GetRecipeSummariesRow
+		if err := rows.Scan(&i.ID, &i.Title); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

@@ -1,15 +1,17 @@
 // To parse this data:
 //
-//   import { Convert, Cuisine, Difficulty, GeneratedBy, HaulPrompt, HaulRequest, HaulResponse, Haul, Ingredient, ItemCategory, Protein, ReceiptItem, Receipt, Recipe, RecipeStep, Unit } from "./file";
+//   import { Convert, Cuisine, Difficulty, GeneratedBy, HaulBase, HaulPrompt, HaulRequest, HaulResponse, Haul, HaulSummary, Ingredient, ItemCategory, Protein, ReceiptItem, Receipt, Recipe, RecipeStep, RecipeSummary, Status, Unit } from "./file";
 //
 //   const cookingMinutes = Convert.toCookingMinutes(json);
 //   const cuisine = Convert.toCuisine(json);
 //   const difficulty = Convert.toDifficulty(json);
 //   const generatedBy = Convert.toGeneratedBy(json);
+//   const haulBase = Convert.toHaulBase(json);
 //   const haulPrompt = Convert.toHaulPrompt(json);
 //   const haulRequest = Convert.toHaulRequest(json);
 //   const haulResponse = Convert.toHaulResponse(json);
 //   const haul = Convert.toHaul(json);
+//   const haulSummary = Convert.toHaulSummary(json);
 //   const ingredient = Convert.toIngredient(json);
 //   const itemCategory = Convert.toItemCategory(json);
 //   const protein = Convert.toProtein(json);
@@ -17,10 +19,149 @@
 //   const receipt = Convert.toReceipt(json);
 //   const recipe = Convert.toRecipe(json);
 //   const recipeStep = Convert.toRecipeStep(json);
+//   const recipeSummary = Convert.toRecipeSummary(json);
+//   const status = Convert.toStatus(json);
 //   const unit = Convert.toUnit(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
+
+/**
+ * Fields shared by Haul and HaulSummary.
+ */
+export interface HaulBase {
+    /**
+     * Number of adults in the household.
+     */
+    adults: number;
+    /**
+     * Number of children in the household.
+     */
+    children: number;
+    /**
+     * When the haul was created.
+     */
+    created_at: Date;
+    /**
+     * Preferred cuisines. An empty list means any cuisine.
+     */
+    cuisine_preferences: Cuisine[];
+    /**
+     * The assistant that generated the recipes. Set once the AI response has been added.
+     */
+    generated_by?: GeneratedBy;
+    /**
+     * UUID v4.
+     */
+    id: string;
+    /**
+     * BCP 47 tag for all free text in the recipes, e.g. sv-SE. Set once the AI response has
+     * been added.
+     */
+    language?: string;
+    /**
+     * Maximum cooking time per meal.
+     */
+    max_cooking_minutes: number;
+    /**
+     * Number of meals to plan.
+     */
+    meal_count: number;
+    /**
+     * Proteins the household eats. Proteins not listed are excluded from recipes.
+     */
+    protein_preferences: Protein[];
+    /**
+     * Servings per meal, including any extra portions for leftovers.
+     */
+    servings_per_meal: number;
+    /**
+     * Processing status of the haul.
+     */
+    status: Status;
+    /**
+     * Short title for the whole set of recipes. Set once the AI response has been added.
+     */
+    title?: string;
+    /**
+     * When the haul was last updated.
+     */
+    updated_at: Date;
+    [property: string]: any;
+}
+
+/**
+ * Cuisine a recipe belongs to or a household prefers.
+ *
+ * Cuisine the recipe belongs to.
+ */
+export enum Cuisine {
+    American = "american",
+    Chinese = "chinese",
+    French = "french",
+    Greek = "greek",
+    Indian = "indian",
+    Italian = "italian",
+    Japanese = "japanese",
+    Korean = "korean",
+    LatinAmerican = "latin_american",
+    Mexican = "mexican",
+    Moroccan = "moroccan",
+    Spanish = "spanish",
+    Swedish = "swedish",
+    Thai = "thai",
+    Turkish = "turkish",
+    Vietnamese = "vietnamese",
+}
+
+/**
+ * The AI assistant that generated the response, as reported by the assistant itself.
+ *
+ * The assistant that generated the recipes. Set once the AI response has been added.
+ *
+ * The assistant that generated the response.
+ */
+export interface GeneratedBy {
+    /**
+     * Assistant name, e.g. Claude or ChatGPT.
+     */
+    assistant: string;
+    /**
+     * Model identifier as reported by the assistant.
+     */
+    model: string;
+}
+
+/**
+ * Main protein source in a recipe or a household preference.
+ *
+ * Main protein in the recipe.
+ */
+export enum Protein {
+    Beef = "beef",
+    Chicken = "chicken",
+    Fish = "fish",
+    Lamb = "lamb",
+    Pork = "pork",
+    Seafood = "seafood",
+    Vegan = "vegan",
+    Vegetarian = "vegetarian",
+}
+
+/**
+ * Processing status of the haul.
+ *
+ * draft: preferences saved, no receipt yet. processing: receipt received, recipes being
+ * generated. ready: recipes available. failed: processing failed. archived: no longer
+ * active.
+ */
+export enum Status {
+    Archived = "archived",
+    Draft = "draft",
+    Failed = "failed",
+    Processing = "processing",
+    Ready = "ready",
+}
 
 /**
  * A generated prompt the user can copy into their own AI assistant.
@@ -67,46 +208,6 @@ export interface HaulRequest {
 }
 
 /**
- * Cuisine a recipe belongs to or a household prefers.
- *
- * Cuisine the recipe belongs to.
- */
-export enum Cuisine {
-    American = "american",
-    Chinese = "chinese",
-    French = "french",
-    Greek = "greek",
-    Indian = "indian",
-    Italian = "italian",
-    Japanese = "japanese",
-    Korean = "korean",
-    LatinAmerican = "latin_american",
-    Mexican = "mexican",
-    Moroccan = "moroccan",
-    Spanish = "spanish",
-    Swedish = "swedish",
-    Thai = "thai",
-    Turkish = "turkish",
-    Vietnamese = "vietnamese",
-}
-
-/**
- * Main protein source in a recipe or a household preference.
- *
- * Main protein in the recipe.
- */
-export enum Protein {
-    Beef = "beef",
-    Chicken = "chicken",
-    Fish = "fish",
-    Lamb = "lamb",
-    Pork = "pork",
-    Seafood = "seafood",
-    Vegan = "vegan",
-    Vegetarian = "vegetarian",
-}
-
-/**
  * Receipt analysis and recipes returned by the AI assistant.
  */
 export interface HaulResponse {
@@ -130,24 +231,6 @@ export interface HaulResponse {
      * Short title for the whole set of recipes.
      */
     title: string;
-}
-
-/**
- * The AI assistant that generated the response, as reported by the assistant itself.
- *
- * The assistant that generated the response.
- *
- * The assistant that generated the recipes. Set once the AI response has been added.
- */
-export interface GeneratedBy {
-    /**
-     * Assistant name, e.g. Claude or ChatGPT.
-     */
-    assistant: string;
-    /**
-     * Model identifier as reported by the assistant.
-     */
-    model: string;
 }
 
 /**
@@ -372,9 +455,20 @@ export interface RecipeStep {
 }
 
 /**
- * A grocery haul with the household and meal preferences used to plan it.
+ * A grocery haul with the household and meal preferences used to plan it, the receipt
+ * analysis and the recipes.
+ *
+ * Fields shared by Haul and HaulSummary.
  */
 export interface Haul {
+    /**
+     * Analysis of the receipt. Set once the AI response has been added.
+     */
+    receipt?: Receipt;
+    /**
+     * Generated recipes, one per planned meal. Set once the AI response has been added.
+     */
+    recipes?: Recipe[];
     /**
      * Number of adults in the household.
      */
@@ -417,13 +511,75 @@ export interface Haul {
      */
     protein_preferences: Protein[];
     /**
-     * Analysis of the receipt. Set once the AI response has been added.
+     * Servings per meal, including any extra portions for leftovers.
      */
-    receipt?: Receipt;
+    servings_per_meal: number;
     /**
-     * Generated recipes, one per planned meal. Set once the AI response has been added.
+     * Processing status of the haul.
      */
-    recipes?: Recipe[];
+    status: Status;
+    /**
+     * Short title for the whole set of recipes. Set once the AI response has been added.
+     */
+    title?: string;
+    /**
+     * When the haul was last updated.
+     */
+    updated_at: Date;
+    [property: string]: any;
+}
+
+/**
+ * A haul without the receipt and full recipes, used when listing hauls.
+ *
+ * Fields shared by Haul and HaulSummary.
+ */
+export interface HaulSummary {
+    /**
+     * Short versions of the generated recipes. Empty until the AI response has been added.
+     */
+    recipes?: RecipeSummary[];
+    /**
+     * Number of adults in the household.
+     */
+    adults: number;
+    /**
+     * Number of children in the household.
+     */
+    children: number;
+    /**
+     * When the haul was created.
+     */
+    created_at: Date;
+    /**
+     * Preferred cuisines. An empty list means any cuisine.
+     */
+    cuisine_preferences: Cuisine[];
+    /**
+     * The assistant that generated the recipes. Set once the AI response has been added.
+     */
+    generated_by?: GeneratedBy;
+    /**
+     * UUID v4.
+     */
+    id: string;
+    /**
+     * BCP 47 tag for all free text in the recipes, e.g. sv-SE. Set once the AI response has
+     * been added.
+     */
+    language?: string;
+    /**
+     * Maximum cooking time per meal.
+     */
+    max_cooking_minutes: number;
+    /**
+     * Number of meals to plan.
+     */
+    meal_count: number;
+    /**
+     * Proteins the household eats. Proteins not listed are excluded from recipes.
+     */
+    protein_preferences: Protein[];
     /**
      * Servings per meal, including any extra portions for leftovers.
      */
@@ -440,21 +596,21 @@ export interface Haul {
      * When the haul was last updated.
      */
     updated_at: Date;
+    [property: string]: any;
 }
 
 /**
- * Processing status of the haul.
- *
- * draft: preferences saved, no receipt yet. processing: receipt received, recipes being
- * generated. ready: recipes available. failed: processing failed. archived: no longer
- * active.
+ * Short version of a recipe, used in lists.
  */
-export enum Status {
-    Archived = "archived",
-    Draft = "draft",
-    Failed = "failed",
-    Processing = "processing",
-    Ready = "ready",
+export interface RecipeSummary {
+    /**
+     * Recipe ID. UUID v4.
+     */
+    id: string;
+    /**
+     * Recipe name.
+     */
+    title: string;
 }
 
 // Converts JSON strings to/from your types
@@ -492,6 +648,14 @@ export class Convert {
         return JSON.stringify(uncast(value, r("GeneratedBy")), null, 2);
     }
 
+    public static toHaulBase(json: string): HaulBase {
+        return cast(JSON.parse(json), r("HaulBase"));
+    }
+
+    public static haulBaseToJson(value: HaulBase): string {
+        return JSON.stringify(uncast(value, r("HaulBase")), null, 2);
+    }
+
     public static toHaulPrompt(json: string): HaulPrompt {
         return cast(JSON.parse(json), r("HaulPrompt"));
     }
@@ -522,6 +686,14 @@ export class Convert {
 
     public static haulToJson(value: Haul): string {
         return JSON.stringify(uncast(value, r("Haul")), null, 2);
+    }
+
+    public static toHaulSummary(json: string): HaulSummary {
+        return cast(JSON.parse(json), r("HaulSummary"));
+    }
+
+    public static haulSummaryToJson(value: HaulSummary): string {
+        return JSON.stringify(uncast(value, r("HaulSummary")), null, 2);
     }
 
     public static toIngredient(json: string): Ingredient {
@@ -578,6 +750,22 @@ export class Convert {
 
     public static recipeStepToJson(value: RecipeStep): string {
         return JSON.stringify(uncast(value, r("RecipeStep")), null, 2);
+    }
+
+    public static toRecipeSummary(json: string): RecipeSummary {
+        return cast(JSON.parse(json), r("RecipeSummary"));
+    }
+
+    public static recipeSummaryToJson(value: RecipeSummary): string {
+        return JSON.stringify(uncast(value, r("RecipeSummary")), null, 2);
+    }
+
+    public static toStatus(json: string): Status {
+        return cast(JSON.parse(json), r("Status"));
+    }
+
+    public static statusToJson(value: Status): string {
+        return JSON.stringify(uncast(value, r("Status")), null, 2);
     }
 
     public static toUnit(json: string): Unit {
@@ -742,6 +930,26 @@ function r(name: string) {
 }
 
 const typeMap: any = {
+    "HaulBase": o([
+        { json: "adults", js: "adults", typ: 0 },
+        { json: "children", js: "children", typ: 0 },
+        { json: "created_at", js: "created_at", typ: Date },
+        { json: "cuisine_preferences", js: "cuisine_preferences", typ: a(r("Cuisine")) },
+        { json: "generated_by", js: "generated_by", typ: u(undefined, r("GeneratedBy")) },
+        { json: "id", js: "id", typ: "" },
+        { json: "language", js: "language", typ: u(undefined, "") },
+        { json: "max_cooking_minutes", js: "max_cooking_minutes", typ: 0 },
+        { json: "meal_count", js: "meal_count", typ: 0 },
+        { json: "protein_preferences", js: "protein_preferences", typ: a(r("Protein")) },
+        { json: "servings_per_meal", js: "servings_per_meal", typ: 0 },
+        { json: "status", js: "status", typ: r("Status") },
+        { json: "title", js: "title", typ: u(undefined, "") },
+        { json: "updated_at", js: "updated_at", typ: Date },
+    ], "any"),
+    "GeneratedBy": o([
+        { json: "assistant", js: "assistant", typ: "" },
+        { json: "model", js: "model", typ: "" },
+    ], false),
     "HaulPrompt": o([
         { json: "prompt", js: "prompt", typ: "" },
     ], false),
@@ -760,10 +968,6 @@ const typeMap: any = {
         { json: "receipt", js: "receipt", typ: r("Receipt") },
         { json: "recipes", js: "recipes", typ: a(r("Recipe")) },
         { json: "title", js: "title", typ: "" },
-    ], false),
-    "GeneratedBy": o([
-        { json: "assistant", js: "assistant", typ: "" },
-        { json: "model", js: "model", typ: "" },
     ], false),
     "Receipt": o([
         { json: "currency", js: "currency", typ: "" },
@@ -809,6 +1013,8 @@ const typeMap: any = {
         { json: "timer_minutes", js: "timer_minutes", typ: u(undefined, 0) },
     ], false),
     "Haul": o([
+        { json: "receipt", js: "receipt", typ: u(undefined, r("Receipt")) },
+        { json: "recipes", js: "recipes", typ: u(undefined, a(r("Recipe"))) },
         { json: "adults", js: "adults", typ: 0 },
         { json: "children", js: "children", typ: 0 },
         { json: "created_at", js: "created_at", typ: Date },
@@ -819,12 +1025,31 @@ const typeMap: any = {
         { json: "max_cooking_minutes", js: "max_cooking_minutes", typ: 0 },
         { json: "meal_count", js: "meal_count", typ: 0 },
         { json: "protein_preferences", js: "protein_preferences", typ: a(r("Protein")) },
-        { json: "receipt", js: "receipt", typ: u(undefined, r("Receipt")) },
-        { json: "recipes", js: "recipes", typ: u(undefined, a(r("Recipe"))) },
         { json: "servings_per_meal", js: "servings_per_meal", typ: 0 },
         { json: "status", js: "status", typ: r("Status") },
         { json: "title", js: "title", typ: u(undefined, "") },
         { json: "updated_at", js: "updated_at", typ: Date },
+    ], "any"),
+    "HaulSummary": o([
+        { json: "recipes", js: "recipes", typ: u(undefined, a(r("RecipeSummary"))) },
+        { json: "adults", js: "adults", typ: 0 },
+        { json: "children", js: "children", typ: 0 },
+        { json: "created_at", js: "created_at", typ: Date },
+        { json: "cuisine_preferences", js: "cuisine_preferences", typ: a(r("Cuisine")) },
+        { json: "generated_by", js: "generated_by", typ: u(undefined, r("GeneratedBy")) },
+        { json: "id", js: "id", typ: "" },
+        { json: "language", js: "language", typ: u(undefined, "") },
+        { json: "max_cooking_minutes", js: "max_cooking_minutes", typ: 0 },
+        { json: "meal_count", js: "meal_count", typ: 0 },
+        { json: "protein_preferences", js: "protein_preferences", typ: a(r("Protein")) },
+        { json: "servings_per_meal", js: "servings_per_meal", typ: 0 },
+        { json: "status", js: "status", typ: r("Status") },
+        { json: "title", js: "title", typ: u(undefined, "") },
+        { json: "updated_at", js: "updated_at", typ: Date },
+    ], "any"),
+    "RecipeSummary": o([
+        { json: "id", js: "id", typ: "" },
+        { json: "title", js: "title", typ: "" },
     ], false),
     "Cuisine": [
         "american",
@@ -853,6 +1078,13 @@ const typeMap: any = {
         "seafood",
         "vegan",
         "vegetarian",
+    ],
+    "Status": [
+        "archived",
+        "draft",
+        "failed",
+        "processing",
+        "ready",
     ],
     "ItemCategory": [
         "baby",
@@ -888,12 +1120,5 @@ const typeMap: any = {
         "easy",
         "hard",
         "medium",
-    ],
-    "Status": [
-        "archived",
-        "draft",
-        "failed",
-        "processing",
-        "ready",
     ],
 };

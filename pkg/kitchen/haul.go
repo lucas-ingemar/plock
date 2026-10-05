@@ -135,7 +135,7 @@ func (k *Kitchen) GetHaul(ctx context.Context, id uuid.UUID) (haul types.Haul, e
 	return haul, nil
 }
 
-func (k *Kitchen) ListHauls(ctx context.Context) (hauls []types.Haul, err error) {
+func (k *Kitchen) ListHauls(ctx context.Context) (hauls []types.HaulSummary, err error) {
 	dbHauls, err := k.db.ListHauls(ctx)
 	if err != nil {
 		return nil, err
@@ -144,6 +144,11 @@ func (k *Kitchen) ListHauls(ctx context.Context) (hauls []types.Haul, err error)
 	for _, h := range dbHauls {
 		var generatedBy *types.GeneratedBy
 
+		recipeSummaries, err := k.ListRecipeSummariesForHaul(ctx, h.ID)
+		if err != nil {
+			return nil, err
+		}
+
 		if h.Assistant.Valid {
 			generatedBy = &types.GeneratedBy{
 				Assistant: h.Assistant.String,
@@ -151,7 +156,7 @@ func (k *Kitchen) ListHauls(ctx context.Context) (hauls []types.Haul, err error)
 			}
 		}
 
-		hauls = append(hauls, types.Haul{
+		hauls = append(hauls, types.HaulSummary{
 			Title:              database.NilStr(h.Title),
 			Language:           database.NilStr(h.Language),
 			GeneratedBy:        generatedBy,
@@ -166,6 +171,7 @@ func (k *Kitchen) ListHauls(ctx context.Context) (hauls []types.Haul, err error)
 			ServingsPerMeal:    int(h.ServingsPerMeal),
 			Status:             h.Status,
 			UpdatedAt:          h.UpdatedAt,
+			Recipes:            recipeSummaries,
 		})
 	}
 

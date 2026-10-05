@@ -1,6 +1,6 @@
 import ky from "ky";
 import type { Api } from "./Api";
-import type { Haul, HaulPrompt, HaulRequest, HaulResponse } from "../types/types";
+import type { Haul, HaulPrompt, HaulRequest, HaulResponse, HaulSummary } from "../types/types";
 
 const isoDate = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$/
 
@@ -92,8 +92,8 @@ export class ServerApi implements Api {
         return await this.api.get(`/hauls/${id}/prompt`).json<HaulPrompt>();
     }
 
-    async listHauls(): Promise<Haul[]> {
-        return await this.api.get(`/hauls`).json<Haul[]>();
+    async listHauls(): Promise<HaulSummary[]> {
+        return await this.api.get(`/hauls`).json<HaulSummary[]>();
     }
 
 }

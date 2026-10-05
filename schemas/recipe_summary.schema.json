@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://plock.dev/schemas/recipe_summary.schema.json",
+  "title": "RecipeSummary",
+  "description": "Short version of a recipe, used in lists.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Recipe ID. UUID v4.",
+      "goJSONSchema": {
+        "type": "uuid.UUID",
+        "imports": [
+          "github.com/gofrs/uuid/v5"
+        ]
+      }
+    },
+    "title": {
+      "type": "string",
+      "description": "Recipe name."
+    }
+  }
+}

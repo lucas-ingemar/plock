@@ -32,6 +32,10 @@ generate-types-go:
         --schema-root-type={{schema_base}}/recipe.schema.json=Recipe \
         --schema-root-type={{schema_base}}/haul_request.schema.json=HaulRequest \
         --schema-root-type={{schema_base}}/haul.schema.json=Haul \
+        --schema-root-type={{schema_base}}/haul_base.schema.json=HaulBase \
+        --schema-root-type={{schema_base}}/status.schema.json=Status \
+        --schema-root-type={{schema_base}}/haul_summary.schema.json=HaulSummary \
+        --schema-root-type={{schema_base}}/recipe_summary.schema.json=RecipeSummary \
         --schema-root-type={{schema_base}}/haul_prompt.schema.json=HaulPrompt \
         --schema-root-type={{schema_base}}/haul_response.schema.json=HaulResponse \
         --schema-output={{schema_base}}/protein.schema.json=pkg/types/protein.go \
@@ -48,12 +52,17 @@ generate-types-go:
         --schema-output={{schema_base}}/recipe.schema.json=pkg/types/recipe.go \
         --schema-output={{schema_base}}/haul_request.schema.json=pkg/types/haul_request.go \
         --schema-output={{schema_base}}/haul.schema.json=pkg/types/haul.go \
+        --schema-output={{schema_base}}/haul_base.schema.json=pkg/types/haul_base.go \
+        --schema-output={{schema_base}}/status.schema.json=pkg/types/status.go \
+        --schema-output={{schema_base}}/haul_summary.schema.json=pkg/types/haul_summary.go \
+        --schema-output={{schema_base}}/recipe_summary.schema.json=pkg/types/recipe_summary.go \
         --schema-output={{schema_base}}/haul_prompt.schema.json=pkg/types/haul_prompt.go \
         --schema-output={{schema_base}}/haul_response.schema.json=pkg/types/haul_response.go \
         schemas/haul.schema.json \
         schemas/haul_request.schema.json \
         schemas/haul_prompt.schema.json \
-        schemas/haul_response.schema.json
+        schemas/haul_response.schema.json \
+        schemas/haul_summary.schema.json
 
 bundle-prompt-schemas:
     mkdir -p assets/schemas

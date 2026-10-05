@@ -33,3 +33,6 @@ INSERT INTO recipe_steps (
     text,
     timer_minutes
 ) VALUES (?, ?, ?, ?, ?);
+
+-- name: GetRecipeSummaries :many
+SELECT id, title from recipes WHERE haul_id = ? ORDER by haul_idx ASC;

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://plock.dev/schemas/status.schema.json",
+  "title": "Status",
+  "description": "draft: preferences saved, no receipt yet. processing: receipt received, recipes being generated. ready: recipes available. failed: processing failed. archived: no longer active.",
+  "type": "string",
+  "enum": [
+    "draft",
+    "processing",
+    "ready",
+    "failed",
+    "archived"
+  ]
+}
