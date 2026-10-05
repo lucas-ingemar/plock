@@ -4,13 +4,13 @@ import { PlockButton } from "../primitives/PlockButton";
 import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import type { Haul } from "../types/types";
+import type { HaulSummary } from "../types/types";
 import { PlockChip } from "../primitives/PlockChip";
 import { useApi } from "../api/ApiContext";
 import { HaulStatusCard } from "../components/HaulStatusCard";
 
 export const HaulsPage: React.FC = () => {
-    const [hauls, setHauls] = useState<Haul[]>([])
+    const [hauls, setHauls] = useState<HaulSummary[]>([])
     const { t } = useTranslation();
     const navigate = useNavigate();
     const api = useApi();
@@ -39,7 +39,7 @@ export const HaulsPage: React.FC = () => {
                 </PlockChip>
             </div>
             <div className="flex flex-col gap-4 mt-8">
-            {hauls.map((haul: Haul) => (
+            {hauls.map((haul: HaulSummary) => (
                 <HaulStatusCard haul={haul} />
             ))}
             </div>
