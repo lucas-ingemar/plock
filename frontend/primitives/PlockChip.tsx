@@ -19,11 +19,11 @@ export const PlockChip: React.FC<PlockChipProps> = ({
             break
 
         case "haulIngredient":
-            cn = "bg-citrus text-foreground rounded-md py-2 px-3 text-sm"
+            cn = "bg-citrus text-foreground rounded-md py-2 px-3 text-sm capitalize"
             break
 
         case "haulPantry":
-            cn = "border-border/50 border-1 text-accent-foreground rounded-md py-2 px-3 text-sm"
+            cn = "border-border/50 border-1 text-accent-foreground rounded-md py-2 px-3 text-sm capitalize"
             break
 
         case "recipeTag":

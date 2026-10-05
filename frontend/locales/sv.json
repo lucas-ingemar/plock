@@ -56,6 +56,14 @@
       "addReceipt": "Lägg till kvitto"
     }
   },
+  "recipeSummary": {
+    "next_dish": "Nästa rätt",
+    "cooking_time": "{{time}} min",
+    "start_cooking": "Börja laga",
+    "from_bag": "Från kassen",
+    "from_bag_ing": "{{bagcount}} av {{total}} ingredienser",
+    "pantry": "Skafferi"
+  },
   "receipt": {
     "items": "varor",
     "total": "totalt",
@@ -106,45 +114,54 @@
       },
       "protein": {
         "title": "Vad äter ni för protein?",
-        "subtitle": "Vi bygger recepten kring det ni gillar och hoppar över resten.",
-        "options": {
-          "chicken": "Kyckling",
-          "beef": "Nötkött",
-          "pork": "Fläsk",
-          "lamb": "Lamm",
-          "fish": "Fisk",
-          "seafood": "Skaldjur",
-          "vegetarian": "Vegetariskt",
-          "vegetarianCaption": "Ägg, ost, bönor",
-          "vegan": "Veganskt",
-          "veganCaption": "Tofu, linser, vego"
-        }
+        "subtitle": "Vi bygger recepten kring det ni gillar och hoppar över resten."
       },
       "cuisines": {
         "title": "Vilka kök gillar ni?",
         "subtitle": "Välj så många ni vill. Vi blandar mellan dem under veckan.",
         "choiceDescNone": "Väljer ni inget blandar vi fritt mellan köken.",
         "selected_one": "{{count}} vald",
-        "selected_other": "{{count}} valda",
-        "options": {
-          "swedish": "Svenskt",
-          "italian": "Italienskt",
-          "french": "Franskt",
-          "spanish": "Spanskt",
-          "greek": "Grekiskt",
-          "turkish": "Turkiskt",
-          "moroccan": "Marockanskt",
-          "indian": "Indiskt",
-          "chinese": "Kinesiskt",
-          "thai": "Thailändskt",
-          "japanese": "Japanskt",
-          "korean": "Koreanskt",
-          "vietnamese": "Vietnamesiskt",
-          "mexican": "Mexikanskt",
-          "american": "Amerikanskt",
-          "latinAmerican": "Latinamerikanskt"
-        }
+        "selected_other": "{{count}} valda"
       }
     }
+  },
+  "cuisines": {
+    "options": {
+      "swedish": "Svenskt",
+      "italian": "Italienskt",
+      "french": "Franskt",
+      "spanish": "Spanskt",
+      "greek": "Grekiskt",
+      "turkish": "Turkiskt",
+      "moroccan": "Marockanskt",
+      "indian": "Indiskt",
+      "chinese": "Kinesiskt",
+      "thai": "Thailändskt",
+      "japanese": "Japanskt",
+      "korean": "Koreanskt",
+      "vietnamese": "Vietnamesiskt",
+      "mexican": "Mexikanskt",
+      "american": "Amerikanskt",
+      "latinAmerican": "Latinamerikanskt"
+    }
+  },
+  "protein": {
+    "options": {
+      "chicken": "Kyckling",
+      "beef": "Nötkött",
+      "pork": "Fläsk",
+      "lamb": "Lamm",
+      "fish": "Fisk",
+      "seafood": "Skaldjur",
+      "vegetarian": "Vegetariskt",
+      "vegetarianCaption": "Ägg, ost, bönor",
+      "vegan": "Veganskt",
+      "veganCaption": "Tofu, linser, vego"
+    }
+  },
+  "difficulty" : {
+    "easy": "Lättlagad",
+    "hard": "Utmanande tillagning",
+    "medium": "Medelsvår"
   }
 }

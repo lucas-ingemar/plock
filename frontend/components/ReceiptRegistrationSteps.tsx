@@ -160,34 +160,37 @@ const TimeStep: React.FC<StepContentProps> = ({ data, update }) => {
 const P = "registerReceipt.steps.protein"
 const C = "registerReceipt.steps.cuisines"
 
+const Pp = "protein"
+const Cc = "cuisines"
+
 const proteinOptions = [
-    { value: Protein.Chicken, labelKey: `${P}.options.chicken` },
-    { value: Protein.Beef, labelKey: `${P}.options.beef` },
-    { value: Protein.Pork, labelKey: `${P}.options.pork` },
-    { value: Protein.Lamb, labelKey: `${P}.options.lamb` },
-    { value: Protein.Fish, labelKey: `${P}.options.fish` },
-    { value: Protein.Seafood, labelKey: `${P}.options.seafood` },
-    { value: Protein.Vegetarian, labelKey: `${P}.options.vegetarian`, captionKey: `${P}.options.vegetarianCaption` },
-    { value: Protein.Vegan, labelKey: `${P}.options.vegan`, captionKey: `${P}.options.veganCaption` },
+    { value: Protein.Chicken, labelKey: `${Pp}.options.chicken` },
+    { value: Protein.Beef, labelKey: `${Pp}.options.beef` },
+    { value: Protein.Pork, labelKey: `${Pp}.options.pork` },
+    { value: Protein.Lamb, labelKey: `${Pp}.options.lamb` },
+    { value: Protein.Fish, labelKey: `${Pp}.options.fish` },
+    { value: Protein.Seafood, labelKey: `${Pp}.options.seafood` },
+    { value: Protein.Vegetarian, labelKey: `${Pp}.options.vegetarian`, captionKey: `${P}.options.vegetarianCaption` },
+    { value: Protein.Vegan, labelKey: `${Pp}.options.vegan`, captionKey: `${P}.options.veganCaption` },
 ] as const
 
 const cuisineOptions = [
-    { value: Cuisine.Swedish, labelKey: `${C}.options.swedish` },
-    { value: Cuisine.Italian, labelKey: `${C}.options.italian` },
-    { value: Cuisine.French, labelKey: `${C}.options.french` },
-    { value: Cuisine.Spanish, labelKey: `${C}.options.spanish` },
-    { value: Cuisine.Greek, labelKey: `${C}.options.greek` },
-    { value: Cuisine.Turkish, labelKey: `${C}.options.turkish` },
-    { value: Cuisine.Moroccan, labelKey: `${C}.options.moroccan` },
-    { value: Cuisine.Indian, labelKey: `${C}.options.indian` },
-    { value: Cuisine.Chinese, labelKey: `${C}.options.chinese` },
-    { value: Cuisine.Thai, labelKey: `${C}.options.thai` },
-    { value: Cuisine.Japanese, labelKey: `${C}.options.japanese` },
-    { value: Cuisine.Korean, labelKey: `${C}.options.korean` },
-    { value: Cuisine.Vietnamese, labelKey: `${C}.options.vietnamese` },
-    { value: Cuisine.Mexican, labelKey: `${C}.options.mexican` },
-    { value: Cuisine.American, labelKey: `${C}.options.american` },
-    { value: Cuisine.LatinAmerican, labelKey: `${C}.options.latinAmerican` },
+    { value: Cuisine.Swedish, labelKey: `${Cc}.options.swedish` },
+    { value: Cuisine.Italian, labelKey: `${Cc}.options.italian` },
+    { value: Cuisine.French, labelKey: `${Cc}.options.french` },
+    { value: Cuisine.Spanish, labelKey: `${Cc}.options.spanish` },
+    { value: Cuisine.Greek, labelKey: `${Cc}.options.greek` },
+    { value: Cuisine.Turkish, labelKey: `${Cc}.options.turkish` },
+    { value: Cuisine.Moroccan, labelKey: `${Cc}.options.moroccan` },
+    { value: Cuisine.Indian, labelKey: `${Cc}.options.indian` },
+    { value: Cuisine.Chinese, labelKey: `${Cc}.options.chinese` },
+    { value: Cuisine.Thai, labelKey: `${Cc}.options.thai` },
+    { value: Cuisine.Japanese, labelKey: `${Cc}.options.japanese` },
+    { value: Cuisine.Korean, labelKey: `${Cc}.options.korean` },
+    { value: Cuisine.Vietnamese, labelKey: `${Cc}.options.vietnamese` },
+    { value: Cuisine.Mexican, labelKey: `${Cc}.options.mexican` },
+    { value: Cuisine.American, labelKey: `${Cc}.options.american` },
+    { value: Cuisine.LatinAmerican, labelKey: `${Cc}.options.latinAmerican` },
 ] as const
 
 const ProteinStep: React.FC<StepContentProps> = ({ data, update }) => {

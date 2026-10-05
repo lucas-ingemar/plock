@@ -41,7 +41,7 @@ export const HaulView: React.FC<HaulViewProps> = ({
                     <PlockChip className="hidden xl:flex">{t("haulView.max_cooking_minutes", {max_cooking_minutes: haul.max_cooking_minutes})}</PlockChip>
                 </div>
                 {haul.recipes && haul.recipes?.length > 0 ?
-                        <RecipeSummary/>
+                        <RecipeSummary recipe={haul.recipes[0]}/>
                  :
                     <p className="mt-24 w-full text-2xl text-center">Inga registrerade recept</p>
                 }
