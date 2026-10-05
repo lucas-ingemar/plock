@@ -4,6 +4,7 @@ package types
 
 import "encoding/json"
 import "fmt"
+import "github.com/gofrs/uuid/v5"
 import yaml "gopkg.in/yaml.v3"
 
 // A recipe generated from the receipt and household preferences.
@@ -16,6 +17,10 @@ type Recipe struct {
 
 	// How demanding the recipe is to cook.
 	Difficulty Difficulty `json:"difficulty"`
+
+	// Recipe ID, UUID v4. Set by the server when the recipe is saved. Leave out when
+	// generating recipes.
+	ID *uuid.UUID `json:"id,omitempty,omitzero"`
 
 	// Ingredients with amounts for the given servings.
 	Ingredients []Ingredient `json:"ingredients"`

@@ -157,3 +157,117 @@ func (q *Queries) GetRecipeSummaries(ctx context.Context, haulID uuid.UUID) ([]G
 	}
 	return items, nil
 }
+
+const listRecipeIngredientsFromRecipeID = `-- name: ListRecipeIngredientsFromRecipeID :many
+SELECT id, recipe_id, idx, from_receipt, name, note, quantity, unit, created_at, updated_at FROM recipe_ingredients WHERE recipe_id= ? ORDER BY idx ASC
+`
+
+func (q *Queries) ListRecipeIngredientsFromRecipeID(ctx context.Context, recipeID uuid.UUID) ([]RecipeIngredient, error) {
+	rows, err := q.db.QueryContext(ctx, listRecipeIngredientsFromRecipeID, recipeID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []RecipeIngredient{}
+	for rows.Next() {
+		var i RecipeIngredient
+		if err := rows.Scan(
+			&i.ID,
+			&i.RecipeID,
+			&i.Idx,
+			&i.FromReceipt,
+			&i.Name,
+			&i.Note,
+			&i.Quantity,
+			&i.Unit,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listRecipeStepsFromRecipeID = `-- name: ListRecipeStepsFromRecipeID :many
+SELECT id, recipe_id, idx, text, timer_minutes, created_at, updated_at FROM recipe_steps WHERE recipe_id= ? ORDER BY idx ASC
+`
+
+func (q *Queries) ListRecipeStepsFromRecipeID(ctx context.Context, recipeID uuid.UUID) ([]RecipeStep, error) {
+	rows, err := q.db.QueryContext(ctx, listRecipeStepsFromRecipeID, recipeID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []RecipeStep{}
+	for rows.Next() {
+		var i RecipeStep
+		if err := rows.Scan(
+			&i.ID,
+			&i.RecipeID,
+			&i.Idx,
+			&i.Text,
+			&i.TimerMinutes,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listRecipesFromHaulID = `-- name: ListRecipesFromHaulID :many
+SELECT id, haul_id, haul_idx, cuisine, description, difficulty, kid_tips, protein, servings, title, total_time_minutes, created_at, updated_at FROM recipes WHERE haul_id = ? ORDER BY haul_idx ASC
+`
+
+func (q *Queries) ListRecipesFromHaulID(ctx context.Context, haulID uuid.UUID) ([]Recipe, error) {
+	rows, err := q.db.QueryContext(ctx, listRecipesFromHaulID, haulID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Recipe{}
+	for rows.Next() {
+		var i Recipe
+		if err := rows.Scan(
+			&i.ID,
+			&i.HaulID,
+			&i.HaulIdx,
+			&i.Cuisine,
+			&i.Description,
+			&i.Difficulty,
+			&i.KidTips,
+			&i.Protein,
+			&i.Servings,
+			&i.Title,
+			&i.TotalTimeMinutes,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

@@ -138,7 +138,13 @@ func (k *Kitchen) GetHaul(ctx context.Context, id uuid.UUID) (haul types.Haul, e
 			return types.Haul{}, err
 		}
 
+		recipes, err := k.ListRecipesForHaul(ctx, h.ID)
+		if err != nil {
+			return types.Haul{}, err
+		}
+
 		haul.Receipt = &receipt
+		haul.Recipes = recipes
 	}
 
 	return haul, nil

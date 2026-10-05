@@ -36,3 +36,12 @@ INSERT INTO recipe_steps (
 
 -- name: GetRecipeSummaries :many
 SELECT id, title from recipes WHERE haul_id = ? ORDER by haul_idx ASC;
+
+-- name: ListRecipesFromHaulID :many
+SELECT * FROM recipes WHERE haul_id = ? ORDER BY haul_idx ASC;
+
+-- name: ListRecipeIngredientsFromRecipeID :many
+SELECT * FROM recipe_ingredients WHERE recipe_id= ? ORDER BY idx ASC;
+
+-- name: ListRecipeStepsFromRecipeID :many
+SELECT * FROM recipe_steps WHERE recipe_id= ? ORDER BY idx ASC;

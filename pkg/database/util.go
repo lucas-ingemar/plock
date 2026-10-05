@@ -1,6 +1,10 @@
 package database
 
-import "database/sql"
+import (
+	"database/sql"
+
+	"github.com/samber/lo"
+)
 
 func NilStr(ns sql.NullString) *string {
 	if ns.Valid {
@@ -12,6 +16,13 @@ func NilStr(ns sql.NullString) *string {
 func NilFloat64(ns sql.NullFloat64) *float64 {
 	if ns.Valid {
 		return &ns.Float64
+	}
+	return nil
+}
+
+func NilInt(ns sql.NullInt64) *int {
+	if ns.Valid {
+		return lo.ToPtr(int(ns.Int64))
 	}
 	return nil
 }

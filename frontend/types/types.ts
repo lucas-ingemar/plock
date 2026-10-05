@@ -374,6 +374,11 @@ export interface Recipe {
      */
     difficulty: Difficulty;
     /**
+     * Recipe ID, UUID v4. Set by the server when the recipe is saved. Leave out when generating
+     * recipes.
+     */
+    id?: string;
+    /**
      * Ingredients with amounts for the given servings.
      */
     ingredients: Ingredient[];
@@ -993,6 +998,7 @@ const typeMap: any = {
         { json: "cuisine", js: "cuisine", typ: r("Cuisine") },
         { json: "description", js: "description", typ: "" },
         { json: "difficulty", js: "difficulty", typ: r("Difficulty") },
+        { json: "id", js: "id", typ: u(undefined, "") },
         { json: "ingredients", js: "ingredients", typ: a(r("Ingredient")) },
         { json: "kid_tips", js: "kid_tips", typ: u(undefined, "") },
         { json: "protein", js: "protein", typ: r("Protein") },

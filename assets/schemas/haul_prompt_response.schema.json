@@ -223,6 +223,17 @@
         "steps"
       ],
       "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Recipe ID, UUID v4. Set by the server when the recipe is saved. Leave out when generating recipes.",
+          "goJSONSchema": {
+            "type": "uuid.UUID",
+            "imports": [
+              "github.com/gofrs/uuid/v5"
+            ]
+          }
+        },
         "title": {
           "type": "string",
           "description": "Recipe name."

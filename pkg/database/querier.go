@@ -26,6 +26,9 @@ type Querier interface {
 	GetRecipeSummaries(ctx context.Context, haulID uuid.UUID) ([]GetRecipeSummariesRow, error)
 	GetReciptByHaulID(ctx context.Context, haulID uuid.UUID) (Receipt, error)
 	ListHauls(ctx context.Context) ([]Haul, error)
+	ListRecipeIngredientsFromRecipeID(ctx context.Context, recipeID uuid.UUID) ([]RecipeIngredient, error)
+	ListRecipeStepsFromRecipeID(ctx context.Context, recipeID uuid.UUID) ([]RecipeStep, error)
+	ListRecipesFromHaulID(ctx context.Context, haulID uuid.UUID) ([]Recipe, error)
 	ListReciptItemsByRecieptID(ctx context.Context, receiptID uuid.UUID) ([]ReceiptItem, error)
 }
 
