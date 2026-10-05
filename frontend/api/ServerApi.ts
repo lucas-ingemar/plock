@@ -2,13 +2,27 @@ import ky from "ky";
 import type { Api } from "./Api";
 import type { Haul, HaulPrompt, HaulRequest, HaulResponse, HaulSummary } from "../types/types";
 
-const isoDate = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$/
 
 const DATE_ONLY_KEYS = new Set(["date"])
 
-const reviveDates = (key: string, value: unknown) =>
-    key.endsWith("_at") && typeof value === "string" && isoDate.test(value) ? new Date(value) : value
+const isoDateTime = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$/
+const isoDate = /^(\d{4})-(\d{2})-(\d{2})$/
 
+const reviveDates = (key: string, value: unknown) => {
+    if (typeof value !== "string") return value
+
+    if (key.endsWith("_at") && isoDateTime.test(value)) {
+        return new Date(value)
+    }
+
+    const date = key === "date" ? isoDate.exec(value) : null
+    if (date) {
+        const [, year, month, day] = date
+        return new Date(Number(year), Number(month) - 1, Number(day))
+    }
+
+    return value
+}
 const toJsonWithDates = (value: unknown) =>
     JSON.stringify(value, function (key, serialized) {
         const original = this[key]

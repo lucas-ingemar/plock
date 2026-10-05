@@ -2,7 +2,7 @@ import { cn, TextArea } from "@heroui/react";
 import { Convert, type Haul, type HaulResponse } from "../types/types";
 import { useEffect, useState } from "react";
 import { useApi } from "../api/ApiContext";
-import { ArrowBigDown, ArrowDown } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 import { PlockButton } from "../primitives/PlockButton";
 import { CopyButton } from "./CopyButton";
 

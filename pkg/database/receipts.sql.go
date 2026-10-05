@@ -99,3 +99,67 @@ func (q *Queries) AddReceiptItem(ctx context.Context, arg AddReceiptItemParams) 
 	)
 	return err
 }
+
+const getReciptByHaulID = `-- name: GetReciptByHaulID :one
+SELECT id, haul_id, currency, date, item_count, store, summary, total, total_savings, created_at, updated_at FROM receipts WHERE haul_id = ? LIMIT 1
+`
+
+func (q *Queries) GetReciptByHaulID(ctx context.Context, haulID uuid.UUID) (Receipt, error) {
+	row := q.db.QueryRowContext(ctx, getReciptByHaulID, haulID)
+	var i Receipt
+	err := row.Scan(
+		&i.ID,
+		&i.HaulID,
+		&i.Currency,
+		&i.Date,
+		&i.ItemCount,
+		&i.Store,
+		&i.Summary,
+		&i.Total,
+		&i.TotalSavings,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const listReciptItemsByRecieptID = `-- name: ListReciptItemsByRecieptID :many
+SELECT id, receipt_id, idx, brand, category, discount, is_food, name, price, quantity, unit, created_at, updated_at FROM receipt_items WHERE receipt_id = ? ORDER BY idx ASC
+`
+
+func (q *Queries) ListReciptItemsByRecieptID(ctx context.Context, receiptID uuid.UUID) ([]ReceiptItem, error) {
+	rows, err := q.db.QueryContext(ctx, listReciptItemsByRecieptID, receiptID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []ReceiptItem{}
+	for rows.Next() {
+		var i ReceiptItem
+		if err := rows.Scan(
+			&i.ID,
+			&i.ReceiptID,
+			&i.Idx,
+			&i.Brand,
+			&i.Category,
+			&i.Discount,
+			&i.IsFood,
+			&i.Name,
+			&i.Price,
+			&i.Quantity,
+			&i.Unit,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

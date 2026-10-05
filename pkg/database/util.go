@@ -9,6 +9,13 @@ func NilStr(ns sql.NullString) *string {
 	return nil
 }
 
+func NilFloat64(ns sql.NullFloat64) *float64 {
+	if ns.Valid {
+		return &ns.Float64
+	}
+	return nil
+}
+
 func SqlFloat64(f *float64) sql.NullFloat64 {
 	if f == nil {
 		return sql.NullFloat64{

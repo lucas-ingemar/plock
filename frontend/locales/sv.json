@@ -38,6 +38,15 @@
       "all": "Alla"
     }
   },
+  "haulView": {
+    "guests": {
+      "only_adults": "{{adults}} vuxna",
+      "only_children": "{{children}} barn",
+      "adults_and_children": "{{adults}} vuxna + {{children}} barn"
+    },
+    "portions": "{{portions}} portioner",
+    "max_cooking_minutes": "max {{max_cooking_minutes}} min"
+  },
   "haulCard": {
     "meal_count": "{{meal_count}} middagar",
     "portions": "{{portions}} portioner",
@@ -46,6 +55,13 @@
       "title": "Väntar på kvitto",
       "addReceipt": "Lägg till kvitto"
     }
+  },
+  "receipt": {
+    "items": "varor",
+    "total": "totalt",
+    "food_products": "Matvaror",
+    "show_all_products": "Visa alla {{count}} varor",
+    "show_less": "Visa mindre"
   },
   "registerReceipt": {
     "creating": "Skapar nytt plock",

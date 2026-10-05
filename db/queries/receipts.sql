@@ -25,3 +25,9 @@ INSERT INTO receipt_items (
     quantity,
     unit
 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+-- name: GetReciptByHaulID :one
+SELECT * FROM receipts WHERE haul_id = ? LIMIT 1;
+
+-- name: ListReciptItemsByRecieptID :many
+SELECT * FROM receipt_items WHERE receipt_id = ? ORDER BY idx ASC;

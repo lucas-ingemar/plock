@@ -24,7 +24,9 @@ type Querier interface {
 	GetHaulCuisines(ctx context.Context, haulID uuid.UUID) ([]HaulCuisine, error)
 	GetHaulProteins(ctx context.Context, haulID uuid.UUID) ([]HaulProtein, error)
 	GetRecipeSummaries(ctx context.Context, haulID uuid.UUID) ([]GetRecipeSummariesRow, error)
+	GetReciptByHaulID(ctx context.Context, haulID uuid.UUID) (Receipt, error)
 	ListHauls(ctx context.Context) ([]Haul, error)
+	ListReciptItemsByRecieptID(ctx context.Context, receiptID uuid.UUID) ([]ReceiptItem, error)
 }
 
 var _ Querier = (*Queries)(nil)
