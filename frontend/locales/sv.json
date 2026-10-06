@@ -165,5 +165,10 @@
     "easy": "Lättlagad",
     "hard": "Utmanande tillagning",
     "medium": "Medelsvår"
+  },
+  "error": {
+    "title": "Hoppsan, något kokade över",
+    "message": "Vi kunde inte hämta det här just nu. Försök igen om en liten stund.",
+    "retry": "Försök igen"
   }
 }

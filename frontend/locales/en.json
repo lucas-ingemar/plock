@@ -130,5 +130,10 @@
         }
       }
     }
+  },
+  "error": {
+    "title": "Oops, something boiled over",
+    "message": "We couldn't load this right now. Please try again in a moment.",
+    "retry": "Try again"
   }
 }
