@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -35,7 +34,6 @@ func (s *Server) getHaul() http.HandlerFunc {
 		ctx := r.Context()
 
 		haulID := chi.URLParam(r, "haulID")
-		fmt.Println(haulID)
 
 		haulUID, err := uuid.FromString(haulID)
 		if err != nil {

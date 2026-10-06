@@ -37,6 +37,9 @@ INSERT INTO recipe_steps (
 -- name: GetRecipeSummaries :many
 SELECT id, title from recipes WHERE haul_id = ? ORDER by haul_idx ASC;
 
+-- name: GetRecipe :one
+SELECT * from recipes WHERE id = ? LIMIT 1;
+
 -- name: ListRecipesFromHaulID :many
 SELECT * FROM recipes WHERE haul_id = ? ORDER BY haul_idx ASC;
 

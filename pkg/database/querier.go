@@ -23,6 +23,7 @@ type Querier interface {
 	GetHaul(ctx context.Context, id uuid.UUID) (Haul, error)
 	GetHaulCuisines(ctx context.Context, haulID uuid.UUID) ([]HaulCuisine, error)
 	GetHaulProteins(ctx context.Context, haulID uuid.UUID) ([]HaulProtein, error)
+	GetRecipe(ctx context.Context, id uuid.UUID) (Recipe, error)
 	GetRecipeSummaries(ctx context.Context, haulID uuid.UUID) ([]GetRecipeSummariesRow, error)
 	GetReciptByHaulID(ctx context.Context, haulID uuid.UUID) (Receipt, error)
 	ListHauls(ctx context.Context) ([]Haul, error)

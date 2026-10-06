@@ -4,6 +4,7 @@ import { WeekPage } from './pages/WeekPage'
 import { RegisterReceiptPage } from './pages/RegisterReceiptPage'
 import { HaulsPage } from './pages/HaulsPage'
 import { HaulPage } from './pages/HaulPage'
+import { RecipePage } from './pages/RecipePage'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route element={<HaulsPage/>} path="/hauls" />
         <Route element={<HaulPage/>} path="/hauls/:haulID" />
         <Route element={<RegisterReceiptPage/>} path="/register-receipt" />
+        <Route element={<RecipePage/>} path="/recipes/:recipeID" />
       </Routes>
     </div>
   )

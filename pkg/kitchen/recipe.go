@@ -9,6 +9,22 @@ import (
 	"github.com/samber/lo"
 )
 
+func (k *Kitchen) GetRecipe(ctx context.Context, recipeID uuid.UUID) (types.Recipe, error) {
+	dbR, err := k.db.GetRecipe(ctx, recipeID)
+	if err != nil {
+		return types.Recipe{}, err
+	}
+
+	r := dbR.ToApiRecipe()
+
+	r, err = k.FillRecipe(ctx, r)
+	if err != nil {
+		return types.Recipe{}, err
+	}
+
+	return r, nil
+}
+
 func (k *Kitchen) ListRecipeSummariesForHaul(ctx context.Context, haulID uuid.UUID) ([]types.RecipeSummary, error) {
 	titles, err := k.db.GetRecipeSummaries(ctx, haulID)
 	if err != nil {
@@ -32,47 +48,46 @@ func (k *Kitchen) ListRecipesForHaul(ctx context.Context, haulID uuid.UUID) (rec
 	}
 
 	for _, dbr := range dbReceipes {
-		r := types.Recipe{
-			ID:               &dbr.ID,
-			Cuisine:          types.Cuisine(dbr.Cuisine),
-			Description:      dbr.Description,
-			Difficulty:       types.Difficulty(dbr.Difficulty),
-			KidTips:          database.NilStr(dbr.KidTips),
-			Protein:          types.Protein(dbr.Protein),
-			Servings:         int(dbr.Servings),
-			Title:            dbr.Title,
-			TotalTimeMinutes: int(dbr.TotalTimeMinutes),
-		}
+		r := dbr.ToApiRecipe()
 
-		dbIng, err := k.db.ListRecipeIngredientsFromRecipeID(ctx, *r.ID)
+		r, err = k.FillRecipe(ctx, r)
 		if err != nil {
 			return nil, err
 		}
-
-		r.Ingredients = lo.Map(dbIng, func(item database.RecipeIngredient, _ int) types.Ingredient {
-			return types.Ingredient{
-				FromReceipt: item.FromReceipt,
-				Name:        item.Name,
-				Note:        database.NilStr(item.Note),
-				Quantity:    database.NilFloat64(item.Quantity),
-				Unit:        (*types.Unit)(database.NilStr(item.Unit)),
-			}
-		})
-
-		dbSteps, err := k.db.ListRecipeStepsFromRecipeID(ctx, *r.ID)
-		if err != nil {
-			return nil, err
-		}
-
-		r.Steps = lo.Map(dbSteps, func(item database.RecipeStep, _ int) types.RecipeStep {
-			return types.RecipeStep{
-				Text:         item.Text,
-				TimerMinutes: database.NilInt(item.TimerMinutes),
-			}
-		})
 
 		recipes = append(recipes, r)
 	}
 
 	return recipes, nil
+}
+
+func (k *Kitchen) FillRecipe(ctx context.Context, r types.Recipe) (types.Recipe, error) {
+	dbIng, err := k.db.ListRecipeIngredientsFromRecipeID(ctx, *r.ID)
+	if err != nil {
+		return types.Recipe{}, err
+	}
+
+	r.Ingredients = lo.Map(dbIng, func(item database.RecipeIngredient, _ int) types.Ingredient {
+		return types.Ingredient{
+			FromReceipt: item.FromReceipt,
+			Name:        item.Name,
+			Note:        database.NilStr(item.Note),
+			Quantity:    database.NilFloat64(item.Quantity),
+			Unit:        (*types.Unit)(database.NilStr(item.Unit)),
+		}
+	})
+
+	dbSteps, err := k.db.ListRecipeStepsFromRecipeID(ctx, *r.ID)
+	if err != nil {
+		return types.Recipe{}, err
+	}
+
+	r.Steps = lo.Map(dbSteps, func(item database.RecipeStep, _ int) types.RecipeStep {
+		return types.RecipeStep{
+			Text:         item.Text,
+			TimerMinutes: database.NilInt(item.TimerMinutes),
+		}
+	})
+
+	return r, err
 }

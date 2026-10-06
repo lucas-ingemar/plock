@@ -1,6 +1,6 @@
 import ky from "ky";
 import type { Api } from "./Api";
-import type { Haul, HaulPrompt, HaulRequest, HaulResponse, HaulSummary } from "../types/types";
+import type { Haul, HaulPrompt, HaulRequest, HaulResponse, HaulSummary, Recipe } from "../types/types";
 
 
 const DATE_ONLY_KEYS = new Set(["date"])
@@ -108,6 +108,11 @@ export class ServerApi implements Api {
 
     async listHauls(): Promise<HaulSummary[]> {
         return await this.api.get(`/hauls`).json<HaulSummary[]>();
+    }
+
+
+    async getRecipe(id: string): Promise<Recipe> {
+        return await this.api.get(`/recipes/${id}`).json<Recipe>();
     }
 
 }

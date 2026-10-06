@@ -126,6 +126,31 @@ func (q *Queries) AddRecipeStep(ctx context.Context, arg AddRecipeStepParams) er
 	return err
 }
 
+const getRecipe = `-- name: GetRecipe :one
+SELECT id, haul_id, haul_idx, cuisine, description, difficulty, kid_tips, protein, servings, title, total_time_minutes, created_at, updated_at from recipes WHERE id = ? LIMIT 1
+`
+
+func (q *Queries) GetRecipe(ctx context.Context, id uuid.UUID) (Recipe, error) {
+	row := q.db.QueryRowContext(ctx, getRecipe, id)
+	var i Recipe
+	err := row.Scan(
+		&i.ID,
+		&i.HaulID,
+		&i.HaulIdx,
+		&i.Cuisine,
+		&i.Description,
+		&i.Difficulty,
+		&i.KidTips,
+		&i.Protein,
+		&i.Servings,
+		&i.Title,
+		&i.TotalTimeMinutes,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const getRecipeSummaries = `-- name: GetRecipeSummaries :many
 SELECT id, title from recipes WHERE haul_id = ? ORDER by haul_idx ASC
 `
