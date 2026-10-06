@@ -4,6 +4,7 @@ import { PlockChip } from "../primitives/PlockChip"
 import { RecipeSummary } from "./RecipeSummary"
 import { Receipt } from "./Receipt"
 import { useTranslation } from "react-i18next"
+import { RemainingRecipes } from "./RemainingRecipes"
 
 interface HaulViewProps {
     haul: Haul,
@@ -26,7 +27,7 @@ export const HaulView: React.FC<HaulViewProps> = ({
     }
 
     return (
-        <DefaultPageLayout className="flex gap-8">
+        <DefaultPageLayout className="flex gap-12">
             <div className="hidden flex-col h-full lg:flex">
                 {haul.receipt &&
                     <Receipt receipt={haul.receipt}/>
@@ -41,9 +42,12 @@ export const HaulView: React.FC<HaulViewProps> = ({
                     <PlockChip className="hidden xl:flex">{t("haulView.max_cooking_minutes", {max_cooking_minutes: haul.max_cooking_minutes})}</PlockChip>
                 </div>
                 {haul.recipes && haul.recipes?.length > 0 ?
+                    <div className="flex flex-col gap-8">
                         <RecipeSummary recipe={haul.recipes[0]}/>
+                        <RemainingRecipes recipes={haul.recipes.slice(1)}/>
+                    </div>
                  :
-                    <p className="mt-24 w-full text-2xl text-center">Inga registrerade recept</p>
+                    <p className="mt-24 w-full text-2xl text-center">{t("haulView.no_registered_recipes")}</p>
                 }
             </div>
         </DefaultPageLayout>

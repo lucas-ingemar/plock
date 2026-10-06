@@ -45,7 +45,8 @@
       "adults_and_children": "{{adults}} vuxna + {{children}} barn"
     },
     "portions": "{{portions}} portioner",
-    "max_cooking_minutes": "max {{max_cooking_minutes}} min"
+    "max_cooking_minutes": "max {{max_cooking_minutes}} min",
+    "no_registered_recipes": "Inga registrerade recept"
   },
   "haulCard": {
     "meal_count": "{{meal_count}} middagar",
@@ -62,7 +63,8 @@
     "start_cooking": "Börja laga",
     "from_bag": "Från kassen",
     "from_bag_ing": "{{bagcount}} av {{total}} ingredienser",
-    "pantry": "Skafferi"
+    "pantry": "Skafferi",
+    "from_receipt": "{{count}} från kvittot"
   },
   "receipt": {
     "items": "varor",

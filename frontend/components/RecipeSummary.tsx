@@ -3,6 +3,7 @@ import { PlockButton } from "../primitives/PlockButton"
 import { PlockCheckCircle } from "../primitives/PlockCheckCircle"
 import { PlockChip } from "../primitives/PlockChip"
 import type { Recipe } from "../types/types";
+import { useNavigate } from "react-router-dom";
 
 interface RecipeSummaryProps {
     recipe: Recipe;
@@ -12,10 +13,15 @@ export const RecipeSummary: React.FC<RecipeSummaryProps> = ({
     recipe,
 }) => {
 
-    const { t, i18n } = useTranslation()
+    const { t } = useTranslation()
+    const navigate = useNavigate()
 
     const recipeIngredients = recipe.ingredients.filter((i)=>(i.from_receipt))
     const pantryIngredients = recipe.ingredients.filter((i)=>(!i.from_receipt))
+
+    const onClick = () => {
+        navigate("/recipes/"+recipe.id)
+    }
 
     return (
         <div className="flex gap-4 justify-between p-8 font-sans rounded-xl bg-accent text-accent-foreground">
@@ -33,7 +39,7 @@ export const RecipeSummary: React.FC<RecipeSummaryProps> = ({
                 </div>
                 <div className="flex-grow"/>
                 <div className="flex gap-3 items-center">
-                <PlockButton className="mt-8 w-full sm:w-auto" variant="citrus" size="xl">{t("recipeSummary.start_cooking")}</PlockButton>
+                <PlockButton className="mt-8 w-full sm:w-auto" variant="citrus" size="xl" onClick={onClick}>{t("recipeSummary.start_cooking")}</PlockButton>
                 </div>
             </div>
             <div className="hidden flex-col p-6 w-2/5 rounded-xl sm:flex bg-accent-foreground/10">
