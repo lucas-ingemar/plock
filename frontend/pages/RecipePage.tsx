@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { type Recipe } from "../types/types";
 import { useApi } from "../api/ApiContext";
 import { ErrorState } from "../components/ErrorState";
+import { RecipeHeader } from "../components/RecipeHeader";
+import { RecipeIngredients } from "../components/RecipeIngredients";
 
 export const RecipePage: React.FC = () => {
     const [recipe, setRecipe] = useState<Recipe|undefined>()
@@ -25,7 +27,10 @@ export const RecipePage: React.FC = () => {
         if (recipe) {
             return (
                 <>
-                    {recipe.title}
+                   <RecipeHeader recipe={recipe}/>
+                    <div className="flex flex-col gap-8 mt-6 lg:flex-row">
+                        <RecipeIngredients className="w-full lg:w-1/3" recipe={recipe}/>
+                    </div>
                 </>
             )
         }

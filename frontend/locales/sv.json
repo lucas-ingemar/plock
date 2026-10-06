@@ -57,6 +57,12 @@
       "addReceipt": "Lägg till kvitto"
     }
   },
+  "recipe": {
+    "ingredients": "Ingredienser",
+    "servings": "portioner",
+    "from_receipt": "från kvittot",
+    "staple_product": "basvara"
+  },
   "recipeSummary": {
     "next_dish": "Nästa rätt",
     "cooking_time": "{{time}} min",
@@ -170,5 +176,23 @@
     "title": "Hoppsan, något kokade över",
     "message": "Vi kunde inte hämta det här just nu. Försök igen om en liten stund.",
     "retry": "Försök igen"
+  },
+  "units": {
+    "g": "g",
+    "kg": "kg",
+    "ml": "ml",
+    "dl": "dl",
+    "l": "l",
+    "tsp": "tsk",
+    "tbsp": "msk",
+    "pinch_one": "nypa",
+    "pinch_other": "nypor",
+    "piece": "st",
+    "clove_one": "klyfta",
+    "clove_other": "klyftor",
+    "can_one": "burk",
+    "can_other": "burkar",
+    "package_one": "förp",
+    "package_other": "förp"
   }
 }

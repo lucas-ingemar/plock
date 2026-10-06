@@ -1,9 +1,9 @@
 interface PlockCheckCircleProps {
-    checked: boolean,
+    checked?: boolean,
 }
 
 export const PlockCheckCircle: React.FC<PlockCheckCircleProps> = ({
-    checked,
+    checked=false,
 }) => {
     if (checked) {
         return <div className="w-3 h-3 rounded-full bg-citrus"/>

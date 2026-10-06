@@ -135,5 +135,23 @@
     "title": "Oops, something boiled over",
     "message": "We couldn't load this right now. Please try again in a moment.",
     "retry": "Try again"
+  },
+  "units": {
+    "g": "g",
+    "kg": "kg",
+    "ml": "ml",
+    "dl": "dl",
+    "l": "l",
+    "tsp": "tsp",
+    "tbsp": "tbsp",
+    "pinch_one": "pinch",
+    "pinch_other": "pinches",
+    "piece": "",
+    "clove_one": "clove",
+    "clove_other": "cloves",
+    "can_one": "can",
+    "can_other": "cans",
+    "package_one": "package",
+    "package_other": "packages"
   }
 }
