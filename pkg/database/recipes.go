@@ -6,7 +6,7 @@ import (
 
 func (r Recipe) ToApiRecipe() types.Recipe {
 	return types.Recipe{
-		ID:               &r.ID,
+		ID:               r.ID,
 		Cuisine:          types.Cuisine(r.Cuisine),
 		Description:      r.Description,
 		Difficulty:       types.Difficulty(r.Difficulty),

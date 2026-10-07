@@ -18,7 +18,7 @@ type HaulResponse struct {
 	Receipt Receipt `json:"receipt"`
 
 	// Generated recipes, one per planned meal.
-	Recipes []Recipe `json:"recipes"`
+	Recipes []GeneratedRecipe `json:"recipes"`
 
 	// Short title for the whole set of recipes.
 	Title string `json:"title"`

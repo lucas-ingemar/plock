@@ -4,11 +4,10 @@ package types
 
 import "encoding/json"
 import "fmt"
-import "github.com/gofrs/uuid/v5"
 import yaml "gopkg.in/yaml.v3"
 
-// A saved recipe with its reviews.
-type Recipe struct {
+// Fields shared by GeneratedRecipe and Recipe.
+type RecipeBase struct {
 	// Cuisine the recipe belongs to.
 	Cuisine Cuisine `json:"cuisine"`
 
@@ -18,9 +17,6 @@ type Recipe struct {
 	// How demanding the recipe is to cook.
 	Difficulty Difficulty `json:"difficulty"`
 
-	// Recipe ID. UUID v4.
-	ID uuid.UUID `json:"id"`
-
 	// Ingredients with amounts for the given servings.
 	Ingredients []Ingredient `json:"ingredients"`
 
@@ -29,10 +25,6 @@ type Recipe struct {
 
 	// Main protein in the recipe.
 	Protein Protein `json:"protein"`
-
-	// Reviews keyed by user ID (UUID v4). Always present; an empty object when nobody
-	// has reviewed the recipe.
-	Reviews map[uuid.UUID]RecipeReview `json:"reviews"`
 
 	// Number of servings the ingredient amounts are for.
 	Servings int `json:"servings"`
@@ -48,45 +40,39 @@ type Recipe struct {
 }
 
 // UnmarshalJSON implements json.Unmarshaler.
-func (j *Recipe) UnmarshalJSON(value []byte) error {
+func (j *RecipeBase) UnmarshalJSON(value []byte) error {
 	var raw map[string]interface{}
 	if err := json.Unmarshal(value, &raw); err != nil {
 		return err
 	}
 	if _, ok := raw["cuisine"]; raw != nil && !ok {
-		return fmt.Errorf("field cuisine in Recipe: required")
+		return fmt.Errorf("field cuisine in RecipeBase: required")
 	}
 	if _, ok := raw["description"]; raw != nil && !ok {
-		return fmt.Errorf("field description in Recipe: required")
+		return fmt.Errorf("field description in RecipeBase: required")
 	}
 	if _, ok := raw["difficulty"]; raw != nil && !ok {
-		return fmt.Errorf("field difficulty in Recipe: required")
-	}
-	if _, ok := raw["id"]; raw != nil && !ok {
-		return fmt.Errorf("field id in Recipe: required")
+		return fmt.Errorf("field difficulty in RecipeBase: required")
 	}
 	if _, ok := raw["ingredients"]; raw != nil && !ok {
-		return fmt.Errorf("field ingredients in Recipe: required")
+		return fmt.Errorf("field ingredients in RecipeBase: required")
 	}
 	if _, ok := raw["protein"]; raw != nil && !ok {
-		return fmt.Errorf("field protein in Recipe: required")
-	}
-	if _, ok := raw["reviews"]; raw != nil && !ok {
-		return fmt.Errorf("field reviews in Recipe: required")
+		return fmt.Errorf("field protein in RecipeBase: required")
 	}
 	if _, ok := raw["servings"]; raw != nil && !ok {
-		return fmt.Errorf("field servings in Recipe: required")
+		return fmt.Errorf("field servings in RecipeBase: required")
 	}
 	if _, ok := raw["steps"]; raw != nil && !ok {
-		return fmt.Errorf("field steps in Recipe: required")
+		return fmt.Errorf("field steps in RecipeBase: required")
 	}
 	if _, ok := raw["title"]; raw != nil && !ok {
-		return fmt.Errorf("field title in Recipe: required")
+		return fmt.Errorf("field title in RecipeBase: required")
 	}
 	if _, ok := raw["total_time_minutes"]; raw != nil && !ok {
-		return fmt.Errorf("field total_time_minutes in Recipe: required")
+		return fmt.Errorf("field total_time_minutes in RecipeBase: required")
 	}
-	type Plain Recipe
+	type Plain RecipeBase
 	var plain Plain
 	if err := json.Unmarshal(value, &plain); err != nil {
 		return err
@@ -103,50 +89,44 @@ func (j *Recipe) UnmarshalJSON(value []byte) error {
 	if 1 > plain.TotalTimeMinutes {
 		return fmt.Errorf("field %s: must be >= %v", "total_time_minutes", 1)
 	}
-	*j = Recipe(plain)
+	*j = RecipeBase(plain)
 	return nil
 }
 
 // UnmarshalYAML implements yaml.Unmarshaler.
-func (j *Recipe) UnmarshalYAML(value *yaml.Node) error {
+func (j *RecipeBase) UnmarshalYAML(value *yaml.Node) error {
 	var raw map[string]interface{}
 	if err := value.Decode(&raw); err != nil {
 		return err
 	}
 	if _, ok := raw["cuisine"]; raw != nil && !ok {
-		return fmt.Errorf("field cuisine in Recipe: required")
+		return fmt.Errorf("field cuisine in RecipeBase: required")
 	}
 	if _, ok := raw["description"]; raw != nil && !ok {
-		return fmt.Errorf("field description in Recipe: required")
+		return fmt.Errorf("field description in RecipeBase: required")
 	}
 	if _, ok := raw["difficulty"]; raw != nil && !ok {
-		return fmt.Errorf("field difficulty in Recipe: required")
-	}
-	if _, ok := raw["id"]; raw != nil && !ok {
-		return fmt.Errorf("field id in Recipe: required")
+		return fmt.Errorf("field difficulty in RecipeBase: required")
 	}
 	if _, ok := raw["ingredients"]; raw != nil && !ok {
-		return fmt.Errorf("field ingredients in Recipe: required")
+		return fmt.Errorf("field ingredients in RecipeBase: required")
 	}
 	if _, ok := raw["protein"]; raw != nil && !ok {
-		return fmt.Errorf("field protein in Recipe: required")
-	}
-	if _, ok := raw["reviews"]; raw != nil && !ok {
-		return fmt.Errorf("field reviews in Recipe: required")
+		return fmt.Errorf("field protein in RecipeBase: required")
 	}
 	if _, ok := raw["servings"]; raw != nil && !ok {
-		return fmt.Errorf("field servings in Recipe: required")
+		return fmt.Errorf("field servings in RecipeBase: required")
 	}
 	if _, ok := raw["steps"]; raw != nil && !ok {
-		return fmt.Errorf("field steps in Recipe: required")
+		return fmt.Errorf("field steps in RecipeBase: required")
 	}
 	if _, ok := raw["title"]; raw != nil && !ok {
-		return fmt.Errorf("field title in Recipe: required")
+		return fmt.Errorf("field title in RecipeBase: required")
 	}
 	if _, ok := raw["total_time_minutes"]; raw != nil && !ok {
-		return fmt.Errorf("field total_time_minutes in Recipe: required")
+		return fmt.Errorf("field total_time_minutes in RecipeBase: required")
 	}
-	type Plain Recipe
+	type Plain RecipeBase
 	var plain Plain
 	if err := value.Decode(&plain); err != nil {
 		return err
@@ -163,6 +143,6 @@ func (j *Recipe) UnmarshalYAML(value *yaml.Node) error {
 	if 1 > plain.TotalTimeMinutes {
 		return fmt.Errorf("field %s: must be >= %v", "total_time_minutes", 1)
 	}
-	*j = Recipe(plain)
+	*j = RecipeBase(plain)
 	return nil
 }

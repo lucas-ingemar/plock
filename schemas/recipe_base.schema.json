@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://plock.dev/schemas/recipe_base.schema.json",
+  "title": "RecipeBase",
+  "description": "Fields shared by GeneratedRecipe and Recipe.",
+  "type": "object",
+  "required": [
+    "title",
+    "description",
+    "cuisine",
+    "protein",
+    "servings",
+    "total_time_minutes",
+    "difficulty",
+    "ingredients",
+    "steps"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Recipe name."
+    },
+    "description": {
+      "type": "string",
+      "description": "One or two sentences describing the dish."
+    },
+    "cuisine": {
+      "description": "Cuisine the recipe belongs to.",
+      "$ref": "cuisine.schema.json"
+    },
+    "protein": {
+      "description": "Main protein in the recipe.",
+      "$ref": "protein.schema.json"
+    },
+    "servings": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Number of servings the ingredient amounts are for."
+    },
+    "total_time_minutes": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Total time from start to served, in minutes."
+    },
+    "difficulty": {
+      "description": "How demanding the recipe is to cook.",
+      "$ref": "difficulty.schema.json"
+    },
+    "ingredients": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "ingredient.schema.json"
+      },
+      "description": "Ingredients with amounts for the given servings."
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "recipe_step.schema.json"
+      },
+      "description": "Cooking steps in order."
+    },
+    "kid_tips": {
+      "type": "string",
+      "description": "Adaptations for children in the household. Omitted when not relevant."
+    }
+  }
+}

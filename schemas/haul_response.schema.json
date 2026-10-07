@@ -33,7 +33,7 @@
       "type": "array",
       "minItems": 1,
       "items": {
-        "$ref": "recipe.schema.json"
+        "$ref": "generated_recipe.schema.json"
       },
       "description": "Generated recipes, one per planned meal."
     }

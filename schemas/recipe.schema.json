@@ -2,81 +2,78 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://plock.dev/schemas/recipe.schema.json",
   "title": "Recipe",
-  "description": "A recipe generated from the receipt and household preferences.",
+  "description": "A saved recipe with its reviews.",
+  "allOf": [
+    {
+      "$ref": "recipe_base.schema.json"
+    }
+  ],
   "type": "object",
-  "additionalProperties": false,
   "required": [
-    "title",
-    "description",
-    "cuisine",
-    "protein",
-    "servings",
-    "total_time_minutes",
-    "difficulty",
-    "ingredients",
-    "steps"
+    "id",
+    "reviews"
   ],
   "properties": {
     "id": {
       "type": "string",
       "format": "uuid",
-      "description": "Recipe ID, UUID v4. Set by the server when the recipe is saved. Leave out when generating recipes.",
       "goJSONSchema": {
         "type": "uuid.UUID",
         "imports": [
           "github.com/gofrs/uuid/v5"
         ]
+      },
+      "description": "Recipe ID. UUID v4."
+    },
+    "reviews": {
+      "type": "object",
+      "description": "Reviews keyed by user ID (UUID v4). Always present; an empty object when nobody has reviewed the recipe.",
+      "propertyNames": {
+        "format": "uuid"
+      },
+      "additionalProperties": {
+        "$ref": "recipe_review.schema.json"
+      },
+      "goJSONSchema": {
+        "type": "map[uuid.UUID]RecipeReview",
+        "imports": [
+          "github.com/gofrs/uuid/v5"
+        ]
       }
-    },
-    "title": {
-      "type": "string",
-      "description": "Recipe name."
-    },
-    "description": {
-      "type": "string",
-      "description": "One or two sentences describing the dish."
-    },
-    "cuisine": {
-      "description": "Cuisine the recipe belongs to.",
-      "$ref": "cuisine.schema.json"
-    },
-    "protein": {
-      "description": "Main protein in the recipe.",
-      "$ref": "protein.schema.json"
-    },
-    "servings": {
-      "type": "integer",
-      "minimum": 1,
-      "description": "Number of servings the ingredient amounts are for."
-    },
-    "total_time_minutes": {
-      "type": "integer",
-      "minimum": 1,
-      "description": "Total time from start to served, in minutes."
-    },
-    "difficulty": {
-      "description": "How demanding the recipe is to cook.",
-      "$ref": "difficulty.schema.json"
-    },
-    "ingredients": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "$ref": "ingredient.schema.json"
-      },
-      "description": "Ingredients with amounts for the given servings."
-    },
-    "steps": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "$ref": "recipe_step.schema.json"
-      },
-      "description": "Cooking steps in order."
-    },
-    "kid_tips": {
-      "type": "string",
-      "description": "Adaptations for children in the household. Omitted when not relevant."
     }
-  }
+  },
+  "unevaluatedProperties": false,
+  "examples": [
+    {
+      "id": "7b1e4c2a-5d3f-4a8b-9c6e-1f2a3b4c5d6e",
+      "title": "Krispig sesamtofu med risnudlar",
+      "description": "Krispig tofu, knapriga grönsaker och en söt-salt sesamsås.",
+      "cuisine": "chinese",
+      "protein": "vegan",
+      "servings": 4,
+      "total_time_minutes": 25,
+      "difficulty": "easy",
+      "ingredients": [
+        {
+          "quantity": 400,
+          "unit": "g",
+          "name": "tofu",
+          "from_receipt": true
+        }
+      ],
+      "steps": [
+        {
+          "text": "Stek tofun gyllene.",
+          "timer_minutes": 8
+        }
+      ],
+      "reviews": {
+        "00000000-0000-0000-0000-000000000000": {
+          "rating": 3,
+          "children_rating": 3,
+          "notes": "Dubbla såsen nästa gång."
+        }
+      }
+    }
+  ]
 }

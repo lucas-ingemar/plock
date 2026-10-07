@@ -87,7 +87,7 @@ func (k *Kitchen) ListRecipesForHaul(ctx context.Context, haulID uuid.UUID) (rec
 }
 
 func (k *Kitchen) FillRecipe(ctx context.Context, r types.Recipe) (types.Recipe, error) {
-	dbIng, err := k.db.ListRecipeIngredientsFromRecipeID(ctx, *r.ID)
+	dbIng, err := k.db.ListRecipeIngredientsFromRecipeID(ctx, r.ID)
 	if err != nil {
 		return types.Recipe{}, err
 	}
@@ -102,7 +102,7 @@ func (k *Kitchen) FillRecipe(ctx context.Context, r types.Recipe) (types.Recipe,
 		}
 	})
 
-	dbSteps, err := k.db.ListRecipeStepsFromRecipeID(ctx, *r.ID)
+	dbSteps, err := k.db.ListRecipeStepsFromRecipeID(ctx, r.ID)
 	if err != nil {
 		return types.Recipe{}, err
 	}
