@@ -3,6 +3,7 @@ import { PlockChip } from "../primitives/PlockChip"
 import type { Recipe } from "../types/types";
 import defaultImage from "@/assets/recipes/default-recipe.svg"
 import { useState } from "react";
+import Rating from "./Rating";
 
 interface RecipeHeaderProps {
     recipe: Recipe;
@@ -32,6 +33,7 @@ export const RecipeHeader: React.FC<RecipeHeaderProps> = ({
                     <PlockChip variant="recipeTag">{t("protein.options." + recipe.protein)}</PlockChip>
                     <PlockChip variant="recipeTag" className="hidden sm:flex">{t("difficulty." + recipe.difficulty)}</PlockChip>
                 </div>
+                <Rating className="mt-6" size={30} allowHalf value={3.7} readOnly/>
             </div>
 
             <div className="hidden flex-col w-2/5 rounded-xl lg:flex">

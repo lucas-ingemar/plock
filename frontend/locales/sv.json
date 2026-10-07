@@ -61,7 +61,32 @@
     "ingredients": "Ingredienser",
     "servings": "portioner",
     "from_receipt": "från kvittot",
-    "staple_product": "basvara"
+    "staple_product": "basvara",
+    "instructions": "Gör så här"
+  },
+  "recipe_review": {
+    "title": "När ni har ätit",
+    "subtitle": "Hur var maten?",
+    "children_rating": "Vad tyckte barnen?",
+    "notes": "Anteckningar till nästa gång",
+    "notes_placeholder": "t.ex mindre salt, dubbla såsen",
+    "image": "Bild",
+    "optional": "valfritt",
+    "add_image": "Lägg till bild",
+    "save": "Spara och markera som lagad",
+    "save_info": "Svaret delas med familjen och används när nästa plock planeras."
+  },
+  "rating_button_group": {
+    "all": {
+      "1": "Inte för oss",
+      "2": "Helt okej",
+      "3": "Laga igen"
+    },
+    "children": {
+      "1": "Rörde inte maten",
+      "2": "Sådär",
+      "3": "Gillade det"
+    }
   },
   "recipeSummary": {
     "next_dish": "Nästa rätt",

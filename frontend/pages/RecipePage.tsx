@@ -6,6 +6,8 @@ import { useApi } from "../api/ApiContext";
 import { ErrorState } from "../components/ErrorState";
 import { RecipeHeader } from "../components/RecipeHeader";
 import { RecipeIngredients } from "../components/RecipeIngredients";
+import { RecipeSteps } from "../components/RecipeSteps";
+import { RecipeReview } from "../components/RecipeReview";
 
 export const RecipePage: React.FC = () => {
     const [recipe, setRecipe] = useState<Recipe|undefined>()
@@ -28,8 +30,12 @@ export const RecipePage: React.FC = () => {
             return (
                 <>
                    <RecipeHeader recipe={recipe}/>
-                    <div className="flex flex-col gap-8 mt-6 lg:flex-row">
+                    <div className="flex flex-col gap-12 mt-10 lg:flex-row">
                         <RecipeIngredients className="w-full lg:w-1/3" recipe={recipe}/>
+                        <div className="flex flex-col gap-28 w-full lg:w-2/3">
+                            <RecipeSteps recipe={recipe}/>
+                            <RecipeReview recipe={recipe}/>
+                        </div>
                     </div>
                 </>
             )
