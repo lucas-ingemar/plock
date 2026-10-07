@@ -1,6 +1,6 @@
 // To parse this data:
 //
-//   import { Convert, Cuisine, Difficulty, GeneratedBy, HaulBase, HaulPrompt, HaulRequest, HaulResponse, Haul, HaulSummary, Ingredient, ItemCategory, Protein, ReceiptItem, Receipt, Recipe, RecipeStep, RecipeSummary, Status, Unit } from "./file";
+//   import { Convert, Cuisine, Difficulty, GeneratedBy, HaulBase, HaulPrompt, HaulRequest, HaulResponse, Haul, HaulSummary, Ingredient, ItemCategory, Protein, ReceiptItem, Receipt, RecipeReview, Recipe, RecipeStep, RecipeSummary, Status, Unit } from "./file";
 //
 //   const cookingMinutes = Convert.toCookingMinutes(json);
 //   const cuisine = Convert.toCuisine(json);
@@ -17,6 +17,7 @@
 //   const protein = Convert.toProtein(json);
 //   const receiptItem = Convert.toReceiptItem(json);
 //   const receipt = Convert.toReceipt(json);
+//   const recipeReview = Convert.toRecipeReview(json);
 //   const recipe = Convert.toRecipe(json);
 //   const recipeStep = Convert.toRecipeStep(json);
 //   const recipeSummary = Convert.toRecipeSummary(json);
@@ -618,6 +619,29 @@ export interface RecipeSummary {
     title: string;
 }
 
+/**
+ * A household member's review of a recipe after cooking it.
+ */
+export interface RecipeReview {
+    /**
+     * What the children thought. 1: didn't eat it, 2: so-so, 3: liked it. Omitted when there
+     * are no children or no answer.
+     */
+    children_rating?: number;
+    /**
+     * Free-text note for next time, e.g. 'less salt'.
+     */
+    notes?: string;
+    /**
+     * Overall verdict. 1: not for us, 2: okay, 3: cook again.
+     */
+    rating: number;
+    /**
+     * ID of the reviewed recipe. UUID v4.
+     */
+    recipe_id: string;
+}
+
 // Converts JSON strings to/from your types
 // and asserts the results of JSON.parse at runtime
 export class Convert {
@@ -739,6 +763,14 @@ export class Convert {
 
     public static receiptToJson(value: Receipt): string {
         return JSON.stringify(uncast(value, r("Receipt")), null, 2);
+    }
+
+    public static toRecipeReview(json: string): RecipeReview {
+        return cast(JSON.parse(json), r("RecipeReview"));
+    }
+
+    public static recipeReviewToJson(value: RecipeReview): string {
+        return JSON.stringify(uncast(value, r("RecipeReview")), null, 2);
     }
 
     public static toRecipe(json: string): Recipe {
@@ -1056,6 +1088,12 @@ const typeMap: any = {
     "RecipeSummary": o([
         { json: "id", js: "id", typ: "" },
         { json: "title", js: "title", typ: "" },
+    ], false),
+    "RecipeReview": o([
+        { json: "children_rating", js: "children_rating", typ: u(undefined, 0) },
+        { json: "notes", js: "notes", typ: u(undefined, "") },
+        { json: "rating", js: "rating", typ: 0 },
+        { json: "recipe_id", js: "recipe_id", typ: "" },
     ], false),
     "Cuisine": [
         "american",

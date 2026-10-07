@@ -31,7 +31,9 @@ export const RecipePage: React.FC = () => {
                 <>
                    <RecipeHeader recipe={recipe}/>
                     <div className="flex flex-col gap-12 mt-10 lg:flex-row">
-                        <RecipeIngredients className="w-full lg:w-1/3" recipe={recipe}/>
+                        <div className="w-full lg:w-1/3">
+                            <RecipeIngredients className="" recipe={recipe}/>
+                        </div>
                         <div className="flex flex-col gap-28 w-full lg:w-2/3">
                             <RecipeSteps recipe={recipe}/>
                             <RecipeReview recipe={recipe}/>
