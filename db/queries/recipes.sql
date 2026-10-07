@@ -48,3 +48,12 @@ SELECT * FROM recipe_ingredients WHERE recipe_id= ? ORDER BY idx ASC;
 
 -- name: ListRecipeStepsFromRecipeID :many
 SELECT * FROM recipe_steps WHERE recipe_id= ? ORDER BY idx ASC;
+
+-- name: AddRecipeReview :exec
+INSERT INTO recipe_reviews (
+    user_id,
+    recipe_id,
+    rating,
+    children_rating,
+    notes
+) VALUES (?, ?, ?, ?, ?);

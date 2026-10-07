@@ -99,3 +99,15 @@ sql:
               import: github.com/gofrs/uuid/v5
               package: uuid
               type: UUID
+
+          # recipe reviews
+          - column: "recipe_reviews.user_id"
+            go_type:
+              import: github.com/gofrs/uuid/v5
+              package: uuid
+              type: UUID
+          - column: "recipe_reviews.recipe_id"
+            go_type:
+              import: github.com/gofrs/uuid/v5
+              package: uuid
+              type: UUID

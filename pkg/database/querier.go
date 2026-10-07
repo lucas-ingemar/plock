@@ -18,6 +18,7 @@ type Querier interface {
 	AddReceiptItem(ctx context.Context, arg AddReceiptItemParams) error
 	AddRecipe(ctx context.Context, arg AddRecipeParams) error
 	AddRecipeIngredient(ctx context.Context, arg AddRecipeIngredientParams) error
+	AddRecipeReview(ctx context.Context, arg AddRecipeReviewParams) error
 	AddRecipeStep(ctx context.Context, arg AddRecipeStepParams) error
 	CreateHaul(ctx context.Context, arg CreateHaulParams) (Haul, error)
 	GetHaul(ctx context.Context, id uuid.UUID) (Haul, error)

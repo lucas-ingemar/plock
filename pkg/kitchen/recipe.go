@@ -2,7 +2,6 @@ package kitchen
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/gofrs/uuid/v5"
 	"github.com/lucas-ingemar/plock/pkg/database"
@@ -10,13 +9,27 @@ import (
 	"github.com/samber/lo"
 )
 
-func (k *Kitchen) AddRecipeReview(ctx context.Context, recipeID uuid.UUID, review types.RecipeReview) error {
+func (k *Kitchen) AddRecipeReview(ctx context.Context, recipeID, userID uuid.UUID, review types.RecipeReview) error {
 	_, err := k.db.GetRecipe(ctx, recipeID)
 	if err != nil {
 		return err
 	}
 
-	fmt.Println(recipeID, review)
+	if review.Notes != nil && *review.Notes == "" {
+		review.Notes = nil
+	}
+
+	dbRecipeReview := database.AddRecipeReviewParams{
+		UserID:         userID,
+		RecipeID:       recipeID,
+		Rating:         int64(review.Rating),
+		ChildrenRating: database.SqlInt64(review.ChildrenRating),
+		Notes:          database.SqlString(review.Notes),
+	}
+
+	if err = k.db.AddRecipeReview(ctx, dbRecipeReview); err != nil {
+		return err
+	}
 
 	return nil
 }

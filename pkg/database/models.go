@@ -97,6 +97,16 @@ type RecipeIngredient struct {
 	UpdatedAt   time.Time       `json:"updated_at"`
 }
 
+type RecipeReview struct {
+	UserID         uuid.UUID      `json:"user_id"`
+	RecipeID       uuid.UUID      `json:"recipe_id"`
+	Rating         int64          `json:"rating"`
+	ChildrenRating sql.NullInt64  `json:"children_rating"`
+	Notes          sql.NullString `json:"notes"`
+	CreatedAt      time.Time      `json:"created_at"`
+	UpdatedAt      time.Time      `json:"updated_at"`
+}
+
 type RecipeStep struct {
 	ID           uuid.UUID     `json:"id"`
 	RecipeID     uuid.UUID     `json:"recipe_id"`
@@ -109,4 +119,9 @@ type RecipeStep struct {
 
 type SchemaMigration struct {
 	Version string `json:"version"`
+}
+
+type User struct {
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at"`
 }

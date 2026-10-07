@@ -49,7 +49,10 @@ func (s *Server) addRecipeReview() http.HandlerFunc {
 			return
 		}
 
-		err = s.k.AddRecipeReview(ctx, recipeUID, recipeReview)
+		// FIXME: THIS IS NOT A REAL USER ID
+		userID := uuid.Nil
+
+		err = s.k.AddRecipeReview(ctx, recipeUID, userID, recipeReview)
 		if err != nil {
 			s.handleError(ctx, err, w, r)
 			return

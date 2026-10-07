@@ -97,6 +97,35 @@ func (q *Queries) AddRecipeIngredient(ctx context.Context, arg AddRecipeIngredie
 	return err
 }
 
+const addRecipeReview = `-- name: AddRecipeReview :exec
+INSERT INTO recipe_reviews (
+    user_id,
+    recipe_id,
+    rating,
+    children_rating,
+    notes
+) VALUES (?, ?, ?, ?, ?)
+`
+
+type AddRecipeReviewParams struct {
+	UserID         uuid.UUID      `json:"user_id"`
+	RecipeID       uuid.UUID      `json:"recipe_id"`
+	Rating         int64          `json:"rating"`
+	ChildrenRating sql.NullInt64  `json:"children_rating"`
+	Notes          sql.NullString `json:"notes"`
+}
+
+func (q *Queries) AddRecipeReview(ctx context.Context, arg AddRecipeReviewParams) error {
+	_, err := q.db.ExecContext(ctx, addRecipeReview,
+		arg.UserID,
+		arg.RecipeID,
+		arg.Rating,
+		arg.ChildrenRating,
+		arg.Notes,
+	)
+	return err
+}
+
 const addRecipeStep = `-- name: AddRecipeStep :exec
 INSERT INTO recipe_steps (
     id,
