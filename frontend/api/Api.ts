@@ -1,4 +1,4 @@
-import type { Haul, HaulPrompt, HaulRequest, HaulResponse, HaulSummary, Recipe } from "../types/types";
+import type { Haul, HaulPrompt, HaulRequest, HaulResponse, HaulSummary, Recipe, RecipeReview } from "../types/types";
 
 export interface Api {
     addHaul(haul: HaulRequest): Promise<Haul>;
@@ -8,4 +8,5 @@ export interface Api {
     listHauls(): Promise<HaulSummary[]>;
 
     getRecipe(id: string): Promise<Recipe>;
+    addRecipeReview(recipeID: string, review: RecipeReview): Promise<void>;
 }

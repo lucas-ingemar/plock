@@ -2,12 +2,24 @@ package kitchen
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/gofrs/uuid/v5"
 	"github.com/lucas-ingemar/plock/pkg/database"
 	"github.com/lucas-ingemar/plock/pkg/types"
 	"github.com/samber/lo"
 )
+
+func (k *Kitchen) AddRecipeReview(ctx context.Context, recipeID uuid.UUID, review types.RecipeReview) error {
+	_, err := k.db.GetRecipe(ctx, recipeID)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(recipeID, review)
+
+	return nil
+}
 
 func (k *Kitchen) GetRecipe(ctx context.Context, recipeID uuid.UUID) (types.Recipe, error) {
 	dbR, err := k.db.GetRecipe(ctx, recipeID)

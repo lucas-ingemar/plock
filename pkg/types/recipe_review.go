@@ -4,7 +4,6 @@ package types
 
 import "encoding/json"
 import "fmt"
-import "github.com/gofrs/uuid/v5"
 import yaml "gopkg.in/yaml.v3"
 
 // A household member's review of a recipe after cooking it.
@@ -18,9 +17,6 @@ type RecipeReview struct {
 
 	// Overall verdict. 1: not for us, 2: okay, 3: cook again.
 	Rating int `json:"rating"`
-
-	// ID of the reviewed recipe. UUID v4.
-	RecipeID uuid.UUID `json:"recipe_id"`
 }
 
 // UnmarshalJSON implements json.Unmarshaler.
@@ -31,9 +27,6 @@ func (j *RecipeReview) UnmarshalJSON(value []byte) error {
 	}
 	if _, ok := raw["rating"]; raw != nil && !ok {
 		return fmt.Errorf("field rating in RecipeReview: required")
-	}
-	if _, ok := raw["recipe_id"]; raw != nil && !ok {
-		return fmt.Errorf("field recipe_id in RecipeReview: required")
 	}
 	type Plain RecipeReview
 	var plain Plain
@@ -64,9 +57,6 @@ func (j *RecipeReview) UnmarshalYAML(value *yaml.Node) error {
 	}
 	if _, ok := raw["rating"]; raw != nil && !ok {
 		return fmt.Errorf("field rating in RecipeReview: required")
-	}
-	if _, ok := raw["recipe_id"]; raw != nil && !ok {
-		return fmt.Errorf("field recipe_id in RecipeReview: required")
 	}
 	type Plain RecipeReview
 	var plain Plain

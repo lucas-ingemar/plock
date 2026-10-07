@@ -636,10 +636,6 @@ export interface RecipeReview {
      * Overall verdict. 1: not for us, 2: okay, 3: cook again.
      */
     rating: number;
-    /**
-     * ID of the reviewed recipe. UUID v4.
-     */
-    recipe_id: string;
 }
 
 // Converts JSON strings to/from your types
@@ -1093,7 +1089,6 @@ const typeMap: any = {
         { json: "children_rating", js: "children_rating", typ: u(undefined, 0) },
         { json: "notes", js: "notes", typ: u(undefined, "") },
         { json: "rating", js: "rating", typ: 0 },
-        { json: "recipe_id", js: "recipe_id", typ: "" },
     ], false),
     "Cuisine": [
         "american",

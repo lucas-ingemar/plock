@@ -6,21 +6,9 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "recipe_id",
     "rating"
   ],
   "properties": {
-    "recipe_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "ID of the reviewed recipe. UUID v4.",
-      "goJSONSchema": {
-        "type": "uuid.UUID",
-        "imports": [
-          "github.com/gofrs/uuid/v5"
-        ]
-      }
-    },
     "rating": {
       "type": "integer",
       "minimum": 1,
@@ -40,13 +28,11 @@
   },
   "examples": [
     {
-      "recipe_id": "7b1e4c2a-5d3f-4a8b-9c6e-1f2a3b4c5d6e",
       "rating": 3,
       "children_rating": 3,
       "notes": "Dubbla såsen nästa gång."
     },
     {
-      "recipe_id": "c4d5e6f7-8a9b-4c1d-8e2f-3a4b5c6d7e8f",
       "rating": 2
     }
   ]
