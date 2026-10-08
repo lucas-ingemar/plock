@@ -4,7 +4,7 @@ import { PlockButton } from '../primitives/PlockButton'
 import { useTranslation } from "react-i18next";
 import { useEffect } from 'react';
 import { ScanText } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface NavbarProps {
 }
@@ -13,6 +13,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
     const { t, i18n } = useTranslation();
 
+    const { pathname } = useLocation();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -26,13 +27,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <h1 className="font-sans text-4xl font-bold text-accent">plock</h1>
             </div>
             <div className="hidden flex-grow gap-4 items-center px-24 sm:flex">
-                <Button variant='primary' size='lg' onPress={() => console.log("Button pressed")}>
+                <Button variant={pathname.startsWith("/notknown") ? "primary" : 'ghost'} size='lg' onPress={() => console.log("Button pressed")}>
                     {t("navbar.week")}
                 </Button>
-                <Button variant='ghost' size='lg' onPress={() => navigate("/hauls")}>
+                <Button variant={pathname.startsWith("/hauls") ? "primary" : 'ghost'} size='lg' onPress={() => navigate("/hauls")}>
                     {t("navbar.hauls")}
                 </Button>
-                <PlockButton variant='ghost' size='lg' onPress={() => console.log("Button pressed")}>
+                <PlockButton variant={pathname.startsWith("/recipes") ? "primary" : 'ghost'} size='lg' onPress={() => console.log("Button pressed")}>
                     {t("navbar.recipes")}
                 </PlockButton>
             </div>
