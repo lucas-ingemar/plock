@@ -32,6 +32,7 @@ type Querier interface {
 	ListRecipeStepsFromRecipeID(ctx context.Context, recipeID uuid.UUID) ([]RecipeStep, error)
 	ListRecipesFromHaulID(ctx context.Context, haulID uuid.UUID) ([]Recipe, error)
 	ListReciptItemsByRecieptID(ctx context.Context, receiptID uuid.UUID) ([]ReceiptItem, error)
+	ListReviewsForRecipe(ctx context.Context, arg ListReviewsForRecipeParams) ([]RecipeReview, error)
 }
 
 var _ Querier = (*Queries)(nil)

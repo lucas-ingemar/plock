@@ -325,3 +325,43 @@ func (q *Queries) ListRecipesFromHaulID(ctx context.Context, haulID uuid.UUID) (
 	}
 	return items, nil
 }
+
+const listReviewsForRecipe = `-- name: ListReviewsForRecipe :many
+SELECT user_id, recipe_id, rating, children_rating, notes, created_at, updated_at from recipe_reviews WHERE recipe_id = ? AND user_id = ?
+`
+
+type ListReviewsForRecipeParams struct {
+	RecipeID uuid.UUID `json:"recipe_id"`
+	UserID   uuid.UUID `json:"user_id"`
+}
+
+func (q *Queries) ListReviewsForRecipe(ctx context.Context, arg ListReviewsForRecipeParams) ([]RecipeReview, error) {
+	rows, err := q.db.QueryContext(ctx, listReviewsForRecipe, arg.RecipeID, arg.UserID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []RecipeReview{}
+	for rows.Next() {
+		var i RecipeReview
+		if err := rows.Scan(
+			&i.UserID,
+			&i.RecipeID,
+			&i.Rating,
+			&i.ChildrenRating,
+			&i.Notes,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

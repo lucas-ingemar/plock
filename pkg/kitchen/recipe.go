@@ -114,5 +114,20 @@ func (k *Kitchen) FillRecipe(ctx context.Context, r types.Recipe) (types.Recipe,
 		}
 	})
 
+	// FIXME: Wrong user
+	dbReviews, err := k.db.ListReviewsForRecipe(ctx, database.ListReviewsForRecipeParams{
+		RecipeID: r.ID,
+		UserID:   uuid.Nil,
+	})
+
+	r.Reviews = map[uuid.UUID]types.RecipeReview{}
+	for _, review := range dbReviews {
+		r.Reviews[review.UserID] = types.RecipeReview{
+			ChildrenRating: database.NilInt(review.ChildrenRating),
+			Notes:          database.NilStr(review.Notes),
+			Rating:         int(review.Rating),
+		}
+	}
+
 	return r, err
 }

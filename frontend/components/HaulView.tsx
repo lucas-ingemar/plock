@@ -1,10 +1,11 @@
 import { DefaultPageLayout } from "../layouts/DefaultPageLayout"
-import type { Haul } from "../types/types"
+import type { Haul, Recipe } from "../types/types"
 import { PlockChip } from "../primitives/PlockChip"
 import { RecipeSummary } from "./RecipeSummary"
 import { Receipt } from "./Receipt"
 import { useTranslation } from "react-i18next"
 import { RemainingRecipes } from "./RemainingRecipes"
+import { useEffect, useState } from "react"
 
 interface HaulViewProps {
     haul: Haul,
@@ -13,8 +14,31 @@ interface HaulViewProps {
 export const HaulView: React.FC<HaulViewProps> = ({
     haul,
 }) => {
+    const [otherRecipes, setOtherRecipes] = useState<Recipe[]>([])
+    const [nextRecipe, setNextRecipe] = useState<Recipe | undefined>()
 
     const { t, i18n } = useTranslation()
+
+    useEffect(() => {
+        const recipesDone = haul.recipes?.filter((r) => (Object.keys(r.reviews).length !== 0))
+        const recipesLeft = haul.recipes?.filter((r) => (Object.keys(r.reviews).length === 0))
+
+        var r: Recipe[] = []
+
+        if (recipesLeft && recipesLeft.length > 0) {
+            setNextRecipe(recipesLeft[0])
+            if (recipesLeft.length > 1) {
+                r.push(...recipesLeft.slice(1))
+            }
+        }
+
+        if (recipesDone) {
+            r.push(...recipesDone)
+        }
+
+        setOtherRecipes(r)
+    }, [haul.recipes])
+
 
     const numberOfPeople = (adults: number, children: number):string => {
         if (adults > 0 && children > 0) {
@@ -41,10 +65,16 @@ export const HaulView: React.FC<HaulViewProps> = ({
                     <PlockChip className="hidden xl:flex">{t("haulView.portions", {portions: haul.servings_per_meal})}</PlockChip>
                     <PlockChip className="hidden xl:flex">{t("haulView.max_cooking_minutes", {max_cooking_minutes: haul.max_cooking_minutes})}</PlockChip>
                 </div>
-                {haul.recipes && haul.recipes?.length > 0 ?
+                {(nextRecipe || otherRecipes.length > 0)  ?
                     <div className="flex flex-col gap-8">
-                        <RecipeSummary recipe={haul.recipes[0]}/>
-                        <RemainingRecipes recipes={haul.recipes.slice(1)}/>
+                        {nextRecipe ?
+                            <RecipeSummary recipe={nextRecipe}/>
+                            :
+                            <p>fixa sen</p>
+                        }
+                        {otherRecipes.length > 0 &&
+                            <RemainingRecipes recipes={otherRecipes}/>
+                        }
                     </div>
                  :
                     <p className="mt-24 w-full text-2xl text-center">{t("haulView.no_registered_recipes")}</p>

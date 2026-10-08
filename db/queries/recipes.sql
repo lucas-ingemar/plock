@@ -57,3 +57,6 @@ INSERT INTO recipe_reviews (
     children_rating,
     notes
 ) VALUES (?, ?, ?, ?, ?);
+
+-- name: ListReviewsForRecipe :many
+SELECT * from recipe_reviews WHERE recipe_id = ? AND user_id = ?;
