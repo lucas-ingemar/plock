@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useEffect } from 'react';
 import { ScanText } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../auth/Auth';
 
 interface NavbarProps {
 }
@@ -15,10 +16,15 @@ export const Navbar: React.FC<NavbarProps> = ({
 
     const { pathname } = useLocation();
     const navigate = useNavigate();
+    const { state } = useAuth()
 
     useEffect(() => {
         i18n.changeLanguage("sv")
     }, [])
+
+    if (state.status != "authenticated" ) {
+        return (<></>)
+    }
 
     return (
         <div className="flex gap-8 justify-between items-center py-4 px-8 w-full border-b-2 shrink-0 bg-background border-border">

@@ -145,6 +145,11 @@
     @apply shadow-none border-1 border-border;
   }
 
+  .input--primary {
+    @apply shadow-none border-1 border-border rounded-md py-3 text-base;
+  }
+
+
   .receipt {
     --tooth: 14px; /* bredd per tand, höjden blir hälften */
 

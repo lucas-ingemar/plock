@@ -20,6 +20,8 @@ func (s *Server) api() http.Handler {
 	r.Get("/recipes/{recipeID}", s.getRecipe())
 	r.Post("/recipes/{recipeID}/review", s.addRecipeReview())
 
+	r.Get("/me", func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(http.StatusOK) })
+
 	// r.Get("/info", s.apiInfo())
 	// r.Get("/user", s.user())
 

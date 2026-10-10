@@ -1,4 +1,4 @@
-import ky from "ky";
+import ky, { type KyRequest, type KyResponse, type NormalizedOptions } from "ky";
 import type { Api } from "./Api";
 import type { Haul, HaulPrompt, HaulRequest, HaulResponse, HaulSummary, Recipe, RecipeReview } from "../types/types";
 
@@ -30,6 +30,7 @@ const toJsonWithDates = (value: unknown) =>
             ? original.toISOString().slice(0, 10)
             : serialized
     })
+
 
 export class ServerApi implements Api {
 
@@ -83,7 +84,23 @@ export class ServerApi implements Api {
     private api = ky.create({
         prefix: "/api",
         parseJson: (text) => JSON.parse(text, reviveDates),
+        hooks: {
+            afterResponse: [
+                ({ request, response }) => {
+                    if (response.status === 401 && !request.url.endsWith("/login")) {
+                        this.unauthorizedListeners.forEach((listener) => listener())
+                    }
+                },
+            ],
+        },
     })
+
+    private unauthorizedListeners = new Set<() => void>()
+
+    onUnauthorized(listener: () => void) {
+        this.unauthorizedListeners.add(listener)
+        return () => this.unauthorizedListeners.delete(listener)
+    }
 
     async addHaul(haul: HaulRequest): Promise<Haul> {
         return await this.api.post(`/hauls`, { json: haul}).json<Haul>();
@@ -117,6 +134,11 @@ export class ServerApi implements Api {
 
     async addRecipeReview(recipeID: string, review: RecipeReview): Promise<void> {
         await this.api.post(`/recipes/${recipeID}/review`, { json: review});
+    }
+
+    async me(): Promise<null> {
+        await this.api.get(`/me`);
+        return null
     }
 
 }

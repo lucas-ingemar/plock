@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { ApiProvider } from './api/ApiContext.tsx';
 import { ServerApi } from './api/ServerApi.ts';
 import { ProcessingProvider } from './processingProvider/ProcessingProvider.tsx';
+import { AuthProvider } from './auth/Auth.tsx';
 
 
 const api = new ServerApi()
@@ -16,7 +17,9 @@ createRoot(document.getElementById('root')!).render(
     <ApiProvider api={api}>
       <BrowserRouter>
         <ProcessingProvider>
-          <App />
+          <AuthProvider>
+            <App />
+          </AuthProvider>
         </ProcessingProvider>
       </BrowserRouter>
     </ApiProvider>
